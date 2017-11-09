@@ -1,0 +1,19 @@
+language: java
+
+sudo: required
+
+jdk:
+  - oraclejdk8
+
+cache:
+  directories:
+    - $HOME/.m2
+
+install:
+  - export MAVEN_HOME=/usr/local/maven-3.5.0
+
+script:
+  - mvn clean install
+
+after_success:
+  - mvn clean test jacoco:report coveralls:report
