@@ -1,4 +1,4 @@
-Ex2Amplifier
+Ex2Amplifier [![Build Status](https://travis-ci.org/STAMP-project/Ex2Amplifier.svg?branch=master)](https://travis-ci.org/STAMP-project/Ex2Amplifier)[![Coverage Status](https://coveralls.io/repos/github/STAMP-project/Ex2Amplifier/badge.svg?branch=master)](https://coveralls.io/github/STAMP-project/Ex2Amplifier?branch=master)
 =====================================================================================================================
 ![STAMP - European Commission - H2020](docs/logo_readme_md.png)
 
