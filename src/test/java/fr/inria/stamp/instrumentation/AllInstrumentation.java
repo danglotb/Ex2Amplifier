@@ -8,7 +8,7 @@ import org.junit.Test;
 import spoon.Launcher;
 import spoon.reflect.declaration.CtClass;
 
-import static fr.inria.stamp.Util.nl;
+import static fr.inria.stamp.MainTest.nl;
 import static org.junit.Assert.assertEquals;
 
 
