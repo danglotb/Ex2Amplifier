@@ -19,12 +19,7 @@ import spoon.reflect.reference.CtTypeReference;
  * benjamin.danglot@inria.fr
  * on 08/11/17
  */
-public class ExecutableInstrumenterProcessor extends AbstractProcessor<CtExecutable<?>> {
-
-    @Override
-    public boolean isToBeProcessed(CtExecutable<?> candidate) {
-        return !candidate.getParent(CtPackage.class).getQualifiedName().startsWith("fr.inria.stamp");
-    }
+public class ExecutableInstrumenterProcessor extends InstrumenterProcessor<CtExecutable<?>> {
 
     @Override
     public void process(CtExecutable<?> executable) {
