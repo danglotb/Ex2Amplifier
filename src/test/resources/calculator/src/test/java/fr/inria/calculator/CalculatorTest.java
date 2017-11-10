@@ -11,8 +11,8 @@ public class CalculatorTest {
 
     @Test
     public void testCFG1() throws Exception {
-        final Calculator calculator1 = new Calculator(7);
-        calculator1.accumulate(512);
+        final Calculator calculator1 = new Calculator(-5);
+        calculator1.accumulate(-5);
     }
 
     @Test

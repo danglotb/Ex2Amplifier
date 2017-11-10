@@ -9,4 +9,6 @@ public interface Fact {
 
     String toAlloy();
 
+    Fact copy();
+
 }

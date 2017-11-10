@@ -11,6 +11,10 @@ public class Variable {
         this.name = name;
     }
 
+    public Variable copy() {
+        return new Variable(this.name, this.type);
+    }
+
     @Override
     public String toString() {
         return this.name + ":" + this.type;

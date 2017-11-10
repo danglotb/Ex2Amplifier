@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * benjamin.danglot@inria.fr
  * on 08/11/17
  */
-public class ModificationInstrumenterProcessor extends AbstractProcessor<CtAssignment> {
+public class ModificationInstrumenterProcessor extends InstrumenterProcessor<CtAssignment> {
 
     @Override
     public void process(CtAssignment assignment) {
