@@ -1,6 +1,5 @@
 package fr.inria.stamp.instrumentation.processor;
 
-import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtIf;
 import spoon.reflect.code.CtInvocation;
@@ -18,7 +17,7 @@ import static fr.inria.stamp.instrumentation.util.Translator.toAlloy;
  * benjamin.danglot@inria.fr
  * on 08/11/17
  */
-public class ConstraintInstrumenterProcessor extends AbstractProcessor<CtIf> {
+public class ConstraintInstrumenterProcessor extends InstrumenterProcessor<CtIf> {
 
     @Override
     public void process(CtIf ctIf) {
