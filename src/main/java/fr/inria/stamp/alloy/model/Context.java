@@ -1,6 +1,4 @@
-package fr.inria.stamp.alloy.builder;
-
-import fr.inria.stamp.alloy.model.Variable;
+package fr.inria.stamp.alloy.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +91,15 @@ public class Context {
             this.parametersString.remove(oldName);
             this.parametersInt.add(newName);
         }
+    }
+
+    public Context copy() {
+        final Context copy = new Context();
+        copy.maxNumberParameterInt = this.maxNumberParameterInt;
+        copy.maxNumberParameterString = this.maxNumberParameterString;
+        copy.parametersInt = new ArrayList<>(this.parametersInt);
+        copy.parametersString = new ArrayList<>(this.parametersString);
+        return copy;
     }
 
     public String toAlloy() {

@@ -16,8 +16,25 @@ public class Modification implements Fact {
         this.modification = modification;
     }
 
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (! (o instanceof Modification)) {
+            return false;
+        }
+        Modification modification = (Modification) o;
+        return modification.modification.equals(this.modification) &&
+                modification.modifiedAttribute.equals(this.modifiedAttribute);
+    }
+
     @Override
     public String toAlloy() {
         return "\t" + modifiedAttribute + " = " +  modification;
+    }
+
+    @Override
+    public Fact copy() {
+        return new Modification(this.modifiedAttribute, this.modification);
     }
 }

@@ -3,6 +3,8 @@ package fr.inria.stamp.alloy.model;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static fr.inria.stamp.alloy.builder.ModelBuilder.nl;
+
 /**
  * Created by Benjamin DANGLOT
  * benjamin.danglot@inria.fr
@@ -19,16 +21,25 @@ public class Signature {
         this.variables = variables;
     }
 
+    public Signature copy() {
+        return new Signature(this.name,
+                this.variables.stream()
+                        .map(Variable::copy)
+                        .collect(Collectors.toList())
+        );
+    }
+
     public String toString() {
-        return new StringBuilder().append("abstract sig ")
-                .append(this.name)
-                .append(" {\n\t")
-                .append(this.variables.stream()
-                            .map(Object::toString)
-                            .map("\t"::concat)
-                            .collect(Collectors.joining(",\n"))
-                ).append("\n}")
-                .toString();
+        return "abstract sig " +
+                this.name +
+                nl +
+                "\t" +
+                this.variables.stream()
+                        .map(Object::toString)
+                        .map("\t"::concat)
+                        .collect(Collectors.joining("," + nl)) +
+                nl +
+                "}";
     }
 
 
