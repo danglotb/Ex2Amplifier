@@ -10,8 +10,6 @@ import fr.inria.stamp.alloy.model.Variable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by Benjamin DANGLOT
@@ -37,7 +35,7 @@ public class ModelBuilder {
                 }
         );
     }
-
+    
     public static void addInputs(Variable... types) {
         Arrays.stream(types)
                 .map(variable ->
@@ -110,53 +108,6 @@ public class ModelBuilder {
         }
         final Constraint constraint = (Constraint) (dependantFacts.get(dependantFacts.size() - 1).remove(0));
         constraint.subFacts.addAll(dependantFacts.remove(dependantFacts.size() - 1));
-    }
-
-    public static void addInput(Variable variable) {
-        model.getInputs().add(variable);
-    }
-
-    public static String toAlloy() {
-        StringBuilder modelAlloy = new StringBuilder();
-        modelAlloy.append("one sig InputVector {")
-                .append(nl)
-                .append(model.getInputs()
-                .stream()
-                .map(Object::toString)
-                .map("\t"::concat)
-                .collect(Collectors.joining("," + nl)))
-                .append(nl)
-                .append("}");
-        modelAlloy.append(model.getContext().toAlloy());
-        model.getSignatures().forEach(modelAlloy::append);
-
-        final ArrayList<Object> keys = new ArrayList<>(model.getNbModificationPerReference().keySet());
-        keys.forEach(key ->
-                IntStream.range(1, model.getNbModificationPerReference().get(key) + 1)
-                        .mapToObj(value -> value + "")
-                        .forEach(index ->
-                                modelAlloy.append("one sig ")
-                                        .append(key.getClass().getName().replaceAll("\\.", "_"))
-                                        .append("_")
-                                        .append(keys.indexOf(key))
-                                        .append("_")
-                                        .append(index).append(" extends ")
-                                        .append(key.getClass().getName().replaceAll("\\.", "_"))
-                                        .append("{}")
-                                        .append(nl)
-                        )
-        );
-        modelAlloy.append("fact {")
-                .append(nl)
-                .append(model.getFacts()
-                        .stream()
-                        .map(Fact::toAlloy)
-                        .collect(Collectors.joining(nl)))
-                .append(nl)
-                .append("}")
-                .append(nl);
-        modelAlloy.append("run {} for ").append(model.getInputs().size());
-        return modelAlloy.toString();
     }
 
     public static Model getModel() {
