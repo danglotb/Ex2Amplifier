@@ -1,10 +1,10 @@
 package fr.inria.stamp.instrumentation.processor;
 
+import fr.inria.stamp.AbstractTest;
 import org.junit.Test;
 import spoon.Launcher;
 import spoon.reflect.declaration.CtClass;
 
-import static fr.inria.stamp.MainTest.nl;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * benjamin.danglot@inria.fr
  * on 09/11/17
  */
-public class ExecutableInstrumenterProcessorTest {
+public class ExecutableInstrumenterProcessorTest  extends AbstractTest {
 
     @Test
     public void testProcess() throws Exception {

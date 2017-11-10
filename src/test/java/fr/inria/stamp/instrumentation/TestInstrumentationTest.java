@@ -1,11 +1,11 @@
 package fr.inria.stamp.instrumentation;
 
+import fr.inria.stamp.AbstractTest;
 import org.junit.Test;
 import spoon.Launcher;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 
-import static fr.inria.stamp.MainTest.nl;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  * benjamin.danglot@inria.fr
  * on 09/11/17
  */
-public class TestInstrumentationTest {
+public class TestInstrumentationTest extends AbstractTest {
 
     @Test
     public void testInstrument() throws Exception {

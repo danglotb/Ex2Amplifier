@@ -1,5 +1,6 @@
 package fr.inria.stamp.instrumentation;
 
+import fr.inria.stamp.AbstractTest;
 import fr.inria.stamp.instrumentation.processor.ConstraintInstrumenterProcessor;
 import fr.inria.stamp.instrumentation.processor.ExecutableInstrumenterProcessor;
 import fr.inria.stamp.instrumentation.processor.InvocationInstrumenterProcessor;
@@ -8,7 +9,6 @@ import org.junit.Test;
 import spoon.Launcher;
 import spoon.reflect.declaration.CtClass;
 
-import static fr.inria.stamp.MainTest.nl;
 import static org.junit.Assert.assertEquals;
 
 
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
  * benjamin.danglot@inria.fr
  * on 06/11/17
  */
-public class AllInstrumentation {
+public class AllInstrumentation extends AbstractTest {
 
     @Test
     public void testProcess() throws Exception {

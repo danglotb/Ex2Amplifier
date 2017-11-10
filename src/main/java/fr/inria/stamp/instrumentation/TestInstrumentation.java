@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 public class TestInstrumentation {
 
-    private static int[] index = new int[]{0};
+    public static int[] index = new int[]{0};
 
     private static final String PREFIX_NAME_INPUT_VECTOR = "InputVector.input_";
 

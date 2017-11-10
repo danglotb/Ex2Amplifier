@@ -34,9 +34,7 @@ import static org.junit.Assert.assertEquals;
  * benjamin.danglot@inria.fr
  * on 10/11/17
  */
-public class MainTest {
-
-    public static final String nl = System.getProperty("line.separator");
+public class MainTest extends AbstractTest {
 
     @Test
     public void test() {
@@ -60,45 +58,45 @@ public class MainTest {
         }
     }
 
-    private static final String expectedAlloyModel = "one sig InputVector {" + nl +
-            "\tinput_4:Int," + nl +
-            "\tinput_5:Int" + nl +
-            "}" + nl +
-            "one sig parameterVector {" + nl +
-            "\tparameter_value_int_0:Int" + nl +
-            "}" + nl +
-            "abstract sig fr_inria_calculator_Calculator" + nl +
-            "\t\tcurrentValue:Int" + nl +
-            "}" + nl +
-            "one sig fr_inria_calculator_Calculator_0_1 extends fr_inria_calculator_Calculator{}" + nl +
-            "one sig fr_inria_calculator_Calculator_0_2 extends fr_inria_calculator_Calculator{}" + nl +
-            "fact {" + nl +
-            "\tparameterVector.parameter_value_int_0 = InputVector.input_4" + nl +
-            "\tfr_inria_calculator_Calculator_0_1.currentValue = parameterVector.parameter_value_int_0" + nl +
-            "\tparameterVector.parameter_value_int_0 = InputVector.input_5" + nl +
-            "\tnot rem[fr_inria_calculator_Calculator_0_1.currentValue,3]=0" + nl +
-            "\tfr_inria_calculator_Calculator_0_2.currentValue = plus[fr_inria_calculator_Calculator_0_1.currentValue,mul[2,parameterVector.parameter_value_int_0]]" + nl +
-            "}" + nl +
+    private static final String expectedAlloyModel = "one sig InputVector {" + AbstractTest.nl +
+            "\tinput_4:Int," + AbstractTest.nl +
+            "\tinput_5:Int" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
+            "one sig parameterVector {" + AbstractTest.nl +
+            "\tparameter_value_int_0:Int" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
+            "abstract sig fr_inria_calculator_Calculator" + AbstractTest.nl +
+            "\t\tcurrentValue:Int" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
+            "one sig fr_inria_calculator_Calculator_0_1 extends fr_inria_calculator_Calculator{}" + AbstractTest.nl +
+            "one sig fr_inria_calculator_Calculator_0_2 extends fr_inria_calculator_Calculator{}" + AbstractTest.nl +
+            "fact {" + AbstractTest.nl +
+            "\tparameterVector.parameter_value_int_0 = InputVector.input_4" + AbstractTest.nl +
+            "\tfr_inria_calculator_Calculator_0_1.currentValue = parameterVector.parameter_value_int_0" + AbstractTest.nl +
+            "\tparameterVector.parameter_value_int_0 = InputVector.input_5" + AbstractTest.nl +
+            "\tnot rem[fr_inria_calculator_Calculator_0_1.currentValue,3]=0" + AbstractTest.nl +
+            "\tfr_inria_calculator_Calculator_0_2.currentValue = plus[fr_inria_calculator_Calculator_0_1.currentValue,mul[2,parameterVector.parameter_value_int_0]]" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
             "run {} for 2";
 
-    private static final String expectedNegatedAlloyModel = "one sig InputVector {" + nl +
-            "\tinput_4:Int," + nl +
-            "\tinput_5:Int" + nl +
-            "}" + nl +
-            "one sig parameterVector {" + nl +
-            "\tparameter_value_int_0:Int" + nl +
-            "}" + nl +
-            "abstract sig fr_inria_calculator_Calculator" + nl +
-            "\t\tcurrentValue:Int" + nl +
-            "}" + nl +
-            "one sig fr_inria_calculator_Calculator_0_1 extends fr_inria_calculator_Calculator{}" + nl +
-            "one sig fr_inria_calculator_Calculator_0_2 extends fr_inria_calculator_Calculator{}" + nl +
-            "fact {" + nl +
-            "\tparameterVector.parameter_value_int_0 = InputVector.input_4" + nl +
-            "\tfr_inria_calculator_Calculator_0_1.currentValue = parameterVector.parameter_value_int_0" + nl +
-            "\tparameterVector.parameter_value_int_0 = InputVector.input_5" + nl +
-            "\trem[fr_inria_calculator_Calculator_0_1.currentValue,3]=0" + nl +
-            "}" + nl +
+    private static final String expectedNegatedAlloyModel = "one sig InputVector {" + AbstractTest.nl +
+            "\tinput_4:Int," + AbstractTest.nl +
+            "\tinput_5:Int" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
+            "one sig parameterVector {" + AbstractTest.nl +
+            "\tparameter_value_int_0:Int" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
+            "abstract sig fr_inria_calculator_Calculator" + AbstractTest.nl +
+            "\t\tcurrentValue:Int" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
+            "one sig fr_inria_calculator_Calculator_0_1 extends fr_inria_calculator_Calculator{}" + AbstractTest.nl +
+            "one sig fr_inria_calculator_Calculator_0_2 extends fr_inria_calculator_Calculator{}" + AbstractTest.nl +
+            "fact {" + AbstractTest.nl +
+            "\tparameterVector.parameter_value_int_0 = InputVector.input_4" + AbstractTest.nl +
+            "\tfr_inria_calculator_Calculator_0_1.currentValue = parameterVector.parameter_value_int_0" + AbstractTest.nl +
+            "\tparameterVector.parameter_value_int_0 = InputVector.input_5" + AbstractTest.nl +
+            "\trem[fr_inria_calculator_Calculator_0_1.currentValue,3]=0" + AbstractTest.nl +
+            "}" + AbstractTest.nl +
             "run {} for 2";
 
     private static Launcher init(final InputConfiguration configuration) throws IOException {

@@ -22,7 +22,7 @@ public class ModelBuilder {
 
     private static List<List<Fact>> dependantFacts = new ArrayList<>();
 
-    private static Model model = new Model();
+    public static Model model = new Model();
 
     public static final String nl = System.getProperty("line.separator");
 
