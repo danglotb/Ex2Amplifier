@@ -8,6 +8,7 @@ import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtThisAccess;
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtExecutableReference;
@@ -34,11 +35,15 @@ public class ModificationInstrumenterProcessor extends InstrumenterProcessor<CtA
         final CtThisAccess<?> thisAccess = assignment.getFactory().createThisAccess(modelBuilderClass.getReference());
         final CtLiteral<String> assigned = assignment.getFactory().createLiteral(Translator.toAlloy(assignment.getAssigned()));
         final CtLiteral<String> alloyModification = assignment.getFactory().createLiteral(Translator.toAlloy(assignment));
+        final CtLiteral<String> context = assignment.getFactory().createLiteral(
+                assignment.getParent(CtExecutable.class).getSimpleName()
+        );
 
         final List<CtExpression<?>> parameters = new ArrayList<>();
         parameters.add(thisAccess);
         parameters.add(assigned);
         parameters.add(alloyModification);
+        parameters.add(context);
         parameters.addAll(creationOfAttributes(assignment.getParent(CtType.class))); // TODO checks this for internal class
         assignment.insertAfter(
                 assignment.getFactory().createInvocation(assignment
