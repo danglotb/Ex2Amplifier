@@ -21,7 +21,6 @@ public class AbstractTest {
     @Before
     public void setUp() throws Exception {
         ModelBuilder.model = new Model();
-        TestInstrumentation.index = new int[]{0};
     }
 
     public static Launcher initLauncher(String pathToSources, String pathToTestSources, String dependencies) {

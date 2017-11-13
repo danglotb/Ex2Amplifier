@@ -25,7 +25,7 @@ public class TestInstrumentationTest extends AbstractTest {
         launcher.buildModel();
         final CtClass<?> classToBeInstrumented = launcher.getFactory().Class().get("fr.inria.calculator.CalculatorTest");
         final CtMethod<?> testAccumulate = classToBeInstrumented.getMethodsByName("testAccumulateAndReset").get(0);
-        TestInstrumentation.instrument(testAccumulate);
+        new TestInstrumentation().process(testAccumulate);
         assertEquals("test fr.inria.stamp.instrumentation failed", expectedInstrumentedMethod, testAccumulate.toString());
     }
 

@@ -141,14 +141,8 @@ public class MainTest extends AbstractTest {
         launcher.addProcessor(new ExecutableInstrumenterProcessor());
         launcher.addProcessor(new ConstraintInstrumenterProcessor());
         launcher.addProcessor(new ModificationInstrumenterProcessor());
+        launcher.addProcessor(new TestInstrumentation());
         launcher.process();
-        launcher.getFactory()
-                .Class()
-                .getAll()
-                .stream()
-                .flatMap(ctType -> ctType.getMethods().stream())
-                .filter(AmplificationChecker::isTest)
-                .forEach(TestInstrumentation::instrument);
         return launcher;
     }
 
