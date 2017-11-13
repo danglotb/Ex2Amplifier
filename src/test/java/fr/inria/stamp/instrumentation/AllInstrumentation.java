@@ -39,22 +39,22 @@ public class AllInstrumentation extends AbstractTest {
             "    private int currentValue;" + nl +
             "" + nl +
             "    public Calculator(int value) {" + nl +
-            "        ModelBuilder.depopParameters(new Variable(\"value\", \"Int\"));" + nl +
+            "        ModelBuilder.depopParameters(new Variable(\"<init>#value\", \"Int\"));" + nl +
             "        this.currentValue = value;" + nl +
-            "        ModelBuilder.addModification(this, \"currentValue\", \"value\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "        ModelBuilder.addModification(this, \"currentValue\", \"value\", \"<init>\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "    }" + nl +
             "" + nl +
             "    public void accumulate(int value) {" + nl +
-            "        ModelBuilder.depopParameters(new Variable(\"value\", \"Int\"));" + nl +
+            "        ModelBuilder.depopParameters(new Variable(\"accumulate#value\", \"Int\"));" + nl +
             "        if ((((this.currentValue) % 3) == 0)) {" + nl +
             "            ModelBuilder.addConstraint(this, \"rem[currentValue,3]=0\");" + nl +
             "            (this.currentValue) += value;" + nl +
-            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,value]\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,value]\", \"accumulate\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "            ModelBuilder.endConstraint();" + nl +
             "        }else {" + nl +
             "            ModelBuilder.addConstraint(this, \"not rem[currentValue,3]=0\");" + nl +
             "            (this.currentValue) += (2 * value);" + nl +
-            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,mul[2,value]]\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,mul[2,value]]\", \"accumulate\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "            ModelBuilder.endConstraint();" + nl +
             "        }" + nl +
             "    }" + nl +
@@ -65,7 +65,7 @@ public class AllInstrumentation extends AbstractTest {
             "            if ((((this.currentValue) % 2) == 0)) {" + nl +
             "                ModelBuilder.addConstraint(this, \"rem[currentValue,2]=0\");" + nl +
             "                this.currentValue = 0;" + nl +
-            "                ModelBuilder.addModification(this, \"currentValue\", \"0\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "                ModelBuilder.addModification(this, \"currentValue\", \"0\", \"reset\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "                ModelBuilder.endConstraint();" + nl +
             "            }else {" + nl +
             "                ModelBuilder.addConstraint(this, \"not rem[currentValue,2]=0\");" + nl +
@@ -77,7 +77,7 @@ public class AllInstrumentation extends AbstractTest {
             "            if (((((this.currentValue) * 7) % 23) == 0)) {" + nl +
             "                ModelBuilder.addConstraint(this, \"rem[mul[currentValue,7],23]=0\");" + nl +
             "                (this.currentValue) += 21;" + nl +
-            "                ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,21]\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "                ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,21]\", \"reset\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "                ModelBuilder.endConstraint();" + nl +
             "            }else {" + nl +
             "                ModelBuilder.addConstraint(this, \"not rem[mul[currentValue,7],23]=0\");" + nl +

@@ -1,8 +1,10 @@
 package fr.inria.stamp.instrumentation;
 
+import fr.inria.diversify.utils.AmplificationChecker;
 import fr.inria.stamp.alloy.model.Variable;
 import fr.inria.stamp.instrumentation.util.InstrumenterHelper;
 import fr.inria.stamp.instrumentation.util.TypeUtils;
+import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtConstructorCall;
@@ -24,13 +26,19 @@ import java.util.stream.Collectors;
  * benjamin.danglot@inria.fr
  * on 08/11/17
  */
-public class TestInstrumentation {
-
-    public static int[] index = new int[]{0};
+public class TestInstrumentation extends AbstractProcessor<CtMethod<?>> {
 
     private static final String PREFIX_NAME_INPUT_VECTOR = "InputVector.input_";
 
-    public static void instrument(CtMethod<?> testMethod) {
+    private int[] index = new int[]{0};
+
+    @Override
+    public boolean isToBeProcessed(CtMethod<?> candidate) {
+        return AmplificationChecker.isTest(candidate);
+    }
+
+    @Override
+    public void process(CtMethod<?> testMethod) {
         final CtInvocation<?> callToAddInputs = createCallToAddInputs(testMethod.getFactory());
         testMethod.getElements(new TypeFilter<CtAbstractInvocation>(CtAbstractInvocation.class) {
             @Override
@@ -40,12 +48,12 @@ public class TestInstrumentation {
             }
         }).stream()
                 .flatMap(ctAbstractInvocation ->
-                        TestInstrumentation.instrument(ctAbstractInvocation).stream()
+                        instrument(ctAbstractInvocation).stream()
                 ).forEach(callToAddInputs::addArgument);
         testMethod.getBody().insertBegin(callToAddInputs);
     }
 
-    private static List<? extends CtConstructorCall<?>> instrument(CtAbstractInvocation<?> invocation) {
+    private List<? extends CtConstructorCall<?>> instrument(CtAbstractInvocation<?> invocation) {
 
         final Factory factory = invocation.getFactory();
 
@@ -85,7 +93,7 @@ public class TestInstrumentation {
         return variablesCreations;
     }
 
-    private static CtInvocation<?> createCallToAddInputs(Factory factory) {
+    private CtInvocation<?> createCallToAddInputs(Factory factory) {
         final CtClass<?> modelBuilderClass = factory
                 .Class().get("fr.inria.stamp.alloy.builder.ModelBuilder");
         final CtExecutableReference<?> addInputs = modelBuilderClass
@@ -96,5 +104,6 @@ public class TestInstrumentation {
                 addInputs
         );
     }
+
 
 }

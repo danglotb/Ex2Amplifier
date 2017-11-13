@@ -31,12 +31,12 @@ public class ExecutableInstrumenterProcessorTest  extends AbstractTest {
             "    private int currentValue;" + nl +
             "" + nl +
             "    public Calculator(int value) {" + nl +
-            "        ModelBuilder.depopParameters(new fr.inria.stamp.alloy.model.Variable(\"value\", \"Int\"));" + nl +
+            "        ModelBuilder.depopParameters(new fr.inria.stamp.alloy.model.Variable(\"<init>#value\", \"Int\"));" + nl +
             "        this.currentValue = value;" + nl +
             "    }" + nl +
             "" + nl +
             "    public void accumulate(int value) {" + nl +
-            "        ModelBuilder.depopParameters(new fr.inria.stamp.alloy.model.Variable(\"value\", \"Int\"));" + nl +
+            "        ModelBuilder.depopParameters(new fr.inria.stamp.alloy.model.Variable(\"accumulate#value\", \"Int\"));" + nl +
             "        if (((this.currentValue) % 3) == 0) {" + nl +
             "            this.currentValue += value;" + nl +
             "        }else {" + nl +

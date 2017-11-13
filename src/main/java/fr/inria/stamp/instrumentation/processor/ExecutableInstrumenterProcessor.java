@@ -43,7 +43,10 @@ public class ExecutableInstrumenterProcessor extends InstrumenterProcessor<CtExe
 
             executable.getParameters().stream()
                     .filter(parameter -> TypeUtils.isSupported(parameter.getType().getTypeDeclaration()))
-                    .map(parameter -> InstrumenterHelper.convertParameterToConstructorCall(parameter.getSimpleName(), parameter.getType().getTypeDeclaration()))
+                    .map(parameter -> InstrumenterHelper.convertParameterToConstructorCall(
+                            parameter.getParent(CtExecutable.class).getSimpleName() + "#" + parameter.getSimpleName(),
+                            parameter.getType().getTypeDeclaration())
+                    )
                     .forEach(invocation::addArgument);
 
             executable.getBody().insertBegin(invocation);

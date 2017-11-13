@@ -32,16 +32,16 @@ public class ModificationInstrumenterProcessorTest extends AbstractTest {
             "" + nl +
             "    public Calculator(int value) {" + nl +
             "        this.currentValue = value;" + nl +
-            "        ModelBuilder.addModification(this, \"currentValue\", \"value\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "        ModelBuilder.addModification(this, \"currentValue\", \"value\", \"<init>\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "    }" + nl +
             "" + nl +
             "    public void accumulate(int value) {" + nl +
             "        if (((this.currentValue) % 3) == 0) {" + nl +
             "            (this.currentValue) += value;" + nl +
-            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,value]\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,value]\", \"accumulate\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "        }else {" + nl +
             "            (this.currentValue) += (2 * value);" + nl +
-            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,mul[2,value]]\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "            ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,mul[2,value]]\", \"accumulate\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "        }" + nl +
             "    }" + nl +
             "" + nl +
@@ -49,12 +49,12 @@ public class ModificationInstrumenterProcessorTest extends AbstractTest {
             "        if (((this.currentValue) % 5) == 0) {" + nl +
             "            if (((this.currentValue) % 2) == 0) {" + nl +
             "                this.currentValue = 0;" + nl +
-            "                ModelBuilder.addModification(this, \"currentValue\", \"0\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "                ModelBuilder.addModification(this, \"currentValue\", \"0\", \"reset\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "            }" + nl +
             "        }else {" + nl +
             "            if ((((this.currentValue) * 7) % 23) == 0) {" + nl +
             "                (this.currentValue) += 21;" + nl +
-            "                ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,21]\", new Variable(\"currentValue\", \"Int\"));" + nl +
+            "                ModelBuilder.addModification(this, \"currentValue\", \"plus[currentValue,21]\", \"reset\", new Variable(\"currentValue\", \"Int\"));" + nl +
             "            }" + nl +
             "        }" + nl +
             "    }" + nl +
