@@ -10,13 +10,13 @@ import org.junit.Test;
 public class CalculatorTest {
 
     @Test
-    public void testCFG1() throws Exception {
+    public void testAccumulate() throws Exception {
         final Calculator calculator1 = new Calculator(-5);
         calculator1.accumulate(-5);
     }
 
     @Test
-    public void testAccumulate() throws Exception {
+    public void testAccumulateAndReset() throws Exception {
         final Calculator calculator1 = new Calculator(3);
         calculator1.accumulate(-3);
         calculator1.reset();
