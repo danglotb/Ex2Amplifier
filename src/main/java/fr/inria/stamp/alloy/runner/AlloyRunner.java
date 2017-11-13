@@ -1,5 +1,6 @@
 package fr.inria.stamp.alloy.runner;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
@@ -34,11 +35,19 @@ public class AlloyRunner {
                     cmd,
                     new A4Options()
             );
+            if (!solution.satisfiable()) {
+                return Collections.emptyList();
+            }
             Sig inputVectorSignature = getVectorOfInput(solution);
             for (Sig.Field field : inputVectorSignature.getFields()) {
                 final TupleSet tupleSet = getTupleSet(solution, field);
                 Universe universe = tupleSet.universe();
-                newValues.add(universe.atom(tupleSet.iterator().next().index()));
+                final Object newValue = universe.atom(tupleSet.iterator().next().index());
+                if (field.type().toExpr().toString().endsWith("Int")) {
+                    newValues.add(Integer.parseInt(newValue.toString()));
+                } else {
+                    newValues.add(newValue);
+                }
             }
             return newValues;
         } catch (Err err) {
