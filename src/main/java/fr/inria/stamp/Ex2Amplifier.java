@@ -2,6 +2,7 @@ package fr.inria.stamp;
 
 import fr.inria.diversify.automaticbuilder.AutomaticBuilder;
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
+import fr.inria.diversify.dspot.amplifier.Amplifier;
 import fr.inria.diversify.utils.AmplificationChecker;
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.DSpotUtils;
@@ -38,10 +39,7 @@ import java.util.List;
  * benjamin.danglot@inria.fr
  * on 10/11/17
  */
-public class Ex2Amplifier implements fr.inria.diversify.dspot.amplifier.Amplifier {
-
-    @Deprecated
-    private Launcher spoonModel;
+public class Ex2Amplifier implements Amplifier {
 
     private InputConfiguration configuration;
 
@@ -50,7 +48,7 @@ public class Ex2Amplifier implements fr.inria.diversify.dspot.amplifier.Amplifie
     public Ex2Amplifier(String pathToConfiguration) {
         try {
             this.configuration = new InputConfiguration(pathToConfiguration);
-            this.spoonModel = init(configuration);
+            init(configuration);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -120,7 +118,7 @@ public class Ex2Amplifier implements fr.inria.diversify.dspot.amplifier.Amplifie
         this.testClass = ctType;
     }
 
-    private Launcher init(final InputConfiguration configuration) throws IOException {
+    private void init(final InputConfiguration configuration) throws IOException {
         AutomaticBuilderFactory.reset();
         final InputProgram program = InputConfiguration.initInputProgram(configuration);
         program.setProgramDir(DSpotUtils.computeProgramDirectory.apply(configuration));
@@ -148,7 +146,6 @@ public class Ex2Amplifier implements fr.inria.diversify.dspot.amplifier.Amplifie
         if (!status) {
             throw new RuntimeException("Error during compilation");
         }
-        return spoonModel;
     }
 
     private Launcher instrument(String pathToSources, String pathToTestSources, String dependencies) {
@@ -170,14 +167,8 @@ public class Ex2Amplifier implements fr.inria.diversify.dspot.amplifier.Amplifie
         launcher.addProcessor(new ExecutableInstrumenterProcessor());
         launcher.addProcessor(new ConstraintInstrumenterProcessor());
         launcher.addProcessor(new ModificationInstrumenterProcessor());
+        launcher.addProcessor(new TestInstrumentation());
         launcher.process();
-        launcher.getFactory()
-                .Class()
-                .getAll()
-                .stream()
-                .flatMap(ctType -> ctType.getMethods().stream())
-                .filter(AmplificationChecker::isTest)
-                .forEach(TestInstrumentation::instrument);
         return launcher;
     }
 }
