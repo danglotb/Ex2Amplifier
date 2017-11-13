@@ -18,8 +18,6 @@ import static fr.inria.stamp.alloy.builder.ModelBuilder.nl;
  */
 public class Model {
 
-    private Queue<Variable> parameterStack;
-
     private List<Class<?>> registeredClass;
 
     private Map<Object, Integer> nbModificationPerReference;
@@ -40,7 +38,6 @@ public class Model {
         this.inputs = new ArrayList<>();
         this.nbModificationPerReference = new IdentityHashMap<>();
         this.registeredClass = new ArrayList<>();
-        this.parameterStack = new ArrayDeque<>();
         this.indexOfConstraintToBeNegated = 0;
         this.context = new Context();
     }
@@ -52,7 +49,6 @@ public class Model {
         this.inputs = model.inputs.stream().map(Variable::copy).collect(Collectors.toList());
         this.nbModificationPerReference = new IdentityHashMap<>(model.getNbModificationPerReference());
         this.registeredClass = new ArrayList<>(model.getRegisteredClass());
-        this.parameterStack = new ArrayDeque<>();
         this.indexOfConstraintToBeNegated = 0;
         this.context = model.context.copy();
     }
@@ -76,6 +72,12 @@ public class Model {
                 });
     }
 
+    public boolean hasNextConstraintToBeNegated() {
+        return this.facts.stream()
+                .filter(fact -> fact instanceof Constraint)
+                .count() > this.indexOfConstraintToBeNegated;
+    }
+
     public List<Class<?>> getRegisteredClass() {
         return registeredClass;
     }
@@ -94,10 +96,6 @@ public class Model {
 
     public Map<Object, Integer> getNbModificationPerReference() {
         return nbModificationPerReference;
-    }
-
-    public Queue<Variable> getParameterStack() {
-        return parameterStack;
     }
 
     public int getIndexOfReferenceObject(Object object) {

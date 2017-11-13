@@ -30,11 +30,9 @@ public class Signature {
     }
 
     public String toString() {
-        return "abstract sig " +
-                this.name +
+        return "abstract sig " + this.name + " {" +
                 nl +
-                "\t" +
-                this.variables.stream()
+                "\t" + this.variables.stream()
                         .map(Object::toString)
                         .map("\t"::concat)
                         .collect(Collectors.joining("," + nl)) +

@@ -29,26 +29,14 @@ public class ModelBuilder {
     }
 
     public static void depopParameters(Variable... parameters) {
-        Arrays.stream(parameters).forEach(parameter -> {
-                    final Variable variable = model.getParameterStack().poll();
-                    model.getContext().updateParameter(variable.name, parameter.name, variable.type);
-                }
-        );
-    }
-    
-    public static void addInputs(Variable... types) {
-        Arrays.stream(types)
-                .map(variable ->
-                        new Variable(variable.name.split("\\.")[1], variable.type)
-                ).forEach(model.getInputs()::add);
+        Arrays.stream(parameters).forEach(model.getContext()::matchParameterToVariable);
     }
 
     public static void addParameters(Variable... parameters) {
         model.getContext().reset();
         Arrays.stream(parameters)
                 .map(parameter -> {
-                    model.getParameterStack().add(parameter);
-                    model.getContext().addParameter(parameter);
+                    model.getContext().stack(parameter);
                     return new Modification(
                             model.getContext().parameterNameToVectorParameter(parameter.name),
                             parameter.name
@@ -56,7 +44,14 @@ public class ModelBuilder {
                 }).forEach(model.getFacts()::add);
     }
 
-    public static void addModification(Object object, String modifiedAttribute, String modification, Variable... variables) {
+    public static void addInputs(Variable... types) {
+        Arrays.stream(types)
+                .map(variable ->
+                        new Variable(variable.name.split("\\.")[1], variable.type)
+                ).forEach(model.getInputs()::add);
+    }
+
+    public static void addModification(Object object, String modifiedAttribute, String modification, String context, Variable... variables) {
         final Class<?> objectClass = object.getClass();
         // each class has one abstract sig
         if (!model.getRegisteredClass().contains(objectClass)) {
@@ -76,7 +71,7 @@ public class ModelBuilder {
         );
         final Modification modificationObject = new Modification(
                 prefixObject + (count + 1) + "." + modifiedAttribute,
-                model.getContext().replaceByContext(modification)
+                model.getContext().replaceByContext(modification, context)
         );
         dependantFacts.forEach(facts -> facts.add(modificationObject));
         model.getFacts().add(modificationObject);
