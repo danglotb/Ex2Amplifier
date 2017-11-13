@@ -98,11 +98,8 @@ public class ModelBuilder {
     }
 
     public static void endConstraint() {
-        if (!(dependantFacts.get(dependantFacts.size() - 1).get(0) instanceof Constraint)) {
-            throw new RuntimeException("The first fact of the dependant facts must be a constraint");
-        }
-        final Constraint constraint = (Constraint) (dependantFacts.get(dependantFacts.size() - 1).remove(0));
-        constraint.subFacts.addAll(dependantFacts.remove(dependantFacts.size() - 1));
+        ((Constraint) (dependantFacts.get(dependantFacts.size() - 1).remove(0)))
+                .subFacts.addAll(dependantFacts.remove(dependantFacts.size() - 1));
     }
 
     public static Model getModel() {
