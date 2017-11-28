@@ -2,19 +2,23 @@ package fr.inria.stamp.instrumentation;
 
 import fr.inria.diversify.utils.AmplificationChecker;
 import fr.inria.stamp.alloy.model.Variable;
+import fr.inria.stamp.instrumentation.processor.InvocationInstrumenterProcessor;
 import fr.inria.stamp.instrumentation.util.InstrumenterHelper;
 import fr.inria.stamp.instrumentation.util.TypeUtils;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtConstructorCall;
+import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtPackage;
+import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.List;
@@ -32,19 +36,32 @@ public class TestInstrumentation extends AbstractProcessor<CtMethod<?>> {
 
     private int[] index = new int[]{0};
 
+    private final Factory factory;
+
+    public TestInstrumentation(Factory factory) {
+        this.factory = factory;
+    }
+
     @Override
     public boolean isToBeProcessed(CtMethod<?> candidate) {
         return AmplificationChecker.isTest(candidate);
     }
 
     @Override
-    public void process(CtMethod<?> testMethod) {
-        final CtInvocation<?> callToAddInputs = createCallToAddInputs(testMethod.getFactory());
-        testMethod.getElements(new TypeFilter<CtAbstractInvocation>(CtAbstractInvocation.class) {
+    public void process(CtMethod<?> testMethod) {//TODO redondancy of the code here with InvocationInstrumenterProcessor
+        final CtInvocation<?> callToAddInputs = createCallToAddInputs(this.factory);
+        testMethod.getElements(new TypeFilter<CtAbstractInvocation<?>>(CtAbstractInvocation.class) {
             @Override
-            public boolean matches(CtAbstractInvocation candidate) {
+            public boolean matches(CtAbstractInvocation<?> candidate) {
+                boolean isAssert = false;
+                if (candidate instanceof CtInvocation) {
+                    isAssert = AmplificationChecker.isAssert((CtInvocation) candidate);
+                }
                 return !candidate.getParent(CtPackage.class).getQualifiedName().startsWith("fr.inria.stamp") &&
-                        !candidate.getExecutable().getParameters().isEmpty();
+                        !candidate.getExecutable().getParameters().isEmpty() && !isAssert &&
+                        candidate.getArguments().stream().map(CtExpression::getType)
+                                .map(CtTypeReference::getTypeDeclaration)
+                                .allMatch(TypeUtils::isSupported);
             }
         }).stream()
                 .flatMap(ctAbstractInvocation ->
@@ -54,9 +71,6 @@ public class TestInstrumentation extends AbstractProcessor<CtMethod<?>> {
     }
 
     private List<? extends CtConstructorCall<?>> instrument(CtAbstractInvocation<?> invocation) {
-
-        final Factory factory = invocation.getFactory();
-
         final CtClass<?> modelBuilderClass = factory
                 .Class().get("fr.inria.stamp.alloy.builder.ModelBuilder");
 

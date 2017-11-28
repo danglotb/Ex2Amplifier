@@ -1,16 +1,19 @@
 package fr.inria.stamp.instrumentation.processor;
 
+import fr.inria.diversify.utils.AmplificationChecker;
 import fr.inria.stamp.instrumentation.util.InstrumenterHelper;
 import fr.inria.stamp.instrumentation.util.TypeUtils;
 import spoon.processing.AbstractProcessor;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtBlock;
+import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtPackage;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.reference.CtTypeReference;
 
 /**
  * Created by Benjamin DANGLOT
@@ -21,8 +24,15 @@ public class InvocationInstrumenterProcessor extends InstrumenterProcessor<CtAbs
 
     @Override
     public boolean isToBeProcessed(CtAbstractInvocation<?> candidate) {
+        boolean isAssert = false;
+        if (candidate instanceof CtInvocation) {
+            isAssert = AmplificationChecker.isAssert((CtInvocation) candidate);
+        }
         return super.isToBeProcessed(candidate) &&
-                !candidate.getExecutable().getParameters().isEmpty();
+                !candidate.getExecutable().getParameters().isEmpty() && !isAssert
+                && candidate.getArguments().stream().map(CtExpression::getType)
+                .map(CtTypeReference::getTypeDeclaration)
+                .allMatch(TypeUtils::isSupported);
     }
 
     @Override

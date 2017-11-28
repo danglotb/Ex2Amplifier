@@ -1,6 +1,5 @@
 package fr.inria.stamp.alloy.runner;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
@@ -13,6 +12,7 @@ import kodkod.instance.TupleSet;
 import kodkod.instance.Universe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
