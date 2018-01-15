@@ -85,11 +85,15 @@
         </dependency>
 
         <dependency>
-            <groupId>alloy</groupId>
-            <artifactId>alloy</artifactId>
-            <version>4.2</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/alloy4.2.jar</systemPath>
+            <groupId>jbse</groupId>
+            <artifactId>jbse</artifactId>
+            <version>0.8.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sosy-lab</groupId>
+            <artifactId>java-smt</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
     </dependencies>

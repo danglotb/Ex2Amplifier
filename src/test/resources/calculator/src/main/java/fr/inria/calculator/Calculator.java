@@ -22,6 +22,14 @@ public class Calculator {
         }
     }
 
+    public boolean compareTo(int value) {
+        if (this.currentValue > value) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void reset() {
         if (this.currentValue % 5 == 0) {
             if (this.currentValue % 2 == 0) {
