@@ -60,7 +60,7 @@ public class JBSERunner {
                 testMethod.getSimpleName()
         );
         p.setDecisionProcedureType(RunParameters.DecisionProcedureType.Z3);
-        p.setExternalDecisionProcedurePath("lib/z3/bin/z3"); // build from sources, after cloning the repos
+        p.setExternalDecisionProcedurePath("lib/z3/build/bin/z3");
         p.setOutputFileName("out/runIf_z3.txt");
         p.setStepShowMode(RunParameters.StepShowMode.LEAVES);
         p.setStateFormatMode(RunParameters.StateFormatMode.FULLTEXTHISTORY);
