@@ -14,8 +14,8 @@ cd ..
 
 mkdir lib
 cd lib
-cd z3
 git clone https://github.com/Z3Prover/z3.git
+cd z3
 python scripts/mk_make.py --prefix=./
 cd build
 make
