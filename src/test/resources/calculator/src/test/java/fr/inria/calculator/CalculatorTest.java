@@ -50,4 +50,14 @@ public class CalculatorTest {
         assertEquals(-24, calculator2.getCurrentValue());
     }
 
+    public void testAccumulateWithParameters(int param1, int param2) {
+        final Calculator calculator1 = new Calculator(param1);
+        calculator1.accumulate(param2);
+    }
+
+    public void testCompareToWithParameters(int param1, int param2) {
+        final Calculator calculator1 = new Calculator(param1);
+        calculator1.compareTo(param2);
+    }
+
 }
