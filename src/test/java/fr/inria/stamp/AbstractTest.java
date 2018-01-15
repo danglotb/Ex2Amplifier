@@ -5,6 +5,7 @@ import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.sosiefier.InputConfiguration;
 import fr.inria.diversify.utils.sosiefier.InputProgram;
+import org.junit.After;
 import org.junit.Before;
 import spoon.Launcher;
 
@@ -26,9 +27,15 @@ public class AbstractTest {
 
     @Before
     public void setUp() throws Exception {
+        Main.verbose = true;
         this.launcher = this.initSpoonModel(this.getPathToConfigurationFile());
         AutomaticBuilderFactory.getAutomaticBuilder(this.configuration)
                 .compile(this.configuration.getInputProgram().getProgramDir());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        Main.verbose = false;
     }
 
     protected Launcher launcher;
