@@ -14,6 +14,7 @@ import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -56,8 +57,11 @@ public class MainGenerator {
         if (value instanceof String) {
             value = "\"" + value + "\"";
         }
-        return "catg.CATG.make" + literal.getType().getSimpleName() + "(" + value + ")";
+        return "catg.CATG.read" + toU1.apply(literal.getType().getSimpleName()) + "(" + value + ")";
     }
+
+    private static final Function<String, String> toU1 = string ->
+            Character.toUpperCase(string.charAt(0)) + string.substring(1);
 
     private static CtMethod<?> initMainMethod(Factory factory) {
         final CtMethod<Void> mainMethod = factory.createMethod();
