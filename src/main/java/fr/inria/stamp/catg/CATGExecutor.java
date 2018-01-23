@@ -1,7 +1,6 @@
 package fr.inria.stamp.catg;
 
 import fr.inria.diversify.utils.AmplificationHelper;
-import spoon.reflect.code.CtLiteral;
 import spoon.reflect.factory.Factory;
 
 import java.io.File;
@@ -16,10 +15,9 @@ public class CATGExecutor {
 
     public static int maxIterations = 100;
 
-    public static List<List<CtLiteral<?>>> execute(Factory factory,
-                                                   String classpath,
-                                                   String fullQualifiedNameOfTestClass) {
-
+    public static List<List<String>> execute(Factory factory,
+                                             String classpath,
+                                             String fullQualifiedNameOfTestClass) {
         CATGUtils.eraseOldFiles();
         int iteration = 1;
         while (iteration <= maxIterations) {
@@ -28,7 +26,6 @@ public class CATGExecutor {
                 final String command = CATGUtils.COMMAND_LINE +
                         classpath + CATG_JARS +
                         " -ea " + fullQualifiedNameOfTestClass;
-                System.out.println(command);
                 final Process process = Runtime.getRuntime().exec(command);
                 new ThreadToReadInputStream(System.out, process.getInputStream()).start();
                 new ThreadToReadInputStream(System.err, process.getErrorStream()).start();
@@ -36,14 +33,13 @@ public class CATGExecutor {
             } catch (Exception ignored) {
                 // ignored
             }
-            if (!new File("hisory").exists() && !new File("backtrackFlag").exists()) {
+            if ((!new File("history").exists()) && (!new File("backtrackFlag").exists())) {
                 break;
             } else {
                 iteration++;
             }
         }
-
-        return CATGUtils.readOutPut(factory);
+        return CATGUtils.readOutPut();
     }
 
     private static final String CATG_JARS =

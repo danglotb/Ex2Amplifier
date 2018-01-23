@@ -40,26 +40,24 @@ public class CATGUtils {
         }
         if (isRealInput) {
             try {
-                FileUtils.copyDirectory(new File("inputs"), new File("inputs" + iteration));
-                FileUtils.copyDirectory(new File("inputs"), new File("inputs.old"));
+                FileUtils.copyFile(new File("inputs"), new File("inputs" + iteration));
+                FileUtils.copyFile(new File("inputs"), new File("inputs.old"));
             } catch (Exception ignored) {
                 //ignored
             }
         }
         try {
-            FileUtils.copyDirectory(new File("history"), new File("history.old"));
+            FileUtils.copyFile(new File("history"), new File("history.old"));
         } catch (Exception ignored) {
             //ignored
         }
     }
 
-    static List<List<CtLiteral<?>>> readOutPut(final Factory factory) {
+    static List<List<String>> readOutPut() {
         return Arrays.stream(new File(".").list(FILTER_INPUTS_FILES))
                 .map(filename -> {
                     try (BufferedReader buffer = new BufferedReader(new FileReader(filename))) {
-                        final List<CtLiteral<?>> literals = buffer.lines()
-                                .map(factory::createLiteral)
-                                .collect(Collectors.toList());
+                        final List<String> literals = buffer.lines().collect(Collectors.toList());
                         return literals;
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -74,9 +72,10 @@ public class CATGUtils {
 
     public static void eraseOldFiles() {
         Stream.concat(Arrays.stream(new String[]{
-                        "inputs", "inputs.old",
-                        "history", "history.old",
-                        "isRealInput", "backtrackFlag"
+                        "formula", "formula.tmp", "coverage.catg",
+                        "inputs", "inputs.old", "inputs.bak",
+                        "history", "history.old", "history.bak",
+                        "isRealInput", "backtrackFlag", "instrumented"
                 }),
                 Arrays.stream(new File(".").list(FILTER_INPUTS_FILES))
         ).forEach(CATGUtils::tryToErase);

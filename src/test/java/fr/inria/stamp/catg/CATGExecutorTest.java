@@ -6,6 +6,7 @@ import fr.inria.diversify.dspot.support.DSpotCompiler;
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.DSpotUtils;
 import fr.inria.stamp.AbstractTest;
+import org.junit.After;
 import org.junit.Test;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtClass;
@@ -57,10 +58,16 @@ public class CATGExecutorTest extends AbstractTest {
                         this.configuration.getInputProgram().getTestClassesDir())
         );
 
-        final List<List<CtLiteral<?>>> execute = CATGExecutor.execute(this.launcher.getFactory(),
+        final List<List<String>> execute = CATGExecutor.execute(this.launcher.getFactory(),
                 classpath,
                 qualifiedName
         );
         System.out.println(execute);
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        CATGUtils.eraseOldFiles();
     }
 }
