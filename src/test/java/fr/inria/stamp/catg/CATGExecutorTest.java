@@ -15,6 +15,8 @@ import spoon.reflect.declaration.CtMethod;
 import java.io.File;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by Benjamin DANGLOT
  * benjamin.danglot@inria.fr
@@ -58,11 +60,12 @@ public class CATGExecutorTest extends AbstractTest {
                         this.configuration.getInputProgram().getTestClassesDir())
         );
 
-        final List<List<String>> execute = CATGExecutor.execute(this.launcher.getFactory(),
-                classpath,
-                qualifiedName
-        );
-        System.out.println(execute);
+        final List<List<String>> execute = CATGExecutor.execute(classpath,qualifiedName);
+        assertEquals(3, execute.size());
+        final String expectedOutput = "[0, , 0, , 0, ]";
+        assertEquals(expectedOutput, execute.get(1).toString());
+        final String expectedOutput2 = "[0, , 1, , 0, ]";
+        assertEquals(expectedOutput2, execute.get(2).toString());
     }
 
     @Override

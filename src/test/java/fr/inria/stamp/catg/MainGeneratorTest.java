@@ -1,8 +1,11 @@
 package fr.inria.stamp.catg;
 
+import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.stamp.AbstractTest;
 import org.junit.Test;
 import spoon.reflect.declaration.CtMethod;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Benjamin DANGLOT
@@ -32,7 +35,21 @@ public class MainGeneratorTest extends AbstractTest {
                         .getMethodsByName("test")
                         .get(0)
         );
-
-        System.out.println(mainMethodFromTestMethod);
+        final String expectedMainMethod = "public static void main(String[] args) {" + AmplificationHelper.LINE_SEPARATOR +
+                "    int lit1 = catg.CATG.readInt(100);" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit2 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    int lit3 = catg.CATG.readInt(5);" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit4 = catg.CATG.readString(\"Timoleon\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    int lit5 = catg.CATG.readInt(1000);" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit6 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    Seller seller = new Seller(lit1, Collections.singletonList(new Item(lit2, lit3)));" + AmplificationHelper.LINE_SEPARATOR +
+                "    Player player = new Player(lit4, lit5);" + AmplificationHelper.LINE_SEPARATOR +
+                "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "    player.buyItem(lit6, seller);" + AmplificationHelper.LINE_SEPARATOR +
+                "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "}";
+        assertEquals(expectedMainMethod, mainMethodFromTestMethod.toString());
     }
 }
