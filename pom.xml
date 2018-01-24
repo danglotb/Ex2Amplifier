@@ -47,7 +47,7 @@
         <dependency>
             <groupId>fr.inria.gforge.spoon</groupId>
             <artifactId>spoon-core</artifactId>
-            <version>6.0.0</version>
+            <version>6.1.0</version>
         </dependency>
 
         <dependency>
@@ -59,10 +59,9 @@
         <dependency>
             <groupId>fr.inria.stamp</groupId>
             <artifactId>dspot</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.6-SNAPSHOT</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.shared/maven-invoker -->
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-invoker</artifactId>
@@ -84,18 +83,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>jbse</groupId>
-            <artifactId>jbse</artifactId>
-            <version>0.8.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.sosy-lab</groupId>
-            <artifactId>java-smt</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -110,6 +97,7 @@
                             <directory>src/test/resources/</directory>
                             <includes>
                                 <include>calculator/target/</include>
+                                <include>tavern/target/</include>
                             </includes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
