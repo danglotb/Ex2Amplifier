@@ -1,5 +1,6 @@
 package fr.inria.stamp.catg;
 
+import com.google.common.collect.Lists;
 import com.sun.javafx.fxml.expression.Expression;
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
 import org.pitest.functional.FArray;
@@ -41,7 +42,7 @@ public class MainGenerator {
                                 )
                         ).collect(Collectors.toList());
         final CtMethod<?> mainMethod = initMainMethod(factory);
-        localVariables.forEach(blockMain::insertBegin);
+        Lists.reverse(localVariables).forEach(blockMain::insertBegin);
 
         final Iterator<CtLocalVariable<?>> iterator = localVariables.iterator();
         blockMain.getElements(new TypeFilter<CtLiteral<?>>(CtLiteral.class))
