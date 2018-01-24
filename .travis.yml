@@ -11,8 +11,7 @@ cache:
     - lib/
 
 install:
-  - export MAVEN_HOME=/usr/local/maven-3.5.0
-  - ./src/bash/install-dspot.sh
+  - export MAVEN_HOME=/usr/local/maven-3.5.2
 
 script:
   - mvn clean install
