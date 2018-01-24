@@ -1,8 +1,7 @@
-package fr.inria.stamp;
+package fr.inria.stamp.catg;
 
-import fr.inria.diversify.utils.AmplificationHelper;
+import fr.inria.stamp.AbstractTest;
 import org.junit.Test;
-import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 
 import java.util.List;
@@ -12,29 +11,31 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Benjamin DANGLOT
  * benjamin.danglot@inria.fr
- * on 14/01/18
+ * on 24/01/18
  */
 public class Ex2AmplifierTest extends AbstractTest {
 
-    // TODO refactor tests
+    @Override
+    protected String getPathToConfigurationFile() {
+        return "src/test/resources/tavern/tavern.properties";
+    }
 
     @Test
     public void test() throws Exception {
-        this.configuration.getInputProgram().setFactory(this.launcher.getFactory());
-        final Ex2Amplifier amplifier = new Ex2Amplifier(this.configuration);
-        final CtClass<?> testClass = this.launcher.getFactory().Class().get("fr.inria.calculator.CalculatorTest");
-        amplifier.reset(testClass);
-        final List<CtMethod> amplifiedTestAccumulate = amplifier.apply(testClass.getMethodsByName("testAccumulate").get(0));
-        assertEquals(2, amplifiedTestAccumulate.size());
-        final String expectedAmplifiedTestMethod = "{" + AmplificationHelper.LINE_SEPARATOR +
-                "    final Calculator calculator1 = new Calculator(0);" + AmplificationHelper.LINE_SEPARATOR +
-                "    Assert.assertEquals((-5), calculator1.getCurrentValue());" + AmplificationHelper.LINE_SEPARATOR +
-                "    calculator1.accumulate((-5));" + AmplificationHelper.LINE_SEPARATOR +
-                "    Assert.assertEquals((-15), calculator1.getCurrentValue());" + AmplificationHelper.LINE_SEPARATOR +
-                "}";
-        assertEquals(expectedAmplifiedTestMethod, amplifiedTestAccumulate.get(0).getBody().toString());
 
+        /*
+            Test that the Ex2Amplifier returns a List of CtMethod build thank to CATG.
+            Amplified CtMethod has the same "structural" inputs of the test, but with
+            different test data input, i.e. literals has been modified.
+         */
+
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration);
+        final CtMethod<?> test = this.launcher.getFactory()
+                .Class()
+                .get("fr.inria.stamp.MainTest")
+                .getMethodsByName("test")
+                .get(0);
+        final List<CtMethod> apply = ex2Amplifier.apply(test);
+        assertEquals(3, apply.size());
     }
-
-
 }
