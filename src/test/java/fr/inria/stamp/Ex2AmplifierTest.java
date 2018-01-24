@@ -1,6 +1,5 @@
-package fr.inria.stamp.catg;
+package fr.inria.stamp;
 
-import fr.inria.stamp.AbstractTest;
 import org.junit.Test;
 import spoon.reflect.declaration.CtMethod;
 
@@ -37,5 +36,6 @@ public class Ex2AmplifierTest extends AbstractTest {
                 .get(0);
         final List<CtMethod> apply = ex2Amplifier.apply(test);
         assertEquals(3, apply.size());
+        System.out.println(apply);
     }
 }

@@ -1,7 +1,8 @@
-package fr.inria.stamp.catg;
+package fr.inria.stamp;
 
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.stamp.AbstractTest;
+import fr.inria.stamp.MainGenerator;
 import org.junit.Test;
 import spoon.reflect.declaration.CtMethod;
 

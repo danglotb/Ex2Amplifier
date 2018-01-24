@@ -1,9 +1,6 @@
-package fr.inria.stamp.catg;
+package fr.inria.stamp;
 
-import com.google.common.collect.Lists;
-import com.sun.javafx.fxml.expression.Expression;
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
-import org.pitest.functional.FArray;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtLocalVariable;
@@ -13,6 +10,7 @@ import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.visitor.filter.TypeFilter;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -42,7 +40,10 @@ public class MainGenerator {
                                 )
                         ).collect(Collectors.toList());
         final CtMethod<?> mainMethod = initMainMethod(factory);
-        Lists.reverse(localVariables).forEach(blockMain::insertBegin);
+
+        Collections.reverse(localVariables);
+        localVariables.forEach(blockMain::insertBegin);
+        Collections.reverse(localVariables);
 
         final Iterator<CtLocalVariable<?>> iterator = localVariables.iterator();
         blockMain.getElements(new TypeFilter<CtLiteral<?>>(CtLiteral.class))
