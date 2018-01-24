@@ -15,8 +15,7 @@ public class CATGExecutor {
 
     public static int maxIterations = 100;
 
-    public static List<List<String>> execute(Factory factory,
-                                             String classpath,
+    public static List<List<String>> execute(String classpath,
                                              String fullQualifiedNameOfTestClass) {
         CATGUtils.eraseOldFiles();
         int iteration = 1;
