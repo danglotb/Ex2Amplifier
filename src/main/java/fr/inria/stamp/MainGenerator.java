@@ -44,7 +44,7 @@ public class MainGenerator {
         final CtBlock<?> blockMain =
                 new AssertionRemover().removeAssertion(testMethod).getBody().clone();
         final List<CtLiteral<?>> originalLiterals =
-                blockMain.getElements(new TypeFilter<CtLiteral<?>>(CtLiteral.class));
+                blockMain.getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER);
         final int[] count = new int[]{1};
         final List<CtLocalVariable<?>> localVariables =
                 originalLiterals.stream()
@@ -62,7 +62,7 @@ public class MainGenerator {
         Collections.reverse(localVariables);
 
         final Iterator<CtLocalVariable<?>> iterator = localVariables.iterator();
-        blockMain.getElements(new TypeFilter<CtLiteral<?>>(CtLiteral.class))
+        blockMain.getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER)
                 .forEach(literal ->
                         literal.replace(factory.createVariableRead(iterator.next().getReference(), false))
                 );
