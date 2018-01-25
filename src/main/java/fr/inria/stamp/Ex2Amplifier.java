@@ -12,6 +12,7 @@ import fr.inria.stamp.catg.CATGExecutor;
 import fr.inria.stamp.catg.CATGUtils;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtClass;
+import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
@@ -30,6 +31,12 @@ import java.util.stream.Collectors;
  */
 public class Ex2Amplifier implements Amplifier {
 
+    public static final TypeFilter<CtLiteral<?>> CT_LITERAL_TYPE_FILTER = new TypeFilter<CtLiteral<?>>(CtLiteral.class) {
+        @Override
+        public boolean matches(CtLiteral<?> element) {
+            return super.matches(element) && !"<nulltype>".equals(element.getType().getSimpleName());
+        }
+    };
     private InputConfiguration configuration;
 
     public Ex2Amplifier(InputConfiguration configuration) {
@@ -38,7 +45,7 @@ public class Ex2Amplifier implements Amplifier {
 
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
-        if (ctMethod.getElements(new TypeFilter<CtLiteral>(CtLiteral.class)).isEmpty()) {
+        if (ctMethod.getElements(CT_LITERAL_TYPE_FILTER).isEmpty()) {
             return Collections.emptyList();
         }
         final CtMethod<?> mainMethodFromTestMethod =
