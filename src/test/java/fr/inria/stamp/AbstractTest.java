@@ -51,7 +51,7 @@ public class AbstractTest {
             String dependencies = builder.buildClasspath(program.getProgramDir());
             return initLauncher(program.getAbsoluteSourceCodeDir(),
                     program.getAbsoluteTestSourceCodeDir(),
-                    dependencies);
+                    dependencies + AmplificationHelper.PATH_SEPARATOR + "lib/catg-dev.jar");
         } catch (IOException ignored) {
             fail();//should not happen
         }
