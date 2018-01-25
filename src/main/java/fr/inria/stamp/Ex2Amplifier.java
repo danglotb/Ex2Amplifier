@@ -18,6 +18,7 @@ import spoon.reflect.factory.Factory;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +38,9 @@ public class Ex2Amplifier implements Amplifier {
 
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
+        if (ctMethod.getElements(new TypeFilter<CtLiteral>(CtLiteral.class)).isEmpty()) {
+            return Collections.emptyList();
+        }
         final CtMethod<?> mainMethodFromTestMethod =
                 MainGenerator.generateMainMethodFromTestMethod(ctMethod);
         final CtClass testClass = ctMethod.getParent(CtClass.class);
