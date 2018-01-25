@@ -3,6 +3,8 @@ package fr.inria.stamp;
 import fr.inria.stamp.tavern.Item;
 import fr.inria.stamp.tavern.Player;
 import fr.inria.stamp.tavern.Seller;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,8 +19,28 @@ import static org.junit.Assert.assertEquals;
  */
 public class MainTest {
 
+	public int aUsedNumber = 3;
+
+	private int getANumber() {
+		return 0;
+	}
+
+	@Before
+	public void setUp() throws Exception {
+
+	}
+
+	@After
+	public void tearDown() throws Exception {
+
+	}
+
 	@Test
-	public void test() throws Exception {
+	public void test() {
+
+		System.out.println(this.aUsedNumber);
+		System.out.println(getANumber());
+
 		Seller seller = new Seller(100, Collections.singletonList(new Item("Potion", 5)));
 		Player player = new Player("Timoleon", 1000);
 
