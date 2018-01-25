@@ -5,6 +5,7 @@ import spoon.reflect.declaration.CtMethod;
 
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -37,5 +38,23 @@ public class Ex2AmplifierTest extends AbstractTest {
         final List<CtMethod> apply = ex2Amplifier.apply(test);
         assertEquals(3, apply.size());
         System.out.println(apply);
+    }
+
+    @Test
+    public void testOnNonAmplifiableTestMethod() throws Exception {
+
+        /*
+            In Case of the test method does not contain any literal or only null,
+            Ex2Amplifier returns an empty list, i.e. it cannot amplifiy such test methods.
+         */
+
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration);
+        final CtMethod<?> test = this.launcher.getFactory()
+                .Class()
+                .get("fr.inria.stamp.MainTest")
+                .getMethodsByName("test2")
+                .get(0);
+        final List<CtMethod> apply = ex2Amplifier.apply(test);
+        assertTrue(apply.isEmpty());
     }
 }
