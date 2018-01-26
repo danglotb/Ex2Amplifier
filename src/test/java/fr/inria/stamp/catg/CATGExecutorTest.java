@@ -61,9 +61,9 @@ public class CATGExecutorTest extends AbstractTest {
 
         final List<List<String>> execute = CATGExecutor.execute(classpath,qualifiedName);
         assertEquals(3, execute.size());
-        final String expectedOutput = "[0, , 0, , 0, ]";
+        final String expectedOutput = "[, , 1, 0, , 0, , 0, ]";
         assertEquals(expectedOutput, execute.get(1).toString());
-        final String expectedOutput2 = "[0, , 1, , 0, ]";
+        final String expectedOutput2 = "[, , 1, 0, , 1, , 0, ]";
         assertEquals(expectedOutput2, execute.get(2).toString());
     }
 
