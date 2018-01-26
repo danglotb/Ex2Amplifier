@@ -42,37 +42,39 @@ public class MainGeneratorTest extends AbstractTest {
         final CtMethod<?> mainMethodFromTestMethod = MainGenerator.generateMainMethodFromTestMethod(
                 testClass.getMethodsByName("test").get(0)
         );
-        final String expectedMainMethod = "public static void main(String[] args) {" + AmplificationHelper.LINE_SEPARATOR+
-                "    MainTest mainTest = new MainTest();" + AmplificationHelper.LINE_SEPARATOR+
-                "    try {" + AmplificationHelper.LINE_SEPARATOR+
-                "        mainTest.setUp();" + AmplificationHelper.LINE_SEPARATOR+
-                "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR+
-                "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR+
-                "    }" + AmplificationHelper.LINE_SEPARATOR+
-                "    String lit1 = catg.CATG.readString(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR+
-                "    String lit2 = catg.CATG.readString(\"NEW\" + System.getProperty(\"line.separator\") + \"LINE\");" + AmplificationHelper.LINE_SEPARATOR+
-                "    int lit3 = catg.CATG.readInt(100);" + AmplificationHelper.LINE_SEPARATOR+
-                "    String lit4 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR+
-                "    int lit5 = catg.CATG.readInt(5);" + AmplificationHelper.LINE_SEPARATOR+
-                "    String lit6 = catg.CATG.readString(\"Timoleon\");" + AmplificationHelper.LINE_SEPARATOR+
-                "    int lit7 = catg.CATG.readInt(1000);" + AmplificationHelper.LINE_SEPARATOR+
-                "    String lit8 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR+
-                "    System.out.println(mainTest.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR+
-                "    System.out.println(mainTest.getANumber());" + AmplificationHelper.LINE_SEPARATOR+
-                "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR+
-                "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR+
-                "    Seller seller = new Seller(lit3, Collections.singletonList(new Item(lit4, lit5)));" + AmplificationHelper.LINE_SEPARATOR+
-                "    Player player = new Player(lit6, lit7);" + AmplificationHelper.LINE_SEPARATOR+
-                "    player.toString();" + AmplificationHelper.LINE_SEPARATOR+
-                "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR+
-                "    player.buyItem(lit8, seller);" + AmplificationHelper.LINE_SEPARATOR+
-                "    player.toString();" + AmplificationHelper.LINE_SEPARATOR+
-                "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR+
-                "    try {" + AmplificationHelper.LINE_SEPARATOR+
-                "        mainTest.tearDown();" + AmplificationHelper.LINE_SEPARATOR+
-                "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR+
-                "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR+
-                "    }" + AmplificationHelper.LINE_SEPARATOR+
+        final String expectedMainMethod = "public static void main(String[] args) {" + AmplificationHelper.LINE_SEPARATOR +
+                "    MainTest mainTest = new MainTest();" + AmplificationHelper.LINE_SEPARATOR +
+                "    try {" + AmplificationHelper.LINE_SEPARATOR +
+                "        mainTest.setUp();" + AmplificationHelper.LINE_SEPARATOR +
+                "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+                "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+                "    }" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit1 = catg.CATG.readString(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit2 = catg.CATG.readString(\"NEW\" + System.getProperty(\"line.separator\") + \"LINE\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    boolean lit3 = catg.CATG.readBool(true);" + AmplificationHelper.LINE_SEPARATOR +
+                "    int lit4 = catg.CATG.readInt(100);" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit5 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    int lit6 = catg.CATG.readInt(5);" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit7 = catg.CATG.readString(\"Timoleon\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    int lit8 = catg.CATG.readInt(1000);" + AmplificationHelper.LINE_SEPARATOR +
+                "    String lit9 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR +
+                "    System.out.println(mainTest.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR +
+                "    System.out.println(mainTest.getANumber());" + AmplificationHelper.LINE_SEPARATOR +
+                "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR +
+                "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR +
+                "    System.out.println(lit3);" + AmplificationHelper.LINE_SEPARATOR +
+                "    Seller seller = new Seller(lit4, Collections.singletonList(new Item(lit5, lit6)));" + AmplificationHelper.LINE_SEPARATOR +
+                "    Player player = new Player(lit7, lit8);" + AmplificationHelper.LINE_SEPARATOR +
+                "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "    player.buyItem(lit9, seller);" + AmplificationHelper.LINE_SEPARATOR +
+                "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+                "    try {" + AmplificationHelper.LINE_SEPARATOR +
+                "        mainTest.tearDown();" + AmplificationHelper.LINE_SEPARATOR +
+                "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+                "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+                "    }" + AmplificationHelper.LINE_SEPARATOR +
                 "}";
         assertEquals(expectedMainMethod, mainMethodFromTestMethod.toString());
 
