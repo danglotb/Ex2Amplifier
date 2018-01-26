@@ -47,6 +47,8 @@ public class MainTest {
 
 		System.out.println(this.aUsedNumber);
 		System.out.println(getANumber());
+		System.out.println("\"bar\"");
+		System.out.println("NEW\nLINE");
 
 		Seller seller = new Seller(100, Collections.singletonList(new Item("Potion", 5)));
 		Player player = new Player("Timoleon", 1000);
