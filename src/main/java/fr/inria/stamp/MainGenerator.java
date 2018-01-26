@@ -169,7 +169,9 @@ public class MainGenerator {
                     .replace("\n", "\" + System.getProperty(\"line.separator\") + \"")
                     + "\"";
         }
-        return "catg.CATG.read" + toU1.apply(literal.getType().getSimpleName()) + "(" + value + ")";
+        final String type = "boolean".equals(literal.getType().getSimpleName()) ?
+                "Bool" : toU1.apply(literal.getType().getSimpleName());
+        return "catg.CATG.read" + type + "(" + value + ")";
     }
 
     private static final Function<String, String> toU1 = string ->
