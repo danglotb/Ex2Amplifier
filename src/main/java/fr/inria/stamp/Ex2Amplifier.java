@@ -89,8 +89,10 @@ public class Ex2Amplifier implements Amplifier {
         final Factory factory = originalLiteral.getFactory();
         if (originalLiteralValue instanceof String) {
             return factory.createLiteral(value);
-        } else if (originalLiteralValue instanceof Integer){
+        } else if (originalLiteralValue instanceof Integer) {
             return factory.createLiteral(Integer.parseInt(value));
+        } else if (originalLiteralValue instanceof Boolean) {
+            return factory.createLiteral(value.equals("true"));
         } else {
             throw new UnsupportedOperationException(originalLiteralValue.getClass()  + " is not supported");
         }
