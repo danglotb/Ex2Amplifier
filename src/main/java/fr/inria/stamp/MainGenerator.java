@@ -165,7 +165,9 @@ public class MainGenerator {
     private static String createMakeRead(Factory factory, CtLiteral<?> literal) {
         Object value = literal.getValue();
         if (value instanceof String) {
-            value = "\"" + value + "\"";
+            value = "\"" + ((String) value).replace("\"", "\\\"")
+                    .replace("\n", "\" + System.getProperty(\"line.separator\") + \"")
+                    + "\"";
         }
         return "catg.CATG.read" + toU1.apply(literal.getType().getSimpleName()) + "(" + value + ")";
     }
