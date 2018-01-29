@@ -77,7 +77,7 @@ public class Ex2Amplifier implements Amplifier {
         final CtMethod<?> clone = new AssertionRemover().removeAssertion(
                 AmplificationHelper.cloneMethodTest(originalTestMethod, "Ex2Amplifier")
         );
-        final List<CtLiteral> originalLiterals = clone.getBody().getElements(new TypeFilter<CtLiteral>(CtLiteral.class));
+        final List<CtLiteral<?>> originalLiterals = clone.getBody().getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER);
         originalLiterals.forEach(ctLiteral ->
                     ctLiteral.replace(buildNewLiteralFromString(iteratorOnNewValues.next(), ctLiteral))
                 );
@@ -93,6 +93,8 @@ public class Ex2Amplifier implements Amplifier {
             return factory.createLiteral(Integer.parseInt(value));
         } else if (originalLiteralValue instanceof Boolean) {
             return factory.createLiteral(value.equals("true"));
+        } else if (originalLiteralValue instanceof Character) {
+            return factory.createLiteral(value.charAt(0));
         } else {
             throw new UnsupportedOperationException(originalLiteralValue.getClass()  + " is not supported");
         }
