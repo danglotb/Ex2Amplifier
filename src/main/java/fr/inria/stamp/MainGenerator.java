@@ -168,6 +168,8 @@ public class MainGenerator {
             value = "\"" + ((String) value).replace("\"", "\\\"")
                     .replace("\n", "\" + System.getProperty(\"line.separator\") + \"")
                     + "\"";
+        } else if (value instanceof Character) {
+            value = "'" + value.toString().replace("\'", "\\\'") + "'";
         }
         final String type = "boolean".equals(literal.getType().getSimpleName()) ?
                 "Bool" : toU1.apply(literal.getType().getSimpleName());
