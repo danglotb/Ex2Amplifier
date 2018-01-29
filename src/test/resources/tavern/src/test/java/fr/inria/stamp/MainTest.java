@@ -50,6 +50,8 @@ public class MainTest {
 		System.out.println("\"bar\"");
 		System.out.println("NEW\nLINE");
 		System.out.println(true);
+		System.out.println('<');
+		System.out.println('\'');
 
 		Seller seller = new Seller(100, Collections.singletonList(new Item("Potion", 5)));
 		Player player = new Player("Timoleon", 1000);
