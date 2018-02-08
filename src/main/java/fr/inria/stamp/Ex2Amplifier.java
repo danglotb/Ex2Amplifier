@@ -101,11 +101,6 @@ public class Ex2Amplifier implements Amplifier {
     }
 
     @Override
-    public CtMethod applyRandom(CtMethod ctMethod) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void reset(CtType ctType) {
 
     }
