@@ -1,5 +1,7 @@
 package fr.inria.stamp;
 
+import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
+import org.junit.Ignore;
 import org.junit.Test;
 import spoon.reflect.declaration.CtMethod;
 
@@ -56,5 +58,48 @@ public class Ex2AmplifierTest extends AbstractTest {
                 .get(0);
         final List<CtMethod> apply = ex2Amplifier.apply(test);
         assertTrue(apply.isEmpty());
+    }
+
+    @Test
+    public void testUsingJBSE() throws Exception {
+        /*
+        Test that the Ex2Amplifier returns a List of CtMethod build thank to CATG.
+                Amplified CtMethod has the same "structural" inputs of the test, but with
+        different test data input, i.e. literals has been modified.
+         */
+
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final CtMethod<?> test = this.launcher.getFactory()
+                .Class()
+                .get("fr.inria.stamp.MainTest")
+                .getMethodsByName("test")
+                .get(0);
+        final List<CtMethod> apply = ex2Amplifier.apply(test);
+        System.out.println(apply);
+    }
+
+    @Test
+    public void testUsingJBSE2() throws Exception {
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final CtMethod<?> test = this.launcher.getFactory()
+                .Class()
+                .get("fr.inria.stamp.MainTest")
+                .getMethodsByName("test2")
+                .get(0);
+        final List<CtMethod> apply = ex2Amplifier.apply(test);
+        System.out.println(apply);
+    }
+
+    @Ignore
+    @Test
+    public void testUsingJBSE3() throws Exception {
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final CtMethod<?> test = this.launcher.getFactory()
+                .Class()
+                .get("fr.inria.stamp.MainTest")
+                .getMethodsByName("test3")
+                .get(0);
+        final List<CtMethod> apply = ex2Amplifier.apply(test);
+        System.out.println(apply);
     }
 }

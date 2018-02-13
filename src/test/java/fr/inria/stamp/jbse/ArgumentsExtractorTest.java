@@ -1,4 +1,4 @@
-package fr.inria.stamp;
+package fr.inria.stamp.jbse;
 
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.stamp.jbse.ArgumentsExtractor;
