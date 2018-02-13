@@ -1,0 +1,3 @@
+init begin
+java/lang/AbstractStringBuilder,java/util/Collections,java/util/AbstractList,java/util/AbstractCollection,java/lang/StringBuilder,java/lang/AbstractStringBuilder,java/lang/System,java/util/Arrays,java/lang/Math,java/util/AbstractSet,java/util/AbstractMap,java/lang/Float,java/lang/Double,java/util/AbstractMap,java/util/ArrayList
+end
