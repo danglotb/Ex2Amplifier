@@ -73,7 +73,6 @@ public class SMTSolver {
     }
 
     private BooleanFormula buildConstraint(Map<String, List<String>> constraintsPerParamName) {
-
         constraintsPerParamName.keySet()
                 .forEach(paramName ->
                         this.variables.put(paramName, this.imgr.makeVariable(paramName))
@@ -120,7 +119,7 @@ public class SMTSolver {
         if (constraint.contains("+")) {
             final String[] operands = constraint.split("\\+");
             return this.imgr.add(evaluateNum(operands[0]), evaluateNum(operands[1]));
-        } else if (constraint.contains("-")) {
+        } else if (!constraint.startsWith("-") && constraint.contains("-")) {
             final String[] operands = constraint.split("-");
             return this.imgr.subtract(evaluateNum(operands[0]), evaluateNum(operands[1]));
         } else if (constraint.contains("*")) {

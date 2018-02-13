@@ -1,4 +1,4 @@
-package fr.inria.stamp;
+package fr.inria.stamp.jbse;
 
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
 import spoon.reflect.code.CtAbstractInvocation;
@@ -52,14 +52,16 @@ public class ArgumentsExtractor {
                     final CtAbstractInvocation invocation = ctLiteral.getParent(CtAbstractInvocation.class);
                     if (invocation != null) {
                         if (!parametersPerInvocation.containsKey(invocation)) {
-                            parametersPerInvocation.put(invocation, new ArrayList<>());
+                            parametersPerInvocation.put(invocation, new ArrayList<>(invocation.getArguments()));
                         }
                         if (ctLiteral.getParent() instanceof CtUnaryOperator) {
-                            parametersPerInvocation.get(invocation)
-                                    .add(invocation.getArguments().indexOf(ctLiteral.getParent()), variableRead);
+                            final int index = invocation.getArguments().indexOf(ctLiteral.getParent());
+                            parametersPerInvocation.get(invocation).remove(index);
+                            parametersPerInvocation.get(invocation).add(index, variableRead);
                         } else {
-                            parametersPerInvocation.get(invocation)
-                                    .add(invocation.getArguments().indexOf(ctLiteral), variableRead);
+                            final int index = invocation.getArguments().indexOf(ctLiteral);
+                            parametersPerInvocation.get(invocation).remove(index);
+                            parametersPerInvocation.get(invocation).add(index, variableRead);
                         }
                     } else {
                         ctLiteral.replace(variableRead);
@@ -70,7 +72,7 @@ public class ArgumentsExtractor {
                 .stream()
                 .filter(parametersPerInvocation::containsKey)
                 .forEach(ctAbstractInvocation ->
-                    ctAbstractInvocation.setArguments(parametersPerInvocation.get(ctAbstractInvocation))
+                        ctAbstractInvocation.setArguments(parametersPerInvocation.get(ctAbstractInvocation))
                 );
 
         return extractedMethod;

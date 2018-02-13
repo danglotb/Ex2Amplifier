@@ -1,8 +1,7 @@
 package fr.inria.stamp;
 
 import fr.inria.diversify.utils.AmplificationHelper;
-import fr.inria.stamp.AbstractTest;
-import fr.inria.stamp.MainGenerator;
+import fr.inria.stamp.catg.MainGenerator;
 import org.junit.Test;
 import spoon.SpoonModelBuilder;
 import spoon.reflect.declaration.CtClass;
@@ -36,9 +35,7 @@ public class MainGeneratorTest extends AbstractTest {
             The produced main method must be compilable and runnable
          */
 
-        final CtClass<Object> testClass = this.launcher.getFactory()
-                .Class()
-                .get("fr.inria.stamp.MainTest");
+        final CtClass<Object> testClass = this.launcher.getFactory().Class().get("fr.inria.stamp.MainTest");
         final CtMethod<?> mainMethodFromTestMethod = MainGenerator.generateMainMethodFromTestMethod(
                 testClass.getMethodsByName("test").get(0)
         );

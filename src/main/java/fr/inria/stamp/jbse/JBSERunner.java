@@ -1,9 +1,11 @@
 package fr.inria.stamp.jbse;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import fr.inria.stamp.Main;
-import jbse.apps.StateFormatterTextWithHistory;
 import jbse.apps.run.Run;
 import jbse.apps.run.RunParameters;
+import jbse.apps.settings.ParseException;
+import jbse.apps.settings.SettingsReader;
 import jbse.mem.ClauseAssume;
 import jbse.mem.State;
 import jbse.val.Expression;
@@ -14,7 +16,9 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtTypedElement;
 import spoon.reflect.reference.CtTypeReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,17 +47,22 @@ public class JBSERunner {
         typeToDescriptor.put("boolean", "Z");
     }
 
-    private static String addRequiredJARsToClasspath(String classpath) {
-        return GET_PATH_OF_JAR_FROM_CLASS.apply(Run.class) + ":" +
-                GET_PATH_OF_JAR_FROM_CLASS.apply(String.class) + ":" + classpath;
-    }
-
     private final static Function<Class, String> GET_PATH_OF_JAR_FROM_CLASS = aClass ->
             aClass.getResource("/" + aClass.getName().replaceAll("\\.", "/") + ".class").getPath().split("!")[0];
 
     public static List<Map<String, List<String>>> runJBSE(String classpath, CtMethod<?> testMethod) {
         final RunParameters p = new RunParameters();
-        p.addClasspath(addRequiredJARsToClasspath(classpath).split(":"));
+        try {
+            new SettingsReader("lib/config.jbse").fillRunParameters(p);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        final String[] splittedClasspath = classpath.split(":");
+        final String[] finalClasspath = new String[splittedClasspath.length + 2];
+        System.arraycopy(splittedClasspath, 0, finalClasspath, 2, splittedClasspath.length);
+        finalClasspath[0] = "lib/jre/rt.jar";
+        finalClasspath[1] = GET_PATH_OF_JAR_FROM_CLASS.apply(Run.class);
+        p.addClasspath(finalClasspath);
         p.setMethodSignature(
                 testMethod.getParent(CtClass.class).getQualifiedName().replaceAll("\\.", "/"),
                 methodToDescriptor.apply(testMethod),
@@ -61,14 +70,15 @@ public class JBSERunner {
         );
         p.setDecisionProcedureType(RunParameters.DecisionProcedureType.Z3);
         p.setExternalDecisionProcedurePath("lib/z3/build/bin/z3");
-        p.setOutputFileName("out/runIf_z3.txt");
+        p.setOutputFileName("runIf_z3.txt");
         p.setStepShowMode(RunParameters.StepShowMode.LEAVES);
-        p.setStateFormatMode(RunParameters.StateFormatMode.FULLTEXTHISTORY);
+        p.setDepthScope(8);
+        p.setCountScope(1500);
+        p.setStateFormatMode(RunParameters.StateFormatMode.FULLTEXT);
         p.setShowOnConsole(Main.verbose);
         final Run r = new Run(p);
         r.run();
-
-        return filterDistinctLeaves(StateFormatterTextWithHistory.getStates())
+        return filterDistinctLeaves(r.getStates())
                 .stream()
                 .map(JBSERunner::buildConditionsOnArguments)
                 .collect(Collectors.toList());

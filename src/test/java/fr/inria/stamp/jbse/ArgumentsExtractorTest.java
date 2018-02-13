@@ -1,6 +1,7 @@
 package fr.inria.stamp;
 
 import fr.inria.diversify.utils.AmplificationHelper;
+import fr.inria.stamp.jbse.ArgumentsExtractor;
 import org.junit.Test;
 import spoon.Launcher;
 import spoon.reflect.declaration.CtMethod;

@@ -1,4 +1,4 @@
-package fr.inria.stamp;
+package fr.inria.stamp.ex2amplifier;
 
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.dspot.amplifier.Amplifier;
@@ -7,19 +7,16 @@ import fr.inria.diversify.dspot.support.DSpotCompiler;
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.DSpotUtils;
 import fr.inria.diversify.utils.sosiefier.InputConfiguration;
-import fr.inria.stamp.MainGenerator;
 import fr.inria.stamp.catg.CATGExecutor;
 import fr.inria.stamp.catg.CATGUtils;
+import fr.inria.stamp.catg.MainGenerator;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.declaration.CtClass;
-import spoon.reflect.declaration.CtElement;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
-import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,27 +24,18 @@ import java.util.stream.Collectors;
 /**
  * Created by Benjamin DANGLOT
  * benjamin.danglot@inria.fr
- * on 24/01/18
+ * on 13/02/18
  */
-public class Ex2Amplifier implements Amplifier {
+class CATGAmplifier implements Amplifier {
 
-    public static final TypeFilter<CtLiteral<?>> CT_LITERAL_TYPE_FILTER = new TypeFilter<CtLiteral<?>>(CtLiteral.class) {
-        @Override
-        public boolean matches(CtLiteral<?> element) {
-            return super.matches(element) && !"<nulltype>".equals(element.getType().getSimpleName());
-        }
-    };
     private InputConfiguration configuration;
 
-    public Ex2Amplifier(InputConfiguration configuration) {
+    CATGAmplifier(InputConfiguration configuration) {
         this.configuration = configuration;
     }
 
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
-        if (ctMethod.getElements(CT_LITERAL_TYPE_FILTER).isEmpty()) {
-            return Collections.emptyList();
-        }
         final CtMethod<?> mainMethodFromTestMethod =
                 MainGenerator.generateMainMethodFromTestMethod(ctMethod);
         final CtClass testClass = ctMethod.getParent(CtClass.class);
@@ -79,8 +67,8 @@ public class Ex2Amplifier implements Amplifier {
         );
         final List<CtLiteral<?>> originalLiterals = clone.getBody().getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER);
         originalLiterals.forEach(ctLiteral ->
-                    ctLiteral.replace(buildNewLiteralFromString(iteratorOnNewValues.next(), ctLiteral))
-                );
+                ctLiteral.replace(buildNewLiteralFromString(iteratorOnNewValues.next(), ctLiteral))
+        );
         return clone;
     }
 
@@ -96,7 +84,7 @@ public class Ex2Amplifier implements Amplifier {
         } else if (originalLiteralValue instanceof Character) {
             return factory.createLiteral(value.charAt(0));
         } else {
-            throw new UnsupportedOperationException(originalLiteralValue.getClass()  + " is not supported");
+            throw new UnsupportedOperationException(originalLiteralValue.getClass() + " is not supported");
         }
     }
 
