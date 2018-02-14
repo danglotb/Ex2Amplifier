@@ -54,7 +54,7 @@ public class ArgumentsExtractorTest {
         assertEquals(expectedMethod, extractedMethod.toString());
     }
 
-    private static final String expectedMethod = "public void extract_testAccumulate(int lit0, int lit1) {" + AmplificationHelper.LINE_SEPARATOR +
+    private static final String expectedMethod = "public void extract_testAccumulate(int lit0, int lit1) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
             "    final Calculator calculator1 = new Calculator(lit0);" + AmplificationHelper.LINE_SEPARATOR +
             "    calculator1.getCurrentValue();" + AmplificationHelper.LINE_SEPARATOR +
             "    calculator1.accumulate(lit1);" + AmplificationHelper.LINE_SEPARATOR +
