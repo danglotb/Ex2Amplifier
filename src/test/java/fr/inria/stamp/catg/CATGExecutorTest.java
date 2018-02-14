@@ -5,7 +5,6 @@ import fr.inria.diversify.dspot.support.DSpotCompiler;
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.DSpotUtils;
 import fr.inria.stamp.AbstractTest;
-import fr.inria.stamp.MainGenerator;
 import org.junit.After;
 import org.junit.Test;
 import spoon.reflect.declaration.CtClass;
