@@ -8,6 +8,7 @@ import spoon.reflect.code.CtCatchVariable;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtLocalVariable;
+import spoon.reflect.code.CtStatement;
 import spoon.reflect.code.CtTargetedExpression;
 import spoon.reflect.code.CtThisAccess;
 import spoon.reflect.code.CtThrow;
@@ -17,6 +18,7 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
+import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.Collections;
@@ -61,9 +63,24 @@ public class MainGenerator {
                 .forEach(literal ->
                         literal.replace(factory.createVariableRead(iterator.next().getReference(), false))
                 );
-        mainMethod.setBody(blockMain);
+        if (!testMethod.getThrownTypes().isEmpty()) {
+            final CtTry largeTryCatchBlock = createLargeTryCatchBlock(testMethod.getThrownTypes(), factory);
+            largeTryCatchBlock.setBody(blockMain);
+            mainMethod.setBody(largeTryCatchBlock);
+        } else {
+            mainMethod.setBody(blockMain);
+        }
         removeNonStaticElement(mainMethod, testMethod.getParent(CtClass.class));
         return mainMethod;
+    }
+
+    private static CtTry createLargeTryCatchBlock(Set<CtTypeReference<? extends Throwable>> thrownTypes, Factory factory) {
+        final CtTry aTry = factory.createTry();
+        thrownTypes.stream()
+                .forEach(ctTypeReference ->
+                        addCatchGivenExceptionToTry(ctTypeReference, factory, aTry, ctTypeReference.getSimpleName())
+                );
+        return aTry;
     }
 
     private static void removeNonStaticElement(final CtMethod<?> mainMethod, final CtClass testClass) {
@@ -77,9 +94,15 @@ public class MainGenerator {
                 factory.createConstructorCall(testClass.getReference())
         );
         // 2 invoke setUp(@Before) at the begin if present
-        insertSetUpAtBegin(testClass, body, factory, localVariableOfTestClass);
+        final CtTry wrappedBefore = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, localVariableOfTestClass, "org.junit.Before");
+        if (wrappedBefore != null) {
+            body.insertBegin(wrappedBefore);
+        }
         // 3 invoke tearDown(@After) at the end of the block
-        insertTearDownAtTheEnd(testClass, body, factory, localVariableOfTestClass);
+        final CtTry wrappedAfter = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, localVariableOfTestClass, "org.junit.After");
+        if (wrappedAfter != null) {
+            body.insertEnd(wrappedAfter);
+        }
         // 4 replaces all non-static accesses to accesses on the local variable created at the first step
         body.getElements(new TypeFilter<CtTargetedExpression>(CtTargetedExpression.class) {
             @Override
@@ -95,56 +118,41 @@ public class MainGenerator {
         body.insertBegin(localVariableOfTestClass);
     }
 
-    private static void insertTearDownAtTheEnd(CtClass testClass, CtBlock<?> body, Factory factory, CtLocalVariable localVariableOfTestClass) {
-        final Optional<CtMethod<?>> tearDownMethod = ((Set<CtMethod<?>>) testClass
-                .getMethods())
-                .stream().filter(method ->
-                        method.getAnnotations()
-                                .stream()
-                                .anyMatch(ctAnnotation ->
-                                        "org.junit.After".equals(ctAnnotation.getAnnotationType().getQualifiedName())
-                                )
-                ).findFirst();
-        if (tearDownMethod.isPresent()) {
-            body.insertEnd(
-                    wrappeInvocationInTryCatch(
-                            factory.createInvocation(
-                                    factory.createVariableRead(localVariableOfTestClass.getReference(), false),
-                                    tearDownMethod.get().getReference()
-                            )
-                    ));
-        }
-    }
-
-    private static void insertSetUpAtBegin(CtClass testClass, CtBlock<?> body, Factory factory, CtLocalVariable localVariableOfTestClass) {
+    private static CtTry wrapInTryCatchMethodWithSpecificAnnotation(CtClass testClass, Factory factory, CtLocalVariable localVariableOfTestClass, String fullQualifiedNameOfAnnoation) {
         final Optional<CtMethod<?>> setUpMethod = ((Set<CtMethod<?>>) testClass
                 .getMethods())
                 .stream().filter(method ->
                         method.getAnnotations()
                                 .stream()
                                 .anyMatch(ctAnnotation ->
-                                        "org.junit.Before".equals(ctAnnotation.getAnnotationType().getQualifiedName())
+                                        fullQualifiedNameOfAnnoation.equals(ctAnnotation.getAnnotationType().getQualifiedName())
                                 )
                 ).findFirst();
         if (setUpMethod.isPresent()) {
-            body.insertBegin(
-                    wrappeInvocationInTryCatch(
+            return wrapInTryCatch(
                             factory.createInvocation(
                                     factory.createVariableRead(localVariableOfTestClass.getReference(), false),
                                     setUpMethod.get().getReference()
-                            )
-                    ));
+                            ), factory.Type().createReference("java.lang.Exception")
+                    );
+        } else {
+            return null;
         }
     }
 
-    private static CtTry wrappeInvocationInTryCatch(CtInvocation<?> invocationToBeWrapped) {
-        final Factory factory = invocationToBeWrapped.getFactory();
+    private static CtTry wrapInTryCatch(CtStatement statementToBeWrapped, CtTypeReference exceptionType) {
+        final Factory factory = statementToBeWrapped.getFactory();
         final CtTry aTry = factory.createTry();
-        aTry.setBody(invocationToBeWrapped);
+        aTry.setBody(statementToBeWrapped);
+        addCatchGivenExceptionToTry(exceptionType, factory, aTry, "");
+        return aTry;
+    }
+
+    private static void addCatchGivenExceptionToTry(CtTypeReference exceptionType, Factory factory, CtTry aTry, String suffixNameException) {
         final CtCatch aCatch = factory.createCatch();
         final CtCatchVariable catchVariable = factory.createCatchVariable();
-        catchVariable.setSimpleName("__exceptionEx2Amplifier");
-        catchVariable.setType(factory.Type().createReference("java.lang.Exception"));
+        catchVariable.setSimpleName("__exceptionEx2Amplifier" + suffixNameException);
+        catchVariable.setType(exceptionType);
         aCatch.setParameter(catchVariable);
         final CtThrow aThrow = factory.createThrow();
         aThrow.setThrownExpression(
@@ -154,7 +162,6 @@ public class MainGenerator {
         );
         aCatch.setBody(aThrow);
         aTry.addCatcher(aCatch);
-        return aTry;
     }
 
     private static String createMakeRead(Factory factory, CtLiteral<?> literal) {
