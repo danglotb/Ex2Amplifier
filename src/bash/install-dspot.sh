@@ -18,11 +18,11 @@ mvn install -DskipTests
 
 cd ..
 
-mkdir lib
-cd lib
-git clone https://github.com/Z3Prover/z3.git
-cd z3
-python scripts/mk_make.py --prefix=./
-cd build
-make
-sudo make install
+#mkdir lib
+#cd lib
+#git clone https://github.com/Z3Prover/z3.git
+#cd z3
+#python scripts/mk_make.py --prefix=./
+#cd build
+#make
+#sudo make install
