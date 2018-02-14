@@ -74,7 +74,7 @@ public class ArgumentsExtractor {
                 .forEach(ctAbstractInvocation ->
                         ctAbstractInvocation.setArguments(parametersPerInvocation.get(ctAbstractInvocation))
                 );
-
+        extractedMethod.setThrownTypes(ctMethod.getThrownTypes());
         return extractedMethod;
     }
 }
