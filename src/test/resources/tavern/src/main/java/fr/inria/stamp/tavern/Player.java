@@ -32,7 +32,7 @@ public class Player {
 		this.gold = this.getGold() - amount;
 	}
 
-	public void buyItem(String name, Seller seller) {
+	public void buyItem(String name, Seller seller) throws Exception {
 		final Item item = seller.sellItem(name, this);
 		if (item != null) {
 			this.items.add(item);

@@ -43,7 +43,7 @@ public class MainTest {
 	}
 
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		System.out.println(this.aUsedNumber);
 		System.out.println(getANumber());
 		System.out.println("\"bar\"");
@@ -65,7 +65,7 @@ public class MainTest {
 	}
 
 	@Test
-	public void test3() {
+	public void test3() throws Exception {
 		Seller seller = new Seller(100, Collections.singletonList(new Item("Potion", 5)));
 		Player player = new Player("Timoleon", 1000);
 		assertEquals("Player{gold=1000, items=[]}", player.toString());
