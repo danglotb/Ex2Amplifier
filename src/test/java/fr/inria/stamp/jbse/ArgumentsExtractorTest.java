@@ -92,8 +92,23 @@ public class ArgumentsExtractorTest {
         launcher.getModelBuilder().setBinaryOutputDirectory(new File("target/trash/"));
         launcher.getModelBuilder().compile(SpoonModelBuilder.InputType.CTTYPES);
 
-        assertEquals(expectedMethod, extractedMethod.toString());
+        assertEquals(expectMethodTavern, extractedMethod.toString());
     }
 
-    private final String expectMethodTavern = "";
+    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, int lit3, int lit4, int lit5) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(this.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(getANumber());" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(\"NEW\\nLINE\");" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(lit0);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR +
+            "    Seller seller = new Seller(lit3, Collections.singletonList(new Item(\"Potion\", lit4)));" + AmplificationHelper.LINE_SEPARATOR +
+            "    Player player = new Player(\"Timoleon\", lit5);" + AmplificationHelper.LINE_SEPARATOR +
+            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "    player.buyItem(\"Potion\", seller);" + AmplificationHelper.LINE_SEPARATOR +
+            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "}";
 }
