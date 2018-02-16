@@ -2,10 +2,10 @@ package fr.inria.stamp.catg;
 
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
 import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
+import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCatch;
 import spoon.reflect.code.CtCatchVariable;
-import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtStatement;
@@ -16,8 +16,10 @@ import spoon.reflect.code.CtTry;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.declaration.CtTypedElement;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
+import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
@@ -47,7 +49,7 @@ public class MainGenerator {
                 originalLiterals.stream()
                         .map(literal ->
                                 factory.createLocalVariable(
-                                        literal.getType(),
+                                        getRealTypeOfLiteral(literal),
                                         "lit" + count[0]++,
                                         factory.createCodeSnippetExpression(createMakeRead(factory, literal))
                                 )
@@ -130,11 +132,11 @@ public class MainGenerator {
                 ).findFirst();
         if (setUpMethod.isPresent()) {
             return wrapInTryCatch(
-                            factory.createInvocation(
-                                    factory.createVariableRead(localVariableOfTestClass.getReference(), false),
-                                    setUpMethod.get().getReference()
-                            ), factory.Type().createReference("java.lang.Exception")
-                    );
+                    factory.createInvocation(
+                            factory.createVariableRead(localVariableOfTestClass.getReference(), false),
+                            setUpMethod.get().getReference()
+                    ), factory.Type().createReference("java.lang.Exception")
+            );
         } else {
             return null;
         }
@@ -173,9 +175,30 @@ public class MainGenerator {
         } else if (value instanceof Character) {
             value = "'" + value.toString().replace("\'", "\\\'") + "'";
         }
-        final String type = "boolean".equals(literal.getType().getSimpleName()) ?
-                "Bool" : toU1.apply(literal.getType().getSimpleName());
-        return "catg.CATG.read" + type + "(" + value + ")";
+        final String type = getRealTypeOfLiteral(literal).getSimpleName();
+        return "catg.CATG.read" +
+                ("boolean".equals(literal.getType().getSimpleName()) ?
+                        "Bool" : toU1.apply(type))
+                + "((" + type + ")" + value + ")";
+    }
+
+    private static CtTypeReference<?> getRealTypeOfLiteral(CtLiteral<?> literal) {
+        if (literal.getValue() instanceof Number) {
+            final CtTypedElement typedParent = literal.getParent(CtTypedElement.class);
+            if (typedParent != null) {// special treatement for int literal
+                if (typedParent instanceof CtAbstractInvocation) {
+                    final CtExecutableReference<?> executable = ((CtAbstractInvocation) typedParent).getExecutable();
+                    final int indexOf = ((CtAbstractInvocation) typedParent).getArguments().indexOf(literal);
+                    return executable.getParameters().get(indexOf);
+                } else {
+                    return typedParent.getType();
+                }
+            } else {
+                throw new IllegalArgumentException(literal.toString());
+            }
+        } else {
+            return literal.getType();
+        }
     }
 
     private static final Function<String, String> toU1 = string ->
