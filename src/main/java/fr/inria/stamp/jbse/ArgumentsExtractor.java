@@ -1,6 +1,7 @@
 package fr.inria.stamp.jbse;
 
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
+import fr.inria.stamp.Utils;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtUnaryOperator;
@@ -44,8 +45,8 @@ public class ArgumentsExtractor {
                 .stream()
                 .filter(ctLiteral -> !(ctLiteral.getValue() instanceof String)) // TODO
                 .forEach(ctLiteral -> {
-                    final CtParameter<?> parameter = factory.createParameter();
-                    parameter.setType(ctLiteral.getType());
+                    final CtParameter parameter = factory.createParameter();
+                    parameter.setType(Utils.getRealTypeOfLiteral(ctLiteral));
                     parameter.setSimpleName("lit" + count[0]++);
                     extractedMethod.addParameter(parameter);
                     final CtVariableAccess<?> variableRead = factory.createVariableRead(factory.createParameterReference(parameter), false);

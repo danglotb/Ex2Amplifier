@@ -1,6 +1,7 @@
 package fr.inria.stamp.catg;
 
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
+import fr.inria.stamp.Utils;
 import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtBlock;
@@ -50,7 +51,7 @@ public class MainGenerator {
                 originalLiterals.stream()
                         .map(literal ->
                                 factory.createLocalVariable(
-                                        getRealTypeOfLiteral(literal),
+                                        Utils.getRealTypeOfLiteral(literal),
                                         "lit" + count[0]++,
                                         factory.createCodeSnippetExpression(createMakeRead(factory, literal))
                                 )
@@ -176,32 +177,11 @@ public class MainGenerator {
         } else if (value instanceof Character) {
             value = "'" + value.toString().replace("\'", "\\\'") + "'";
         }
-        final String type = getRealTypeOfLiteral(literal).getSimpleName();
+        final String type = Utils.getRealTypeOfLiteral(literal).getSimpleName();
         return "catg.CATG.read" +
                 ("boolean".equals(literal.getType().getSimpleName()) ?
                         "Bool" : toU1.apply(type))
                 + "((" + type + ")" + value + ")";
-    }
-
-    private static CtTypeReference<?> getRealTypeOfLiteral(CtLiteral<?> literal) {
-        if (literal.getValue() instanceof Number) {
-            final CtTypedElement typedParent = literal.getParent(CtTypedElement.class);
-            if (typedParent != null) {// special treatement for int literal
-                if (typedParent instanceof CtAbstractInvocation) {
-                    final CtExecutableReference<?> executable = ((CtAbstractInvocation) typedParent).getExecutable();
-                    final int indexOf = ((CtAbstractInvocation) typedParent).getArguments().indexOf(literal);
-                    return executable.getParameters().get(indexOf);
-                } else if (typedParent.getType() instanceof CtArrayTypeReference) {
-                    return ((CtArrayTypeReference) typedParent.getType()).getComponentType();
-                } else {
-                    return typedParent.getType();
-                }
-            } else {
-                throw new IllegalArgumentException(literal.toString());
-            }
-        } else {
-            return literal.getType();
-        }
     }
 
     private static final Function<String, String> toU1 = string ->
