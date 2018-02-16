@@ -19,6 +19,7 @@ import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.CtTypedElement;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
+import spoon.reflect.reference.CtArrayTypeReference;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
@@ -190,6 +191,8 @@ public class MainGenerator {
                     final CtExecutableReference<?> executable = ((CtAbstractInvocation) typedParent).getExecutable();
                     final int indexOf = ((CtAbstractInvocation) typedParent).getArguments().indexOf(literal);
                     return executable.getParameters().get(indexOf);
+                } else if (typedParent.getType() instanceof CtArrayTypeReference) {
+                    return ((CtArrayTypeReference) typedParent.getType()).getComponentType();
                 } else {
                     return typedParent.getType();
                 }
