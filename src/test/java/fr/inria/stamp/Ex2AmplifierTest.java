@@ -3,6 +3,7 @@ package fr.inria.stamp;
 import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
 import org.junit.Ignore;
 import org.junit.Test;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 
 import java.util.List;
@@ -69,9 +70,11 @@ public class Ex2AmplifierTest extends AbstractTest {
          */
 
         final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
-        final CtMethod<?> test = this.launcher.getFactory()
+        final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
-                .get("fr.inria.stamp.MainTest")
+                .get("fr.inria.stamp.MainTest");
+        ex2Amplifier.reset(testClass);
+        final CtMethod<?> test = testClass
                 .getMethodsByName("test")
                 .get(0);
         final List<CtMethod> apply = ex2Amplifier.apply(test);

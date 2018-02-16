@@ -34,6 +34,8 @@ class JBSEAmplifier implements Amplifier {
 
     private InputConfiguration configuration;
 
+    private CtType<?> currentTestClassToBeAmplified;
+
     JBSEAmplifier(InputConfiguration configuration) {
         this.configuration = configuration;
     }
@@ -41,7 +43,7 @@ class JBSEAmplifier implements Amplifier {
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
         final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod);
-        final CtType ctType = ctMethod.getParent(CtClass.class);
+        final CtType ctType = currentTestClassToBeAmplified.clone();
         CtType<?> clone = ctType.clone();
         clone.setParent(ctType.getParent());
         clone.removeMethod(ctMethod);
@@ -97,6 +99,6 @@ class JBSEAmplifier implements Amplifier {
 
     @Override
     public void reset(CtType ctType) {
-
+        currentTestClassToBeAmplified = ctType;
     }
 }

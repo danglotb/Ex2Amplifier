@@ -54,17 +54,22 @@ public class MainGeneratorTest extends AbstractTest {
                 "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR + 
                 "    }" + AmplificationHelper.LINE_SEPARATOR + 
                 "    try {" + AmplificationHelper.LINE_SEPARATOR + 
-                "        String lit1 = catg.CATG.readString(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR + 
-                "        String lit2 = catg.CATG.readString(\"NEW\" + System.getProperty(\"line.separator\") + \"LINE\");" + AmplificationHelper.LINE_SEPARATOR + 
-                "        boolean lit3 = catg.CATG.readBool(true);" + AmplificationHelper.LINE_SEPARATOR + 
-                "        char lit4 = catg.CATG.readChar('<');" + AmplificationHelper.LINE_SEPARATOR + 
-                "        char lit5 = catg.CATG.readChar('\\'');" + AmplificationHelper.LINE_SEPARATOR + 
-                "        int lit6 = catg.CATG.readInt(100);" + AmplificationHelper.LINE_SEPARATOR + 
-                "        String lit7 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR + 
-                "        int lit8 = catg.CATG.readInt(5);" + AmplificationHelper.LINE_SEPARATOR + 
-                "        String lit9 = catg.CATG.readString(\"Timoleon\");" + AmplificationHelper.LINE_SEPARATOR + 
-                "        int lit10 = catg.CATG.readInt(1000);" + AmplificationHelper.LINE_SEPARATOR + 
-                "        String lit11 = catg.CATG.readString(\"Potion\");" + AmplificationHelper.LINE_SEPARATOR + 
+                "        String lit1 = catg.CATG.readString((String)\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR + 
+                "        String lit2 = catg.CATG.readString((String)\"NEW\" + System.getProperty(\"line.separator\") + \"LINE\");" + AmplificationHelper.LINE_SEPARATOR + 
+                "        boolean lit3 = catg.CATG.readBool((boolean)true);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        char lit4 = catg.CATG.readChar((char)'<');" + AmplificationHelper.LINE_SEPARATOR + 
+                "        char lit5 = catg.CATG.readChar((char)'\\'');" + AmplificationHelper.LINE_SEPARATOR + 
+                "        byte lit6 = catg.CATG.readByte((byte)3);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        short lit7 = catg.CATG.readShort((short)3);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        int lit8 = catg.CATG.readInt((int)3);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        long lit9 = catg.CATG.readLong((long)3);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        byte lit10 = catg.CATG.readByte((byte)16);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        int lit11 = catg.CATG.readInt((int)100);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        String lit12 = catg.CATG.readString((String)\"Potion\");" + AmplificationHelper.LINE_SEPARATOR + 
+                "        int lit13 = catg.CATG.readInt((int)5);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        String lit14 = catg.CATG.readString((String)\"Timoleon\");" + AmplificationHelper.LINE_SEPARATOR + 
+                "        int lit15 = catg.CATG.readInt((int)1000);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        String lit16 = catg.CATG.readString((String)\"Potion\");" + AmplificationHelper.LINE_SEPARATOR + 
                 "        System.out.println(mainTest.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR + 
                 "        System.out.println(mainTest.getANumber());" + AmplificationHelper.LINE_SEPARATOR + 
                 "        System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR + 
@@ -72,11 +77,16 @@ public class MainGeneratorTest extends AbstractTest {
                 "        System.out.println(lit3);" + AmplificationHelper.LINE_SEPARATOR + 
                 "        System.out.println(lit4);" + AmplificationHelper.LINE_SEPARATOR + 
                 "        System.out.println(lit5);" + AmplificationHelper.LINE_SEPARATOR + 
-                "        Seller seller = new Seller(lit6, Collections.singletonList(new Item(lit7, lit8)));" + AmplificationHelper.LINE_SEPARATOR + 
-                "        Player player = new Player(lit9, lit10);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        byte b = lit6;" + AmplificationHelper.LINE_SEPARATOR + 
+                "        short s = lit7;" + AmplificationHelper.LINE_SEPARATOR + 
+                "        int i = lit8;" + AmplificationHelper.LINE_SEPARATOR + 
+                "        long l = lit9;" + AmplificationHelper.LINE_SEPARATOR + 
+                "        byte[] array_byte = new byte[]{ lit10 };" + AmplificationHelper.LINE_SEPARATOR + 
+                "        Seller seller = new Seller(lit11, Collections.singletonList(new Item(lit12, lit13)));" + AmplificationHelper.LINE_SEPARATOR + 
+                "        Player player = new Player(lit14, lit15);" + AmplificationHelper.LINE_SEPARATOR + 
                 "        player.toString();" + AmplificationHelper.LINE_SEPARATOR + 
                 "        seller.toString();" + AmplificationHelper.LINE_SEPARATOR + 
-                "        player.buyItem(lit11, seller);" + AmplificationHelper.LINE_SEPARATOR + 
+                "        player.buyItem(lit16, seller);" + AmplificationHelper.LINE_SEPARATOR + 
                 "        player.toString();" + AmplificationHelper.LINE_SEPARATOR + 
                 "        seller.toString();" + AmplificationHelper.LINE_SEPARATOR + 
                 "    } catch (Exception __exceptionEx2AmplifierException) {" + AmplificationHelper.LINE_SEPARATOR + 

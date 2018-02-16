@@ -5,10 +5,12 @@ import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.sosiefier.InputConfiguration;
 import fr.inria.diversify.utils.sosiefier.InputProgram;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import spoon.Launcher;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -28,6 +30,11 @@ public class AbstractTest {
     @Before
     public void setUp() throws Exception {
         Main.verbose = true;
+        try {
+            FileUtils.forceDelete(new File("target/dspot/tmp_test_sources"));
+        } catch (Exception ignored) {
+
+        }
         this.launcher = this.initSpoonModel(this.getPathToConfigurationFile());
         AutomaticBuilderFactory.getAutomaticBuilder(this.configuration)
                 .compile(this.configuration.getInputProgram().getProgramDir());

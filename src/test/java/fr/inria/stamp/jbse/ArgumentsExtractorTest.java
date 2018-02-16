@@ -87,6 +87,8 @@ public class ArgumentsExtractorTest {
                         .get(0)
                 );
 
+        System.out.println(extractedMethod);
+
         // same as the MainGenerator, the resulting method from ArgumentsExtractor should be compilable
         testClass.addMethod(extractedMethod);
         launcher.getModelBuilder().setBinaryOutputDirectory(new File("target/trash/"));
@@ -95,20 +97,25 @@ public class ArgumentsExtractorTest {
         assertEquals(expectMethodTavern, extractedMethod.toString());
     }
 
-    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, int lit3, int lit4, int lit5) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(this.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(getANumber());" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(\"NEW\\nLINE\");" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(lit0);" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR +
-            "    Seller seller = new Seller(lit3, Collections.singletonList(new Item(\"Potion\", lit4)));" + AmplificationHelper.LINE_SEPARATOR +
-            "    Player player = new Player(\"Timoleon\", lit5);" + AmplificationHelper.LINE_SEPARATOR +
-            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
-            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
-            "    player.buyItem(\"Potion\", seller);" + AmplificationHelper.LINE_SEPARATOR +
-            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
-            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, byte lit3, short lit4, int lit5, long lit6, byte lit7, int lit8, int lit9, int lit10) throws Exception {" + AmplificationHelper.LINE_SEPARATOR + 
+            "    System.out.println(this.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR + 
+            "    System.out.println(getANumber());" + AmplificationHelper.LINE_SEPARATOR + 
+            "    System.out.println(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR + 
+            "    System.out.println(\"NEW\\nLINE\");" + AmplificationHelper.LINE_SEPARATOR + 
+            "    System.out.println(lit0);" + AmplificationHelper.LINE_SEPARATOR + 
+            "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR + 
+            "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR + 
+            "    byte b = lit3;" + AmplificationHelper.LINE_SEPARATOR + 
+            "    short s = lit4;" + AmplificationHelper.LINE_SEPARATOR + 
+            "    int i = lit5;" + AmplificationHelper.LINE_SEPARATOR + 
+            "    long l = lit6;" + AmplificationHelper.LINE_SEPARATOR + 
+            "    byte[] array_byte = new byte[]{ lit7 };" + AmplificationHelper.LINE_SEPARATOR + 
+            "    Seller seller = new Seller(lit8, Collections.singletonList(new Item(\"Potion\", lit9)));" + AmplificationHelper.LINE_SEPARATOR + 
+            "    Player player = new Player(\"Timoleon\", lit10);" + AmplificationHelper.LINE_SEPARATOR + 
+            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR + 
+            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR + 
+            "    player.buyItem(\"Potion\", seller);" + AmplificationHelper.LINE_SEPARATOR + 
+            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR + 
+            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR + 
             "}";
 }
