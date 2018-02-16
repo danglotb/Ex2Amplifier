@@ -9,6 +9,7 @@ import spoon.reflect.code.CtVariableAccess;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.factory.Factory;
+import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.ArrayList;
@@ -36,7 +37,6 @@ public class ArgumentsExtractor {
 
         extractedMethod.setSimpleName("extract_" + ctMethodWithoutAssertion.getSimpleName());
         new ArrayList<>(extractedMethod.getThrownTypes()).forEach(extractedMethod::removeThrownType);
-        extractedMethod.setParent(ctMethod.getParent());
         ctMethodWithoutAssertion.getAnnotations().forEach(extractedMethod::removeAnnotation);
         final int[] count = new int[1];
         final Map<CtAbstractInvocation<?>, List<CtVariableAccess>> parametersPerInvocation =
@@ -45,11 +45,11 @@ public class ArgumentsExtractor {
                 .stream()
                 .filter(ctLiteral -> !(ctLiteral.getValue() instanceof String)) // TODO
                 .forEach(ctLiteral -> {
-                    final CtParameter parameter = factory.createParameter();
-                    parameter.setType(Utils.getRealTypeOfLiteral(ctLiteral));
-                    parameter.setSimpleName("lit" + count[0]++);
-                    extractedMethod.addParameter(parameter);
-                    final CtVariableAccess<?> variableRead = factory.createVariableRead(factory.createParameterReference(parameter), false);
+                    final CtParameter parameter = factory.createParameter(extractedMethod, Utils.getRealTypeOfLiteral(ctLiteral), "lit" + count[0]++);
+                    final CtParameterReference<?> parameterReference = factory.createParameterReference();
+                    parameterReference.setSimpleName(parameter.getSimpleName());
+                    parameterReference.setType(parameter.getType());
+                    final CtVariableAccess<?> variableRead = factory.createVariableRead(parameterReference, false);
                     final CtAbstractInvocation invocation = ctLiteral.getParent(CtAbstractInvocation.class);
                     if (invocation != null) {
                         if (!parametersPerInvocation.containsKey(invocation)) {
