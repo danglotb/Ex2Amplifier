@@ -43,6 +43,8 @@ public class Ex2Amplifier implements Amplifier {
             JBSE
     }
 
+    private Amplifier amplifier;
+
     private Ex2Amplifier_Mode mode = Ex2Amplifier_Mode.CATG;
 
     public static final TypeFilter<CtLiteral<?>> CT_LITERAL_TYPE_FILTER = new TypeFilter<CtLiteral<?>>(CtLiteral.class) {
@@ -57,6 +59,11 @@ public class Ex2Amplifier implements Amplifier {
     public Ex2Amplifier(InputConfiguration configuration, Ex2Amplifier_Mode mode) {
         this.configuration = configuration;
         this.mode = mode;
+        if (mode == Ex2Amplifier_Mode.CATG) {
+            this.amplifier = new CATGAmplifier(this.configuration);
+        } else {
+            this.amplifier = new JBSEAmplifier(this.configuration);
+        }
     }
 
     public Ex2Amplifier(InputConfiguration configuration) {
@@ -68,15 +75,11 @@ public class Ex2Amplifier implements Amplifier {
         if (ctMethod.getElements(CT_LITERAL_TYPE_FILTER).isEmpty()) {
             return Collections.emptyList();
         }
-        if (mode == Ex2Amplifier_Mode.CATG) {
-            return new CATGAmplifier(this.configuration).apply(ctMethod);
-        } else {
-            return new JBSEAmplifier(this.configuration).apply(ctMethod);
-        }
+        return this.amplifier.apply(ctMethod);
     }
 
     @Override
     public void reset(CtType ctType) {
-
+       this.amplifier.reset(ctType);
     }
 }
