@@ -145,6 +145,36 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/fr/inria/stamp/Main.*</exclude> <!-- we override this from dspot, do not need to re-test it-->
+                        <exclude>**/fr/inria/stamp/JSAPOptions.java</exclude> <!-- we override this from dspot, do not need to re-test it-->
+                        <exclude>**/fr/inria/stamp/Configuration.*</exclude> <!-- we override this from dspot, do not need to re-test it-->
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>fr.inria.stamp.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-my-jar-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

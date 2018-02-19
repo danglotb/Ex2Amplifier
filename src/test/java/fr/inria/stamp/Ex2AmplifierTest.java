@@ -32,7 +32,8 @@ public class Ex2AmplifierTest extends AbstractTest {
             different test data input, i.e. literals has been modified.
          */
 
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration);
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
+        ex2Amplifier.init(this.configuration);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
@@ -53,7 +54,8 @@ public class Ex2AmplifierTest extends AbstractTest {
             Ex2Amplifier returns an empty list, i.e. it cannot amplifiy such test methods.
          */
 
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration);
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
+        ex2Amplifier.init(this.configuration);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
@@ -73,7 +75,8 @@ public class Ex2AmplifierTest extends AbstractTest {
         different test data input, i.e. literals has been modified.
          */
 
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
+        ex2Amplifier.init(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
@@ -87,7 +90,8 @@ public class Ex2AmplifierTest extends AbstractTest {
 
     @Test
     public void testUsingJBSE2() throws Exception {
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
+        ex2Amplifier.init(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
@@ -102,7 +106,8 @@ public class Ex2AmplifierTest extends AbstractTest {
     @Ignore
     @Test
     public void testUsingJBSE3() throws Exception {
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
+        ex2Amplifier.init(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
