@@ -43,9 +43,8 @@ class JBSEAmplifier implements Amplifier {
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
         final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod);
-        final CtType ctType = currentTestClassToBeAmplified.clone();
-        CtType<?> clone = ctType.clone();
-        clone.setParent(ctType.getParent());
+        final CtType<?> clone = this.currentTestClassToBeAmplified.clone();
+        clone.setParent(this.currentTestClassToBeAmplified.getParent());
         clone.removeMethod(ctMethod);
         clone.addMethod(extractedMethod);
         DSpotUtils.printJavaFileWithComment(clone, new File(DSpotCompiler.pathToTmpTestSources));
