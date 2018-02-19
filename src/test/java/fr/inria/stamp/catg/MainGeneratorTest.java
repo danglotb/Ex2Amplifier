@@ -38,7 +38,7 @@ public class MainGeneratorTest extends AbstractTest {
 
         final CtClass<Object> testClass = this.launcher.getFactory().Class().get("fr.inria.stamp.MainTest");
         final CtMethod<?> mainMethodFromTestMethod = MainGenerator.generateMainMethodFromTestMethod(
-                testClass.getMethodsByName("test").get(0)
+                testClass.getMethodsByName("test").get(0) , testClass
         );
 
         System.out.println(mainMethodFromTestMethod.toString());
