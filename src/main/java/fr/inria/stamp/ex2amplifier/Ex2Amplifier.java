@@ -54,15 +54,13 @@ public class Ex2Amplifier implements Amplifier {
         }
     };
 
-    protected InputConfiguration configuration;
 
     public Ex2Amplifier(InputConfiguration configuration, Ex2Amplifier_Mode mode) {
-        this.configuration = configuration;
         this.mode = mode;
         if (mode == Ex2Amplifier_Mode.CATG) {
-            this.amplifier = new CATGAmplifier(this.configuration);
+            this.amplifier = new CATGAmplifier(configuration);
         } else {
-            this.amplifier = new JBSEAmplifier(this.configuration);
+            this.amplifier = new JBSEAmplifier(configuration);
         }
     }
 

@@ -42,7 +42,7 @@ public class CATGExecutorTest extends AbstractTest {
                 .get(qualifiedName);
         final CtMethod<?> mainMethodFromTestMethod = MainGenerator.generateMainMethodFromTestMethod(
                 testClass.getMethodsByName("test")
-                        .get(0)
+                        .get(0), testClass
         );
         testClass.addMethod(mainMethodFromTestMethod);
         DSpotUtils.printJavaFileWithComment(testClass, new File("target/dspot/tmp_test_sources"));

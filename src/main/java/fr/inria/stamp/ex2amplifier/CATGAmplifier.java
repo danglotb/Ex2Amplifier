@@ -30,15 +30,17 @@ class CATGAmplifier implements Amplifier {
 
     private InputConfiguration configuration;
 
+    private CtType<?> currentTestClassToBeAmplified;
+
     CATGAmplifier(InputConfiguration configuration) {
         this.configuration = configuration;
     }
 
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
+        final CtType<?> testClass = this.currentTestClassToBeAmplified.clone();
         final CtMethod<?> mainMethodFromTestMethod =
-                MainGenerator.generateMainMethodFromTestMethod(ctMethod);
-        final CtClass testClass = ctMethod.getParent(CtClass.class);
+                MainGenerator.generateMainMethodFromTestMethod(ctMethod, testClass);
         testClass.addMethod(mainMethodFromTestMethod);
         DSpotUtils.printJavaFileWithComment(testClass, new File("target/dspot/tmp_test_sources"));
         String classpath = AutomaticBuilderFactory
@@ -90,6 +92,6 @@ class CATGAmplifier implements Amplifier {
 
     @Override
     public void reset(CtType ctType) {
-
+        this.currentTestClassToBeAmplified = ctType;
     }
 }

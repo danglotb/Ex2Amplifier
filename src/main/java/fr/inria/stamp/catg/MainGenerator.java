@@ -17,6 +17,7 @@ import spoon.reflect.code.CtTry;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.declaration.CtType;
 import spoon.reflect.declaration.CtTypedElement;
 import spoon.reflect.declaration.ModifierKind;
 import spoon.reflect.factory.Factory;
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
  */
 public class MainGenerator {
 
-    public static CtMethod<?> generateMainMethodFromTestMethod(CtMethod<?> testMethod) {
+    public static CtMethod<?> generateMainMethodFromTestMethod(CtMethod<?> testMethod, CtType<?> testClass) {
         final Factory factory = testMethod.getFactory();
         final CtBlock<?> blockMain =
                 new AssertionRemover().removeAssertion(testMethod).getBody().clone();
@@ -74,7 +75,7 @@ public class MainGenerator {
         } else {
             mainMethod.setBody(blockMain);
         }
-        removeNonStaticElement(mainMethod, testMethod.getParent(CtClass.class));
+        removeNonStaticElement(mainMethod, testClass);
         return mainMethod;
     }
 
@@ -87,7 +88,7 @@ public class MainGenerator {
         return aTry;
     }
 
-    private static void removeNonStaticElement(final CtMethod<?> mainMethod, final CtClass testClass) {
+    private static void removeNonStaticElement(final CtMethod<?> mainMethod, final CtType testClass) {
         final CtBlock<?> body = mainMethod.getBody();
         final Factory factory = mainMethod.getFactory();
 
@@ -122,7 +123,7 @@ public class MainGenerator {
         body.insertBegin(localVariableOfTestClass);
     }
 
-    private static CtTry wrapInTryCatchMethodWithSpecificAnnotation(CtClass testClass, Factory factory, CtLocalVariable localVariableOfTestClass, String fullQualifiedNameOfAnnoation) {
+    private static CtTry wrapInTryCatchMethodWithSpecificAnnotation(CtType testClass, Factory factory, CtLocalVariable localVariableOfTestClass, String fullQualifiedNameOfAnnoation) {
         final Optional<CtMethod<?>> setUpMethod = ((Set<CtMethod<?>>) testClass
                 .getMethods())
                 .stream().filter(method ->

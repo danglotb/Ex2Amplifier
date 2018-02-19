@@ -19,7 +19,6 @@ import static org.junit.Assert.assertNull;
  * on 05/09/17
  */
 public class MainTest {
-
 	public int aUsedNumber = 3;
 
 	private int getANumber() {
