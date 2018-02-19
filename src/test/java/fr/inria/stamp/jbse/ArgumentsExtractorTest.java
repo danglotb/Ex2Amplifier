@@ -109,7 +109,8 @@ public class ArgumentsExtractorTest {
             "    short s = lit4;" + AmplificationHelper.LINE_SEPARATOR + 
             "    int i = lit5;" + AmplificationHelper.LINE_SEPARATOR + 
             "    long l = lit6;" + AmplificationHelper.LINE_SEPARATOR + 
-            "    byte[] array_byte = new byte[]{ lit7 };" + AmplificationHelper.LINE_SEPARATOR + 
+            "    byte[] array_byte = new byte[]{ lit7 };" + AmplificationHelper.LINE_SEPARATOR +
+            "    Integer toto = null;" + AmplificationHelper.LINE_SEPARATOR +
             "    Seller seller = new Seller(lit8, Collections.singletonList(new Item(\"Potion\", lit9)));" + AmplificationHelper.LINE_SEPARATOR + 
             "    Player player = new Player(\"Timoleon\", lit10);" + AmplificationHelper.LINE_SEPARATOR + 
             "    player.toString();" + AmplificationHelper.LINE_SEPARATOR + 

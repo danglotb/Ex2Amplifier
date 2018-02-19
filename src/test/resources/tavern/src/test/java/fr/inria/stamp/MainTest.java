@@ -55,6 +55,7 @@ public class MainTest {
 		int i = 3;
 		long l = 3;
 		byte [] array_byte = new byte[]{16};
+		Integer toto = null;
 
 		Seller seller = new Seller(100, Collections.singletonList(new Item("Potion", 5)));
 		Player player = new Player("Timoleon", 1000);
