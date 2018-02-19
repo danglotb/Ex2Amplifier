@@ -99,6 +99,6 @@ class JBSEAmplifier implements Amplifier {
 
     @Override
     public void reset(CtType ctType) {
-        currentTestClassToBeAmplified = ctType;
+        this.currentTestClassToBeAmplified = ctType;
     }
 }
