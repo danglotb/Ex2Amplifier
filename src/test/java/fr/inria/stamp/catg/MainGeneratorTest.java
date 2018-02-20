@@ -82,6 +82,7 @@ public class MainGeneratorTest extends AbstractTest {
                 "        int i = lit8;" + AmplificationHelper.LINE_SEPARATOR + 
                 "        long l = lit9;" + AmplificationHelper.LINE_SEPARATOR + 
                 "        byte[] array_byte = new byte[]{ lit10 };" + AmplificationHelper.LINE_SEPARATOR + 
+                "        Integer toto = null;" + AmplificationHelper.LINE_SEPARATOR + 
                 "        Seller seller = new Seller(lit11, Collections.singletonList(new Item(lit12, lit13)));" + AmplificationHelper.LINE_SEPARATOR + 
                 "        Player player = new Player(lit14, lit15);" + AmplificationHelper.LINE_SEPARATOR + 
                 "        player.toString();" + AmplificationHelper.LINE_SEPARATOR + 
