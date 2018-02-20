@@ -39,6 +39,7 @@ class CATGAmplifier implements Amplifier {
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
         final CtType<?> testClass = this.currentTestClassToBeAmplified.clone();
+        this.currentTestClassToBeAmplified.getPackage().addType(testClass);
         final CtMethod<?> mainMethodFromTestMethod =
                 MainGenerator.generateMainMethodFromTestMethod(ctMethod, testClass);
         testClass.addMethod(mainMethodFromTestMethod);

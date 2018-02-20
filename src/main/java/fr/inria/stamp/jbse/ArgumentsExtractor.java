@@ -2,6 +2,7 @@ package fr.inria.stamp.jbse;
 
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
 import fr.inria.stamp.Utils;
+import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
 import spoon.reflect.code.CtAbstractInvocation;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtUnaryOperator;
@@ -41,7 +42,7 @@ public class ArgumentsExtractor {
         final int[] count = new int[1];
         final Map<CtAbstractInvocation<?>, List<CtVariableAccess>> parametersPerInvocation =
                 new HashMap<>();
-        extractedMethod.getElements(new TypeFilter<>(CtLiteral.class))
+        extractedMethod.getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER)
                 .stream()
                 .filter(ctLiteral -> !(ctLiteral.getValue() instanceof String)) // TODO
                 .forEach(ctLiteral -> {
