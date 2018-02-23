@@ -11,7 +11,6 @@ import fr.inria.stamp.catg.CATGExecutor;
 import fr.inria.stamp.catg.CATGUtils;
 import fr.inria.stamp.catg.MainGenerator;
 import spoon.reflect.code.CtLiteral;
-import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;

@@ -1,15 +1,11 @@
 package fr.inria.stamp.catg;
 
 import org.apache.commons.io.FileUtils;
-import spoon.reflect.code.CtLiteral;
-import spoon.reflect.factory.Factory;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;

@@ -148,7 +148,7 @@
                 <configuration>
                     <excludes>
                         <exclude>**/fr/inria/stamp/Main.*</exclude> <!-- we override this from dspot, do not need to re-test it-->
-                        <exclude>**/fr/inria/stamp/JSAPOptions.java</exclude> <!-- we override this from dspot, do not need to re-test it-->
+                        <exclude>**/fr/inria/stamp/JSAP*</exclude> <!-- we override this from dspot, do not need to re-test it-->
                         <exclude>**/fr/inria/stamp/Configuration.*</exclude> <!-- we override this from dspot, do not need to re-test it-->
                     </excludes>
                 </configuration>

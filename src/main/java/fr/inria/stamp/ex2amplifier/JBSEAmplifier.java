@@ -1,6 +1,5 @@
 package fr.inria.stamp.ex2amplifier;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.dspot.amplifier.Amplifier;
 import fr.inria.diversify.dspot.support.DSpotCompiler;
@@ -12,7 +11,6 @@ import fr.inria.stamp.jbse.JBSERunner;
 import fr.inria.stamp.smt.SMTSolver;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtUnaryOperator;
-import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.CtType;
@@ -20,6 +18,7 @@ import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;

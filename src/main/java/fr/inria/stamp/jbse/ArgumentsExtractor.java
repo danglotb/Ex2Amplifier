@@ -4,7 +4,6 @@ import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
 import fr.inria.stamp.Utils;
 import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
 import spoon.reflect.code.CtAbstractInvocation;
-import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.code.CtVariableAccess;
 import spoon.reflect.declaration.CtMethod;

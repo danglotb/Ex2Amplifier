@@ -1,10 +1,8 @@
 package fr.inria.stamp.jbse;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import fr.inria.stamp.Main;
 import jbse.apps.run.Run;
 import jbse.apps.run.RunParameters;
-import jbse.apps.settings.ParseException;
 import jbse.apps.settings.SettingsReader;
 import jbse.mem.ClauseAssume;
 import jbse.mem.State;
@@ -16,9 +14,7 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtTypedElement;
 import spoon.reflect.reference.CtTypeReference;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
