@@ -67,4 +67,14 @@ public class SMTSolverTest {
         constraintsPerParamName.get("param1").add("param1");
         assertNull(SMTSolver.solve(constraintsPerParamName));
     }
+
+    @Test
+    public void testWithParenthesis() throws Exception {
+        Map<String, List<String>> constraintsPerParamName = new HashMap<>();
+        constraintsPerParamName.put("param1", new ArrayList<>());
+        constraintsPerParamName.get("param1").add("param1 - ((param1 * 52429 >>> 19 << 3) + (param1 * 52429 >>> 19 << 1)) == 0");
+        constraintsPerParamName.get("param1").add("param1 * 52429 >>> 19 == 0");
+        final List<?> solutions = SMTSolver.solve(constraintsPerParamName);
+        assertEquals(1, solutions.size());
+    }
 }
