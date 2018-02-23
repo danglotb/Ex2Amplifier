@@ -1,5 +1,7 @@
 package fr.inria.stamp.smt;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+import org.slf4j.LoggerFactory;
 import org.sosy_lab.common.ShutdownManager;
 import org.sosy_lab.common.configuration.Configuration;
 import org.sosy_lab.common.log.BasicLogManager;
@@ -14,6 +16,9 @@ import org.sosy_lab.java_smt.api.NumeralFormula;
 import org.sosy_lab.java_smt.api.ProverEnvironment;
 import org.sosy_lab.java_smt.api.SolverContext;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +32,8 @@ import java.util.stream.Collectors;
  */
 public class SMTSolver {
 
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SMTSolver.class);
+
     // TODO must be extended to other types
     private Map<String, NumeralFormula.IntegerFormula> variables;
 
@@ -34,6 +41,7 @@ public class SMTSolver {
     private FormulaManager fmgr;
     private BooleanFormulaManager bmgr;
     private IntegerFormulaManager imgr;
+    private ScriptEngine engine;
 
     private SMTSolver() {
         try {
@@ -46,6 +54,7 @@ public class SMTSolver {
             this.bmgr = this.fmgr.getBooleanFormulaManager();
             this.imgr = this.fmgr.getIntegerFormulaManager();
             this.variables = new HashMap<>();
+            this.engine = new ScriptEngineManager().getEngineByName("JavaScript");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +67,8 @@ public class SMTSolver {
             if (!isUnsat) {
                 return prover.getModel();
             } else {
-                throw new RuntimeException("Could not satisfy constraint" + constraint.toString());
+                LOGGER.warn("Could not satisfy constraint{}", constraint.toString());
+                return null;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -94,49 +104,117 @@ public class SMTSolver {
     private BooleanFormula evaluate(String constraint) {
         if (constraint.contains("==")) {
             final String[] operands = constraint.split("==");
-            return this.imgr.equal(evaluateNum(operands[0]), evaluateNum(operands[1]));
+            return this.imgr.equal(eval(operands[0]), eval(operands[1]));
         } else if (constraint.contains("!=")) {
             final String[] operands = constraint.split("!=");
-            return this.bmgr.not(this.imgr.equal(evaluateNum(operands[0]), evaluateNum(operands[1])));
+            return this.bmgr.not(this.imgr.equal(eval(operands[0]), eval(operands[1])));
         } else if (constraint.contains(">=")) {
             final String[] operands = constraint.split(">=");
-            return this.imgr.greaterThan(evaluateNum(operands[0]), evaluateNum(operands[1]));
+            return this.imgr.greaterThan(eval(operands[0]), eval(operands[1]));
         } else if (constraint.contains(">")) {
             final String[] operands = constraint.split(">");
-            return this.imgr.greaterOrEquals(evaluateNum(operands[0]), evaluateNum(operands[1]));
+            return this.imgr.greaterOrEquals(eval(operands[0]), eval(operands[1]));
         } else if (constraint.contains("<=")) {
             final String[] operands = constraint.split("<=");
-            return this.imgr.lessOrEquals(evaluateNum(operands[0]), evaluateNum(operands[1]));
+            return this.imgr.lessOrEquals(eval(operands[0]), eval(operands[1]));
         } else if (constraint.contains("<")) {
             final String[] operands = constraint.split("<");
-            return this.imgr.lessOrEquals(evaluateNum(operands[0]), evaluateNum(operands[1]));
+            return this.imgr.lessOrEquals(eval(operands[0]), eval(operands[1]));
         } else {
             return null;
         }
     }
 
-    private NumeralFormula.IntegerFormula evaluateNum(String constraint) {
-        if (constraint.contains("+")) {
-            final String[] operands = constraint.split("\\+");
-            return this.imgr.add(evaluateNum(operands[0]), evaluateNum(operands[1]));
-        } else if (!constraint.startsWith("-") && constraint.contains("-")) {
-            final String[] operands = constraint.split("-");
-            return this.imgr.subtract(evaluateNum(operands[0]), evaluateNum(operands[1]));
-        } else if (constraint.contains("*")) {
-            final String[] operands = constraint.split("\\*");
-            return this.imgr.multiply(evaluateNum(operands[0]), evaluateNum(operands[1]));
-        } else if (constraint.contains("/")) {
-            final String[] operands = constraint.split("/");
-            return this.imgr.divide(evaluateNum(operands[0]), evaluateNum(operands[1]));
-        } else if (constraint.contains("%")) {
-            final String[] operands = constraint.split("%");
-            return this.imgr.modulo(evaluateNum(operands[0]), evaluateNum(operands[1]));
+    private NumeralFormula.IntegerFormula evaluateOperands(String constraint, String operator) {
+        // the given operator is the first one in th String constraint
+        String escapedOperator = String.format("\\%s", operator);
+        final String[] operands = constraint.split(escapedOperator);
+        // we concat all the operands from operand[1] to operands[operands.length]
+        StringBuilder operandRight = new StringBuilder();
+        for (int i = 1; i < operands.length; i++) {
+            operandRight.append(operands[i]);
+        }
+        final NumeralFormula.IntegerFormula eval = eval(operands[0]);
+        final NumeralFormula.IntegerFormula eval1 = eval(operandRight.toString());
+        switch (operator) {
+            case "+":
+                return this.imgr.add(eval, eval1);
+            case "-":
+                return this.imgr.subtract(eval, eval1);
+            case "/":
+                return this.imgr.divide(eval, eval1);
+            case "*":
+                return this.imgr.multiply(eval, eval1);
+            case "%":
+                return this.imgr.modulo(eval, eval1);
+            default:
+                return null;
+        }
+    }
+
+    private List<String> supportedOperators = Arrays.asList("+", "-", "/", "*", "%");
+
+    private String findFirstOperator(String constraint) {
+        int nbParenthesis = 0;
+        while (nbParenthesis != -constraint.length() / 2) {
+            for (int i = 0; i < constraint.length(); i++) {
+                if (nbParenthesis == 0 && supportedOperators.contains("" + constraint.charAt(i))) {
+                    return "" + constraint.charAt(i);
+                }
+                nbParenthesis += constraint.charAt(i) == '(' ? 1 : 0;
+                nbParenthesis += constraint.charAt(i) == ')' ? -1 : 0;
+            }
+            nbParenthesis--; // we go deeper, i.e. inside parenthesis
+        }
+        return "";
+    }
+
+    private String removeParenthesisIfNeeded(String constraint) {
+        if (! (constraint.startsWith("(") && constraint.endsWith(")"))) {
+            return constraint;
         } else {
+            int nbParenthesis = 1;
+            // we must checks that the last parenthesis match with the first one
+            for (int i = 1; i < constraint.length(); i++) {
+                if (constraint.charAt(i) == '(') {
+                    nbParenthesis++;
+                } else if (constraint.charAt(i) == ')') {
+                    nbParenthesis--;
+                    if (nbParenthesis == 0 && i + 1 < constraint.length()) {
+                        return constraint;
+                    }
+                }
+            }
+        }
+        return constraint.substring(1, constraint.length() - 1);
+    }
+
+    private NumeralFormula.IntegerFormula eval(String constraint) {
+        constraint = removeParenthesisIfNeeded(constraint);
+        if (constraint.startsWith("-")) {
+            return this.imgr.subtract(this.imgr.makeNumber(0), eval(constraint.substring(1)));
+        }
+        final String operator = findFirstOperator(constraint);
+        if (operator.isEmpty()) {
+            // there is no operator, i.e. it is an operand
             if (this.variables.containsKey(constraint)) {
                 return this.variables.get(constraint);
+            } else if (constraint.contains(">") || constraint.contains("<")){// the SMT solver does not support such operation
+                try {
+                    Object value = this.engine.eval(constraint);
+                    if (value instanceof Double) {
+                        return this.imgr.makeNumber((Double) value);
+                    } else {
+                        return this.imgr.makeNumber((Integer) value);
+                    }
+                } catch (ScriptException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 return this.imgr.makeNumber(Integer.parseInt(constraint));
             }
+        } else {
+            return evaluateOperands(constraint, operator);
         }
     }
 
@@ -144,7 +222,11 @@ public class SMTSolver {
         SMTSolver solver = new SMTSolver();
         BooleanFormula constraint = solver.buildConstraint(constraintsPerParamName);
         final Model model = solver.solve(constraint);
-        return solver.getValues(model);
+        if (model == null) {
+            return Collections.emptyList();
+        } else {
+            return solver.getValues(model);
+        }
     }
 
 }

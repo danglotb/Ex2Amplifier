@@ -9,6 +9,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -50,14 +51,13 @@ public class SMTSolverTest {
         //assertEquals(6, values.get(0).getValue());// TODO must support types conversion
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testSolveThrowUnsat() throws Exception {
         Map<String, List<String>> constraintsPerParamName = new HashMap<>();
         constraintsPerParamName.put("param1", new ArrayList<>());
         constraintsPerParamName.get("param1").add("param1 == 2");
         constraintsPerParamName.get("param1").add("param1 == 3");
-        SMTSolver.solve(constraintsPerParamName);
-        fail("Should have throw a RuntimeException");
+        assertTrue(SMTSolver.solve(constraintsPerParamName).isEmpty());
     }
 
     @Test(expected = RuntimeException.class)
@@ -66,5 +66,15 @@ public class SMTSolverTest {
         constraintsPerParamName.put("param1", new ArrayList<>());
         constraintsPerParamName.get("param1").add("param1");
         assertNull(SMTSolver.solve(constraintsPerParamName));
+    }
+
+    @Test
+    public void testWithParenthesis() throws Exception {
+        Map<String, List<String>> constraintsPerParamName = new HashMap<>();
+        constraintsPerParamName.put("param1", new ArrayList<>());
+        constraintsPerParamName.get("param1").add("param1 - ((param1 * 52429 >>> 19 << 3) + (param1 * 52429 >>> 19 << 1)) == 0");
+        constraintsPerParamName.get("param1").add("param1 * 52429 >>> 19 == 0");
+        final List<?> solutions = SMTSolver.solve(constraintsPerParamName);
+        assertEquals(1, solutions.size());
     }
 }

@@ -1,7 +1,6 @@
 package fr.inria.stamp.catg;
 
 import fr.inria.diversify.utils.AmplificationHelper;
-import spoon.reflect.factory.Factory;
 
 import java.io.File;
 import java.util.List;

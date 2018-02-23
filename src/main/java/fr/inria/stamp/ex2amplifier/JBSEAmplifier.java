@@ -11,7 +11,6 @@ import fr.inria.stamp.jbse.JBSERunner;
 import fr.inria.stamp.smt.SMTSolver;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtUnaryOperator;
-import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.CtType;
@@ -19,6 +18,7 @@ import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +43,9 @@ class JBSEAmplifier implements Amplifier {
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
         final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod);
+        if (extractedMethod.getParameters().isEmpty()) {
+            return Collections.emptyList();
+        }
         final CtType<?> clone = this.currentTestClassToBeAmplified.clone();
         clone.setParent(this.currentTestClassToBeAmplified.getParent());
         clone.removeMethod(ctMethod);
