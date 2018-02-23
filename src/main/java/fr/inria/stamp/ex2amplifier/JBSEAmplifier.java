@@ -1,5 +1,6 @@
 package fr.inria.stamp.ex2amplifier;
 
+import edu.emory.mathcs.backport.java.util.Collections;
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.dspot.amplifier.Amplifier;
 import fr.inria.diversify.dspot.support.DSpotCompiler;
@@ -43,6 +44,9 @@ class JBSEAmplifier implements Amplifier {
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
         final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod);
+        if (extractedMethod.getParameters().isEmpty()) {
+            return Collections.emptyList();
+        }
         final CtType<?> clone = this.currentTestClassToBeAmplified.clone();
         clone.setParent(this.currentTestClassToBeAmplified.getParent());
         clone.removeMethod(ctMethod);
