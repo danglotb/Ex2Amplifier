@@ -50,7 +50,7 @@ class JBSEAmplifier implements Amplifier {
         clone.setParent(this.currentTestClassToBeAmplified.getParent());
         clone.removeMethod(ctMethod);
         clone.addMethod(extractedMethod);
-        DSpotUtils.printJavaFileWithComment(clone, new File(DSpotCompiler.pathToTmpTestSources));
+        DSpotUtils.printCtTypeToGivenDirectory(clone, new File(DSpotCompiler.pathToTmpTestSources));
         final String classpath = AutomaticBuilderFactory
                 .getAutomaticBuilder(this.configuration)
                 .buildClasspath(this.configuration.getInputProgram().getProgramDir())

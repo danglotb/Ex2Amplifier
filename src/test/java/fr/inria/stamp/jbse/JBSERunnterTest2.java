@@ -2,7 +2,6 @@ package fr.inria.stamp.jbse;
 
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.dspot.support.DSpotCompiler;
-import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.DSpotUtils;
 import fr.inria.diversify.utils.sosiefier.InputProgram;
 import fr.inria.stamp.AbstractTest;
@@ -13,8 +12,6 @@ import spoon.reflect.declaration.CtMethod;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Benjamin DANGLOT
@@ -45,7 +42,7 @@ public class JBSERunnterTest2 extends AbstractTest {
         final CtMethod<?> ctMethod = ArgumentsExtractor.performExtraction(testMethod);
         mainClass.addMethod(ctMethod);
 
-        DSpotUtils.printJavaFileWithComment(mainClass, new File("target/dspot/tmp_test_sources"));
+        DSpotUtils.printCtTypeToGivenDirectory(mainClass, new File("target/dspot/tmp_test_sources"));
         DSpotCompiler.compile("target/dspot/tmp_test_sources", classpath,
                 new File(this.configuration.getInputProgram().getProgramDir() + "/" +
                         this.configuration.getInputProgram().getTestClassesDir())
