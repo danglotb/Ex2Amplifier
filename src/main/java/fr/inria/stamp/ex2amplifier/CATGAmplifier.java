@@ -42,7 +42,7 @@ class CATGAmplifier implements Amplifier {
         final CtMethod<?> mainMethodFromTestMethod =
                 MainGenerator.generateMainMethodFromTestMethod(ctMethod, testClass);
         testClass.addMethod(mainMethodFromTestMethod);
-        DSpotUtils.printJavaFileWithComment(testClass, new File("target/dspot/tmp_test_sources"));
+        DSpotUtils.printCtTypeToGivenDirectory(testClass, new File("target/dspot/tmp_test_sources"));
         String classpath = AutomaticBuilderFactory
                 .getAutomaticBuilder(this.configuration)
                 .buildClasspath(this.configuration.getInputProgram().getProgramDir())

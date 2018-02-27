@@ -14,7 +14,6 @@ import fr.inria.diversify.dspot.amplifier.StringLiteralAmplifier;
 import fr.inria.diversify.dspot.amplifier.TestDataMutator;
 import fr.inria.diversify.dspot.amplifier.TestMethodCallAdder;
 import fr.inria.diversify.dspot.amplifier.TestMethodCallRemover;
-import fr.inria.diversify.dspot.selector.BranchCoverageTestSelector;
 import fr.inria.diversify.dspot.selector.ChangeDetectorSelector;
 import fr.inria.diversify.dspot.selector.CloverCoverageSelector;
 import fr.inria.diversify.dspot.selector.ExecutedMutantSelector;
@@ -40,7 +39,7 @@ import java.util.stream.Stream;
  * Created by Benjamin DANGLOT
  * benjamin.danglot@inria.fr
  * on 1/17/17
- * This is a overrided version of the JSAPOptions Class of DSpot
+ * This is an override version of the JSAPOptions Class of DSpot
  */
 public class JSAPOptions {
 
@@ -49,12 +48,6 @@ public class JSAPOptions {
     public static final JSAP options = initJSAP();
 
     public enum SelectorEnum {
-        BranchCoverageTestSelector {
-            @Override
-            public TestSelector buildSelector() {
-                return new BranchCoverageTestSelector(10);
-            }
-        },
         PitMutantScoreSelector {
             @Override
             public TestSelector buildSelector() {
