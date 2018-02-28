@@ -1,12 +1,7 @@
 package fr.inria.stamp.ex2amplifier;
 
-import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
-import fr.inria.diversify.dspot.amplifier.Amplifier;
 import fr.inria.diversify.dspot.assertGenerator.AssertionRemover;
-import fr.inria.diversify.dspot.support.DSpotCompiler;
 import fr.inria.diversify.utils.AmplificationHelper;
-import fr.inria.diversify.utils.DSpotUtils;
-import fr.inria.diversify.utils.sosiefier.InputConfiguration;
 import fr.inria.stamp.catg.CATGExecutor;
 import fr.inria.stamp.catg.CATGUtils;
 import fr.inria.stamp.catg.MainGenerator;
@@ -15,7 +10,7 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,35 +20,16 @@ import java.util.stream.Collectors;
  * benjamin.danglot@inria.fr
  * on 13/02/18
  */
-class CATGAmplifier implements Amplifier {
-
-    private InputConfiguration configuration;
-
-    private CtType<?> currentTestClassToBeAmplified;
-
-    CATGAmplifier(InputConfiguration configuration) {
-        this.configuration = configuration;
-    }
+public class CATGAmplifier extends Ex2Amplifier {
 
     @Override
-    public List<CtMethod> apply(CtMethod ctMethod) {
+    public List<CtMethod> internalApply(CtMethod ctMethod) {
         final CtType<?> testClass = this.currentTestClassToBeAmplified.clone();
         this.currentTestClassToBeAmplified.getPackage().addType(testClass);
         final CtMethod<?> mainMethodFromTestMethod =
                 MainGenerator.generateMainMethodFromTestMethod(ctMethod, testClass);
         testClass.addMethod(mainMethodFromTestMethod);
-        DSpotUtils.printCtTypeToGivenDirectory(testClass, new File("target/dspot/tmp_test_sources"));
-        String classpath = AutomaticBuilderFactory
-                .getAutomaticBuilder(this.configuration)
-                .buildClasspath(this.configuration.getInputProgram().getProgramDir())
-                + AmplificationHelper.PATH_SEPARATOR +
-                this.configuration.getInputProgram().getProgramDir() + "/" + this.configuration.getInputProgram().getClassesDir()
-                + AmplificationHelper.PATH_SEPARATOR +
-                this.configuration.getInputProgram().getProgramDir() + "/" + this.configuration.getInputProgram().getTestClassesDir();
-        DSpotCompiler.compile("target/dspot/tmp_test_sources", classpath + AmplificationHelper.PATH_SEPARATOR + "lib/catg-dev.jar",
-                new File(this.configuration.getInputProgram().getProgramDir() + "/" +
-                        this.configuration.getInputProgram().getTestClassesDir())
-        );
+        final String classpath = printAndCompile(testClass);
         final List<List<String>> execute = CATGExecutor.execute(classpath, testClass.getQualifiedName());
         CATGUtils.eraseOldFiles();
         testClass.removeMethod(mainMethodFromTestMethod);
@@ -65,7 +41,7 @@ class CATGAmplifier implements Amplifier {
     private CtMethod<?> buildMethodFromValues(List<String> values, CtMethod originalTestMethod) {
         final Iterator<String> iteratorOnNewValues = values.iterator();
         final CtMethod<?> clone = new AssertionRemover().removeAssertion(
-                AmplificationHelper.cloneMethodTest(originalTestMethod, "Ex2Amplifier")
+                AmplificationHelper.cloneMethodTest(originalTestMethod, "_Ex2_CATG")
         );
         final List<CtLiteral<?>> originalLiterals = clone.getBody().getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER);
         originalLiterals.forEach(ctLiteral ->
@@ -74,24 +50,30 @@ class CATGAmplifier implements Amplifier {
         return clone;
     }
 
-    private CtLiteral<?> buildNewLiteralFromString(String value, CtLiteral<?> originalLiteral) {
-        final Object originalLiteralValue = originalLiteral.getValue();
-        final Factory factory = originalLiteral.getFactory();
+    private CtLiteral<?> buildNewLiteralFromString(String value, CtLiteral<?> literalToBeReplaced) {
+        final Object originalLiteralValue = literalToBeReplaced.getValue();
+        final Factory factory = literalToBeReplaced.getFactory();
+        final CtLiteral<?> newLiteral;
         if (originalLiteralValue instanceof String) {
-            return factory.createLiteral(value);
+            newLiteral = factory.createLiteral(value);
         } else if (originalLiteralValue instanceof Integer) {
-            return factory.createLiteral(Integer.parseInt(value));
+            newLiteral = factory.createLiteral(Integer.parseInt(value));
         } else if (originalLiteralValue instanceof Boolean) {
-            return factory.createLiteral(value.equals("true"));
+            newLiteral = factory.createLiteral(value.equals("true"));
         } else if (originalLiteralValue instanceof Character) {
-            return factory.createLiteral(value.charAt(0));
+            newLiteral = factory.createLiteral(value.charAt(0));
         } else {
             throw new UnsupportedOperationException(originalLiteralValue.getClass() + " is not supported");
         }
+        if (!this.intermediateAmplification.containsKey(literalToBeReplaced)) {
+            this.intermediateAmplification.put(literalToBeReplaced, new ArrayList<>());
+        }
+        this.intermediateAmplification.get(literalToBeReplaced).add(newLiteral);
+        return newLiteral;
     }
 
     @Override
-    public void reset(CtType ctType) {
-        this.currentTestClassToBeAmplified = ctType;
+    protected String additionalClasspathElement() {
+        return "lib/catg-dev.jar";
     }
 }

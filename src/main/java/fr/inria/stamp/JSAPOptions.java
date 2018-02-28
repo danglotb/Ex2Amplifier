@@ -100,7 +100,7 @@ public class JSAPOptions {
                 new BooleanLiteralAmplifier(),
                 new CharLiteralAmplifier())
         ),
-        Ex2Amplifier(Collections.singletonList(new Ex2Amplifier())),
+        //Ex2Amplifier(Collections.singletonList(new Ex2Amplifier())),
         None(null);
         public final List<Amplifier> amplifiers;
 
