@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public abstract class Ex2Amplifier implements Amplifier {
 
     @Override
     public List<CtMethod> apply(CtMethod ctMethod) {
-        this.intermediateAmplification = new HashMap<>();
+        this.intermediateAmplification = new LinkedHashMap<>();
         if (ctMethod.getElements(CT_LITERAL_TYPE_FILTER).isEmpty()) {
             return Collections.emptyList();
         }
@@ -104,7 +104,7 @@ public abstract class Ex2Amplifier implements Amplifier {
         return this.intermediateAmplification.keySet()
                 .stream()
                 .reduce("", (acc, currentKey) ->
-                                acc + currentKey.toString() +
+                                acc + currentKey.toString() + "," +
                                         this.intermediateAmplification.get(currentKey)
                                                 .stream()
                                                 .map(CtLiteral::toString)

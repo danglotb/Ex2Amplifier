@@ -23,7 +23,6 @@ import fr.inria.diversify.dspot.selector.TakeAllSelector;
 import fr.inria.diversify.dspot.selector.TestSelector;
 import fr.inria.diversify.mutant.pit.GradlePitTaskAndOptions;
 import fr.inria.diversify.mutant.pit.MavenPitCommandAndOptions;
-import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
 import fr.inria.stamp.test.runner.TestRunnerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +99,6 @@ public class JSAPOptions {
                 new BooleanLiteralAmplifier(),
                 new CharLiteralAmplifier())
         ),
-        //Ex2Amplifier(Collections.singletonList(new Ex2Amplifier())),
         None(null);
         public final List<Amplifier> amplifiers;
 
