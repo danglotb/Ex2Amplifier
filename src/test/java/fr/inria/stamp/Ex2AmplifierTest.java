@@ -1,12 +1,16 @@
 package fr.inria.stamp;
 
+import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.stamp.ex2amplifier.Ex2Amplifier;
 import org.junit.Ignore;
 import org.junit.Test;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -32,7 +36,7 @@ public class Ex2AmplifierTest extends AbstractTest {
             different test data input, i.e. literals has been modified.
          */
 
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
+        final Ex2Amplifier ex2Amplifier = Ex2Amplifier.getEx2Amplifier(Ex2Amplifier.Ex2Amplifier_Mode.CATG);
         ex2Amplifier.init(this.configuration);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
@@ -43,6 +47,25 @@ public class Ex2AmplifierTest extends AbstractTest {
                 .get(0);
         final List<CtMethod> apply = ex2Amplifier.apply(test);
         assertEquals(3, apply.size());
+        try (BufferedReader buffer = new BufferedReader(new FileReader(
+                this.configuration.getOutputDirectory() + "/" +
+                        testClass.getSimpleName() + "/test_values.csv"))) {
+            assertEquals("\"\\\"bar\\\"\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
+                            "\"NEW\\nLINE\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
+                            "true,false,false,false" + AmplificationHelper.LINE_SEPARATOR +
+                            "'<','0','0','0'" + AmplificationHelper.LINE_SEPARATOR +
+                            "'\\'','0','0','0'" + AmplificationHelper.LINE_SEPARATOR +
+                            "3,0,0,0,0,0,0,0,0,0,0,0,0" + AmplificationHelper.LINE_SEPARATOR +
+                            "16,0,0,0" + AmplificationHelper.LINE_SEPARATOR +
+                            "100,0,0,0" + AmplificationHelper.LINE_SEPARATOR +
+                            "\"Potion\",\"\\uffff\",\"\\u0000\",\"\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
+                            "5,0,0,1" + AmplificationHelper.LINE_SEPARATOR +
+                            "\"Timoleon\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
+                            "1000,0,0,0",
+                    buffer.lines().collect(Collectors.joining(AmplificationHelper.LINE_SEPARATOR)));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(apply);
     }
 
@@ -54,7 +77,7 @@ public class Ex2AmplifierTest extends AbstractTest {
             Ex2Amplifier returns an empty list, i.e. it cannot amplifiy such test methods.
          */
 
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
+        final Ex2Amplifier ex2Amplifier = Ex2Amplifier.getEx2Amplifier(Ex2Amplifier.Ex2Amplifier_Mode.CATG);
         ex2Amplifier.init(this.configuration);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
@@ -75,8 +98,8 @@ public class Ex2AmplifierTest extends AbstractTest {
         different test data input, i.e. literals has been modified.
          */
 
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
-        ex2Amplifier.init(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final Ex2Amplifier ex2Amplifier = Ex2Amplifier.getEx2Amplifier(Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        ex2Amplifier.init(this.configuration);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
@@ -90,8 +113,8 @@ public class Ex2AmplifierTest extends AbstractTest {
 
     @Test
     public void testUsingJBSE2() throws Exception {
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
-        ex2Amplifier.init(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final Ex2Amplifier ex2Amplifier = Ex2Amplifier.getEx2Amplifier(Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        ex2Amplifier.init(this.configuration);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
@@ -106,8 +129,8 @@ public class Ex2AmplifierTest extends AbstractTest {
     @Ignore
     @Test
     public void testUsingJBSE3() throws Exception {
-        final Ex2Amplifier ex2Amplifier = new Ex2Amplifier();
-        ex2Amplifier.init(this.configuration, Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        final Ex2Amplifier ex2Amplifier = Ex2Amplifier.getEx2Amplifier(Ex2Amplifier.Ex2Amplifier_Mode.JBSE);
+        ex2Amplifier.init(this.configuration);
         final CtClass<?> testClass = this.launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");

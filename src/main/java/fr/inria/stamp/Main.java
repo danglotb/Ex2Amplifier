@@ -55,13 +55,13 @@ public class Main {
             inputConfiguration.getProperties().setProperty("outputDirectory", configuration.pathToOutput);
         }
 
-        ((Ex2Amplifier)configuration.amplifiers
-                .stream()
-                .filter(amplifier -> amplifier instanceof Ex2Amplifier)
-                .findFirst()
-                .get()
-        ).init(inputConfiguration,
-                configuration.JBSEmode ? Ex2Amplifier.Ex2Amplifier_Mode.JBSE : Ex2Amplifier.Ex2Amplifier_Mode.CATG);
+        final Ex2Amplifier ex2Amplifier = Ex2Amplifier.getEx2Amplifier(
+                configuration.JBSEmode ?
+                        Ex2Amplifier.Ex2Amplifier_Mode.JBSE :
+                        Ex2Amplifier.Ex2Amplifier_Mode.CATG
+        );
+        ex2Amplifier.init(inputConfiguration);
+        configuration.amplifiers.add(ex2Amplifier);
 
         DSpot dspot = new DSpot(inputConfiguration, configuration.nbIteration, configuration.amplifiers,
                 configuration.selector);
