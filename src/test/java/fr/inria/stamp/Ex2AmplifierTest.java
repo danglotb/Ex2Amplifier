@@ -93,7 +93,7 @@ public class Ex2AmplifierTest extends AbstractTest {
     @Test
     public void testUsingJBSE() throws Exception {
         /*
-        Test that the Ex2Amplifier returns a List of CtMethod build thank to CATG.
+        Test that the Ex2Amplifier returns a List of CtMethod build thank to JBSE.
                 Amplified CtMethod has the same "structural" inputs of the test, but with
         different test data input, i.e. literals has been modified.
          */

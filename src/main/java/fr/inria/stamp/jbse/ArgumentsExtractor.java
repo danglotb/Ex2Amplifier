@@ -26,9 +26,6 @@ public class ArgumentsExtractor {
 
 
     public static CtMethod<?> performExtraction(CtMethod<?> ctMethod) {
-
-        // remove assertion
-
         final CtMethod<?> ctMethodWithoutAssertion =
                 new AssertionRemover().removeAssertion(ctMethod);
 
@@ -42,8 +39,6 @@ public class ArgumentsExtractor {
         final Map<CtAbstractInvocation<?>, List<CtVariableAccess>> parametersPerInvocation =
                 new HashMap<>();
         extractedMethod.getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER)
-                .stream()
-                .filter(ctLiteral -> !(ctLiteral.getValue() instanceof String)) // TODO
                 .forEach(ctLiteral -> {
                     final CtParameter parameter = factory.createParameter(extractedMethod, Utils.getRealTypeOfLiteral(ctLiteral), "lit" + count[0]++);
                     final CtParameterReference<?> parameterReference = factory.createParameterReference();
