@@ -169,8 +169,34 @@ public class SMTSolver {
         return "";
     }
 
+    private int findIndexOfMatchingParenthesis(String constraint) {
+        int nbParenthesis = 0;
+        for (int i = 0; i < constraint.length(); i++) {
+            if (constraint.charAt(i) == '(') {
+                nbParenthesis++;
+            } else if (constraint.charAt(i) == ')') {
+                if (nbParenthesis == 1) {
+                    return i;
+                } else {
+                    nbParenthesis--;
+                }
+            }
+        }
+        throw new RuntimeException(String.format("Not well formatted constraint: %s", constraint));
+    }
+
+    private String removeConversionCall(String constraint, String conversion) {
+        // conversion.length() + 3 because the format is: CONVERSION-T(ExpressionToBeConverted), where T is the target type
+        // we want to get ExpressionToBeConverted
+        return removeParenthesisIfNeeded(constraint.substring(conversion.length() + 3, findIndexOfMatchingParenthesis(constraint)));
+    }
+
     private String removeParenthesisIfNeeded(String constraint) {
-        if (! (constraint.startsWith("(") && constraint.endsWith(")"))) {
+        if (constraint.startsWith("NARROW")) {
+            return removeConversionCall(constraint, "NARROW");
+        } else if (constraint.startsWith("WIDEN")) {
+            return removeConversionCall(constraint, "WIDEN");
+        } else if (! (constraint.startsWith("(") && constraint.endsWith(")"))) {
             return constraint;
         } else {
             int nbParenthesis = 1;
