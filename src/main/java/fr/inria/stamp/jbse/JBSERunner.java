@@ -7,8 +7,10 @@ import jbse.apps.settings.SettingsReader;
 import jbse.mem.ClauseAssume;
 import jbse.mem.State;
 import jbse.val.Expression;
+import jbse.val.NarrowingConversion;
 import jbse.val.Primitive;
 import jbse.val.PrimitiveSymbolic;
+import jbse.val.WideningConversion;
 import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtTypedElement;
@@ -89,29 +91,26 @@ public class JBSERunner {
 
     private static LinkedHashMap<String, String> getOriginOfOperand(Expression expression) {
         final LinkedHashMap<String, String> map = new LinkedHashMap<>(); // using LinkedHashMap to keep the insertion order
-        if (expression.getFirstOperand() instanceof Expression) {
-            map.putAll(getOriginOfOperand((Expression) expression.getFirstOperand()));
-        } else if (expression.getFirstOperand() instanceof PrimitiveSymbolic) {
-            String firstOperand = ((PrimitiveSymbolic)
-                    expression.getFirstOperand()).getOrigin().toString().substring("{ROOT}:".length());
+        getOriginForGivenOperand(expression.getFirstOperand(), map);
+        getOriginForGivenOperand(expression.getSecondOperand(), map);
+        return map;
+    }
+
+    private static void getOriginForGivenOperand(Primitive operand, final LinkedHashMap<String, String> map) {
+        if (operand instanceof Expression) {
+            map.putAll(getOriginOfOperand((Expression) operand));
+        } else if (operand instanceof PrimitiveSymbolic) {
+            String firstOperand = ((PrimitiveSymbolic) operand).getOrigin()
+                    .toString().substring("{ROOT}:".length());
             if (firstOperand.startsWith("__PARAM") && firstOperand.endsWith("]")) {
                 firstOperand = "param" + firstOperand.split("\\[")[1].substring(0, 1);
             }
-            map.put(firstOperand,
-                    expression.getFirstOperand().toString());
+            map.put(firstOperand, operand.toString());
+        } else if (operand instanceof NarrowingConversion) {
+            getOriginForGivenOperand(((NarrowingConversion) operand).getArg(), map);
+        } else if (operand instanceof WideningConversion) {
+            getOriginForGivenOperand(((WideningConversion) operand).getArg(), map);
         }
-        if (expression.getSecondOperand() instanceof Expression) {
-            map.putAll(getOriginOfOperand((Expression) expression.getSecondOperand()));
-        } else if (expression.getSecondOperand() instanceof PrimitiveSymbolic) {
-            String secondOperand = ((PrimitiveSymbolic)
-                    expression.getSecondOperand()).getOrigin().toString().substring("{ROOT}:".length());
-            if (secondOperand.startsWith("__PARAM") && secondOperand.endsWith("]")) {
-                secondOperand = "param" + secondOperand.split("\\[")[1].substring(0, 1);
-            }
-            map.put(secondOperand,
-                    expression.getSecondOperand().toString());
-        }
-        return map;
     }
 
     private static Map<String, List<String>> buildConditionsOnArguments(State state) {
