@@ -49,7 +49,7 @@ public class Ex2AmplifierTest extends AbstractTest {
         assertEquals(3, apply.size());
         try (BufferedReader buffer = new BufferedReader(new FileReader(
                 this.configuration.getOutputDirectory() + "/" +
-                        testClass.getSimpleName() + "/test_values.csv"))) {
+                        testClass.getQualifiedName() + "/test_values.csv"))) {
             assertEquals("\"\\\"bar\\\"\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
                             "\"NEW\\nLINE\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
                             "true,false,false,false" + AmplificationHelper.LINE_SEPARATOR +
