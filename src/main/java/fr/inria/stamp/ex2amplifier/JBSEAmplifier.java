@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -42,9 +43,10 @@ public class JBSEAmplifier extends Ex2Amplifier {
         final String classpath = printAndCompile(clone);
         final List<Map<String, List<String>>> conditionForEachParameterForEachState = JBSERunner.runJBSE(classpath, extractedMethod);
         return conditionForEachParameterForEachState.stream()
+                .filter(condition -> ! condition.isEmpty())
                 .map(conditions ->
                         this.generateNewTestMethod(ctMethod, conditions)
-                )
+                ).filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

@@ -97,26 +97,26 @@ public class ArgumentsExtractorTest {
         assertEquals(expectMethodTavern, extractedMethod.toString());
     }
 
-    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, byte lit3, short lit4, int lit5, long lit6, byte lit7, int lit8, int lit9, int lit10) throws Exception {" + AmplificationHelper.LINE_SEPARATOR + 
-            "    System.out.println(this.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR + 
-            "    System.out.println(getANumber());" + AmplificationHelper.LINE_SEPARATOR + 
-            "    System.out.println(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR + 
-            "    System.out.println(\"NEW\\nLINE\");" + AmplificationHelper.LINE_SEPARATOR + 
-            "    System.out.println(lit0);" + AmplificationHelper.LINE_SEPARATOR + 
-            "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR + 
-            "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR + 
-            "    byte b = lit3;" + AmplificationHelper.LINE_SEPARATOR + 
-            "    short s = lit4;" + AmplificationHelper.LINE_SEPARATOR + 
-            "    int i = lit5;" + AmplificationHelper.LINE_SEPARATOR + 
-            "    long l = lit6;" + AmplificationHelper.LINE_SEPARATOR + 
-            "    byte[] array_byte = new byte[]{ lit7 };" + AmplificationHelper.LINE_SEPARATOR +
-            "    Integer toto = null;" + AmplificationHelper.LINE_SEPARATOR +
-            "    Seller seller = new Seller(lit8, Collections.singletonList(new Item(\"Potion\", lit9)));" + AmplificationHelper.LINE_SEPARATOR + 
-            "    Player player = new Player(\"Timoleon\", lit10);" + AmplificationHelper.LINE_SEPARATOR + 
-            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR + 
-            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR + 
-            "    player.buyItem(\"Potion\", seller);" + AmplificationHelper.LINE_SEPARATOR + 
-            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR + 
-            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR + 
+    private final String expectMethodTavern = "public void extract_test(String lit0, String lit1, boolean lit2, char lit3, char lit4, byte lit5, short lit6, int lit7, long lit8, byte lit9, int lit10, String lit11, int lit12, String lit13, int lit14, String lit15) throws Exception {\n" +
+            "    System.out.println(this.aUsedNumber);\n" +
+            "    System.out.println(getANumber());\n" +
+            "    System.out.println(lit0);\n" +
+            "    System.out.println(lit1);\n" +
+            "    System.out.println(lit2);\n" +
+            "    System.out.println(lit3);\n" +
+            "    System.out.println(lit4);\n" +
+            "    byte b = lit5;\n" +
+            "    short s = lit6;\n" +
+            "    int i = lit7;\n" +
+            "    long l = lit8;\n" +
+            "    byte[] array_byte = new byte[]{ lit9 };\n" +
+            "    Integer toto = null;\n" +
+            "    Seller seller = new Seller(lit10, Collections.singletonList(new Item(lit11, lit12)));\n" +
+            "    Player player = new Player(lit13, lit14);\n" +
+            "    player.toString();\n" +
+            "    seller.toString();\n" +
+            "    player.buyItem(lit15, seller);\n" +
+            "    player.toString();\n" +
+            "    seller.toString();\n" +
             "}";
 }

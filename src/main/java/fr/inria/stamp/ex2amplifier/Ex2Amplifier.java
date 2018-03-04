@@ -63,9 +63,14 @@ public abstract class Ex2Amplifier implements Amplifier {
         if (ctMethod.getElements(CT_LITERAL_TYPE_FILTER).isEmpty()) {
             return Collections.emptyList();
         }
-        final List<CtMethod> amplifiedTests = this.internalApply(ctMethod);
+        final List<CtMethod> amplifiedTests = this.internalApply(ctMethod)
+                .stream()
+                .filter(amplifiedTest -> !ctMethod.equals(amplifiedTest))
+                .collect(Collectors.toList());
         if (!amplifiedTests.isEmpty()) {
             this.printIntermediateAmplifiedTests(ctMethod, amplifiedTests);
+        }
+        if (!this.intermediateAmplification.isEmpty()) {
             this.printIntermediateAmplification(ctMethod);
         }
         return amplifiedTests;
@@ -117,18 +122,18 @@ public abstract class Ex2Amplifier implements Amplifier {
     @Override
     public void reset(CtType ctType) {
         this.currentTestClassToBeAmplified = ctType;
-        this.prepareIntermediateOutputDirectory(ctType.getSimpleName(), this.configuration.getOutputDirectory());
+        this.prepareIntermediateOutputDirectory(ctType.getQualifiedName(), this.configuration.getOutputDirectory());
     }
 
-    private void prepareIntermediateOutputDirectory(String simpleName, String outputDirectory) {
+    private void prepareIntermediateOutputDirectory(String qualifiedName, String outputDirectory) {
         try {
-            final File outputDir = new File(outputDirectory + "/" + simpleName);
+            final File outputDir = new File(outputDirectory + "/" + qualifiedName);
             if (!outputDir.exists()) {
                 FileUtils.forceMkdir(outputDir);
             }
-            this.currentIntermediateOutputDirectoryPath = outputDirectory + "/" + simpleName;
+            this.currentIntermediateOutputDirectoryPath = outputDirectory + "/" + qualifiedName;
         } catch (Exception e) {
-            LOGGER.error("Error when trying to create directory for intermediate output {}", simpleName);
+            LOGGER.error("Error when trying to create directory for intermediate output {}", qualifiedName);
             throw new RuntimeException(e);
         }
     }

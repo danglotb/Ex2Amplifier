@@ -49,7 +49,7 @@ public class Ex2AmplifierTest extends AbstractTest {
         assertEquals(3, apply.size());
         try (BufferedReader buffer = new BufferedReader(new FileReader(
                 this.configuration.getOutputDirectory() + "/" +
-                        testClass.getSimpleName() + "/test_values.csv"))) {
+                        testClass.getQualifiedName() + "/test_values.csv"))) {
             assertEquals("\"\\\"bar\\\"\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
                             "\"NEW\\nLINE\",\"\",\"\",\"\"" + AmplificationHelper.LINE_SEPARATOR +
                             "true,false,false,false" + AmplificationHelper.LINE_SEPARATOR +
@@ -93,7 +93,7 @@ public class Ex2AmplifierTest extends AbstractTest {
     @Test
     public void testUsingJBSE() throws Exception {
         /*
-        Test that the Ex2Amplifier returns a List of CtMethod build thank to CATG.
+        Test that the Ex2Amplifier returns a List of CtMethod build thank to JBSE.
                 Amplified CtMethod has the same "structural" inputs of the test, but with
         different test data input, i.e. literals has been modified.
          */
