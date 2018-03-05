@@ -31,6 +31,10 @@ import java.util.stream.Collectors;
  */
 public class JBSERunner {
 
+    public static int countScope = 1500;
+
+    public static int depthScope = 8;
+
     public static final Map<String, String> typeToDescriptor =
             new HashMap<>();
 
@@ -71,8 +75,8 @@ public class JBSERunner {
         p.setExternalDecisionProcedurePath("lib/z3/build/bin/z3");
         p.setOutputFileName("runIf_z3.txt");
         p.setStepShowMode(RunParameters.StepShowMode.LEAVES);
-        p.setDepthScope(8);
-        p.setCountScope(1500);
+        p.setDepthScope(JBSERunner.depthScope);
+        p.setCountScope(JBSERunner.countScope);
         p.setStateFormatMode(RunParameters.StateFormatMode.FULLTEXT);
         p.setShowOnConsole(Main.verbose);
         final Run r = new Run(p);
