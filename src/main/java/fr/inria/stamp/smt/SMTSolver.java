@@ -92,6 +92,7 @@ public class SMTSolver {
                 .map(constraintsPerParamName::get)
                 .map(constraints -> constraints.stream()
                         .map(constraint -> constraint.replaceAll(" ", ""))
+                        .flatMap(constraint -> Arrays.stream(constraint.split("&&")))
                         .map(this::evaluate)
                         .reduce(this.bmgr.makeTrue(),
                                 (acc, booleanFormula) -> this.bmgr.and(acc, booleanFormula)

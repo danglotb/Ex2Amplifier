@@ -45,7 +45,7 @@ public class SMTSolverTest {
         constraintsPerParamName.get("param2").add("param2 < 3");
         constraintsPerParamName.get("param2").add("param2 + 1 != 0");
         constraintsPerParamName.get("param2").add("param2 * 2 == param1");
-        constraintsPerParamName.get("param2").add("param2 / 2 > 0");
+        constraintsPerParamName.get("param2").add("param2 / 2 > 0 && param2 / 4 > 0");
         final List<?> solutions = SMTSolver.solve(constraintsPerParamName);
         assertEquals(2, solutions.size());
         //assertEquals(6, values.get(0).getValue());// TODO must support types conversion
