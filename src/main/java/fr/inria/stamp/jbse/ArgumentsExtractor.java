@@ -10,7 +10,6 @@ import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtParameterReference;
-import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,25 +50,14 @@ public class ArgumentsExtractor {
                             parametersPerInvocation.put(invocation, new ArrayList<>(invocation.getArguments()));
                         }
                         if (ctLiteral.getParent() instanceof CtUnaryOperator) {
-                            final int index = invocation.getArguments().indexOf(ctLiteral.getParent());
-                            parametersPerInvocation.get(invocation).remove(index);
-                            parametersPerInvocation.get(invocation).add(index, variableRead);
+                            ctLiteral.getParent().replace(variableRead);
                         } else {
-                            final int index = invocation.getArguments().indexOf(ctLiteral);
-                            parametersPerInvocation.get(invocation).remove(index);
-                            parametersPerInvocation.get(invocation).add(index, variableRead);
+                            ctLiteral.replace(variableRead);
                         }
                     } else {
                         ctLiteral.replace(variableRead);
                     }
                 });
-
-        extractedMethod.getElements(new TypeFilter<>(CtAbstractInvocation.class))
-                .stream()
-                .filter(parametersPerInvocation::containsKey)
-                .forEach(ctAbstractInvocation ->
-                        ctAbstractInvocation.setArguments(parametersPerInvocation.get(ctAbstractInvocation))
-                );
         extractedMethod.setThrownTypes(ctMethod.getThrownTypes());
         return extractedMethod;
     }

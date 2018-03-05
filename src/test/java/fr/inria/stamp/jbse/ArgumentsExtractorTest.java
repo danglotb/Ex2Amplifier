@@ -1,7 +1,6 @@
 package fr.inria.stamp.jbse;
 
 import fr.inria.diversify.utils.AmplificationHelper;
-import fr.inria.stamp.jbse.ArgumentsExtractor;
 import org.junit.Test;
 import spoon.Launcher;
 import spoon.SpoonModelBuilder;
@@ -11,6 +10,7 @@ import spoon.reflect.declaration.CtMethod;
 import java.io.File;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by Benjamin DANGLOT
@@ -18,6 +18,30 @@ import static org.junit.Assert.assertEquals;
  * on 09/01/18
  */
 public class ArgumentsExtractorTest {
+
+    @Test
+    public void testExtraction() throws Exception {
+
+        /*
+            Test that we can extract all literals, e.g. involved in binary operation
+         */
+
+        final Launcher launcher = new Launcher();
+        launcher.getEnvironment().setAutoImports(true);
+        launcher.getEnvironment().setNoClasspath(false);
+        launcher.addInputResource("src/test/resources/calculator/src/test/java/fr/inria/calculator/CalculatorTest.java");
+        launcher.addInputResource("src/test/resources/calculator/src/main/java/fr/inria/calculator/Calculator.java");
+        launcher.buildModel();
+
+        final CtClass<Object> testClass = launcher.getFactory()
+                .Class()
+                .get("fr.inria.calculator.CalculatorTest");
+        final CtMethod<?> test = testClass
+                .getMethodsByName("testWithBinaryOnLiteral")
+                .get(0);
+        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test);
+        System.out.println(extractedMethod);
+    }
 
     @Test
     public void testPerformExtraction() throws Exception {
@@ -40,11 +64,10 @@ public class ArgumentsExtractorTest {
         final CtClass<Object> testClass = launcher.getFactory()
                 .Class()
                 .get("fr.inria.calculator.CalculatorTest");
-        final CtMethod<?> extractedMethod =
-                ArgumentsExtractor.performExtraction(testClass
-                        .getMethodsByName("testAccumulate")
-                        .get(0)
-                );
+        final CtMethod<?> test = testClass
+                .getMethodsByName("testAccumulate")
+                .get(0);
+        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test);
 
         // same as the MainGenerator, the resulting method from ArgumentsExtractor should be compilable
         testClass.addMethod(extractedMethod);
@@ -52,6 +75,7 @@ public class ArgumentsExtractorTest {
         launcher.getModelBuilder().compile(SpoonModelBuilder.InputType.CTTYPES);
 
         assertEquals(expectedMethod, extractedMethod.toString());
+        assertNotEquals(test.toString(), extractedMethod.toString());
     }
 
     private static final String expectedMethod = "public void extract_testAccumulate(int lit0, int lit1) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
@@ -81,11 +105,10 @@ public class ArgumentsExtractorTest {
         final CtClass<Object> testClass = launcher.getFactory()
                 .Class()
                 .get("fr.inria.stamp.MainTest");
-        final CtMethod<?> extractedMethod =
-                ArgumentsExtractor.performExtraction(testClass
-                        .getMethodsByName("test")
-                        .get(0)
-                );
+        final CtMethod<?> test = testClass
+                .getMethodsByName("test")
+                .get(0);
+        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test);
 
         System.out.println(extractedMethod);
 
@@ -95,6 +118,7 @@ public class ArgumentsExtractorTest {
         launcher.getModelBuilder().compile(SpoonModelBuilder.InputType.CTTYPES);
 
         assertEquals(expectMethodTavern, extractedMethod.toString());
+        assertNotEquals(test.toString(), extractedMethod.toString());
     }
 
     private final String expectMethodTavern = "public void extract_test(String lit0, String lit1, boolean lit2, char lit3, char lit4, byte lit5, short lit6, int lit7, long lit8, byte lit9, int lit10, String lit11, int lit12, String lit13, int lit14, String lit15) throws Exception {\n" +
