@@ -60,4 +60,9 @@ public class CalculatorTest {
         calculator1.compareTo(param2);
     }
 
+    @Test
+    public void testWithBinaryOnLiteral() throws Exception {
+        int zz = 4 + 5;
+        assertEquals(9, zz);
+    }
 }
