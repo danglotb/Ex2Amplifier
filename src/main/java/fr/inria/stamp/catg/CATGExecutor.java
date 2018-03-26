@@ -1,6 +1,8 @@
 package fr.inria.stamp.catg;
 
 import fr.inria.diversify.utils.AmplificationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
  * on 23/01/18
  */
 public class CATGExecutor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CATGExecutor.class);
 
     public static int maxIterations = 100;
 
@@ -24,6 +28,7 @@ public class CATGExecutor {
                 final String command = CATGUtils.COMMAND_LINE +
                         classpath + CATG_JARS +
                         " -ea " + fullQualifiedNameOfTestClass;
+                LOGGER.info("Running CATG: {}", command);
                 final Process process = Runtime.getRuntime().exec(command);
                 new ThreadToReadInputStream(System.out, process.getInputStream()).start();
                 new ThreadToReadInputStream(System.err, process.getErrorStream()).start();

@@ -21,8 +21,6 @@ import fr.inria.diversify.dspot.selector.JacocoCoverageSelector;
 import fr.inria.diversify.dspot.selector.PitMutantScoreSelector;
 import fr.inria.diversify.dspot.selector.TakeAllSelector;
 import fr.inria.diversify.dspot.selector.TestSelector;
-import fr.inria.diversify.mutant.pit.GradlePitTaskAndOptions;
-import fr.inria.diversify.mutant.pit.MavenPitCommandAndOptions;
 import fr.inria.stamp.test.runner.TestRunnerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,12 +133,6 @@ public class JSAPOptions {
         } else {
             testCriterion = SelectorEnum.valueOf(jsapConfig.getString("test-criterion")).buildSelector();
         }
-
-        MavenPitCommandAndOptions.descartesMode = jsapConfig.getBoolean("descartes");
-        MavenPitCommandAndOptions.evosuiteMode = jsapConfig.getBoolean("evosuite");
-
-        GradlePitTaskAndOptions.descartesMode = jsapConfig.getBoolean("descartes");
-        GradlePitTaskAndOptions.evosuiteMode = jsapConfig.getBoolean("evosuite");
 
         TestRunnerFactory.useReflectiveTestRunner = false;
 
