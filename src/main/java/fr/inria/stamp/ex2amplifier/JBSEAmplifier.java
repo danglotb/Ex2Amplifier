@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,17 @@ public class JBSEAmplifier extends Ex2Amplifier {
         clone.removeMethod(ctMethod);
         clone.addMethod(extractedMethod);
         final String classpath = printAndCompile(clone);
-        final List<Map<String, List<String>>> conditionForEachParameterForEachState = JBSERunner.runJBSE(classpath, extractedMethod);
+        final List<Map<String, List<String>>> conditionForEachParameterForEachState =
+                JBSERunner.runJBSE(classpath, extractedMethod)
+                .stream()
+                .filter(stringListMap ->
+                        stringListMap.values()
+                                .stream()
+                                .anyMatch(strings ->
+                                        strings.stream()
+                                                .anyMatch(str -> str.contains("\\."))
+                                )
+                ).collect(Collectors.toList());
         return conditionForEachParameterForEachState.stream()
                 .filter(condition -> ! condition.isEmpty())
                 .map(conditions ->
@@ -72,8 +81,8 @@ public class JBSEAmplifier extends Ex2Amplifier {
                         } else {
                             literalToBeReplaced.replace(newLiteral);
                         }
-                    } catch (NoSuchElementException e) {
-                        LOGGER.warn("No more element when trying to get literal for {}", s);
+                    } catch (Exception e) {
+                        LOGGER.warn("Error when trying to generate a value for {}", s);
                     }
                 });
         return clone;

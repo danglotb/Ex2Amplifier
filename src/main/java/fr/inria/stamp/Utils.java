@@ -17,11 +17,16 @@ public class Utils {
     public static CtTypeReference<?> getRealTypeOfLiteral(CtLiteral<?> literal) {
         if (literal.getValue() instanceof Number) {
             final CtTypedElement typedParent = literal.getParent(CtTypedElement.class);
-            if (typedParent != null) {// special treatement for int literal
+            if (typedParent != null) {// special treatment for int literal
                 if (typedParent instanceof CtAbstractInvocation) {
                     final CtExecutableReference<?> executable = ((CtAbstractInvocation) typedParent).getExecutable();
                     final int indexOf = ((CtAbstractInvocation) typedParent).getArguments().indexOf(literal);
-                    return executable.getParameters().get(indexOf);
+                    final CtTypeReference<?> ctTypeReference = executable.getParameters().get(indexOf);
+                    if (Number.class.isAssignableFrom(ctTypeReference.getActualClass())) {
+                        return ctTypeReference;
+                    } else {
+                        return literal.getType();
+                    }
                 } else if (typedParent.getType() instanceof CtArrayTypeReference) {
                     return ((CtArrayTypeReference) typedParent.getType()).getComponentType();
                 } else {
