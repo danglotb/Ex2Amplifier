@@ -46,7 +46,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>fr.inria.stamp.Main</mainClass>
+                            <mainClass>eu.stamp.project.ex2amplifier.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
