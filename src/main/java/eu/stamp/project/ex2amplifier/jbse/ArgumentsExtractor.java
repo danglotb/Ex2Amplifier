@@ -37,7 +37,8 @@ public class ArgumentsExtractor {
         final int[] count = new int[1];
         final Map<CtAbstractInvocation<?>, List<CtVariableAccess>> parametersPerInvocation =
                 new HashMap<>();
-        extractedMethod.getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER)
+        extractedMethod.getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER).stream()
+                .filter(literal ->! (literal.getValue() instanceof String))
                 .forEach(ctLiteral -> {
                     final CtParameter parameter = factory.createParameter(extractedMethod, Utils.getRealTypeOfLiteral(ctLiteral), "lit" + count[0]++);
                     final CtParameterReference<?> parameterReference = factory.createParameterReference();

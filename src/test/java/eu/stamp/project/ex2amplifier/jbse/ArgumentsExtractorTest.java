@@ -122,25 +122,25 @@ public class ArgumentsExtractorTest {
         assertNotEquals(test.toString(), extractedMethod.toString());
     }
 
-    private final String expectMethodTavern = "public void extract_test(String lit0, String lit1, boolean lit2, char lit3, char lit4, byte lit5, short lit6, int lit7, long lit8, byte lit9, int lit10, String lit11, int lit12, String lit13, int lit14, String lit15) throws Exception {\n" +
+    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, byte lit3, short lit4, int lit5, long lit6, byte lit7, int lit8, int lit9, int lit10) throws Exception {\n" +
             "    System.out.println(this.aUsedNumber);\n" +
             "    System.out.println(getANumber());\n" +
+            "    System.out.println(\"\\\"bar\\\"\");\n" +
+            "    System.out.println(\"NEW\\nLINE\");\n" +
             "    System.out.println(lit0);\n" +
             "    System.out.println(lit1);\n" +
             "    System.out.println(lit2);\n" +
-            "    System.out.println(lit3);\n" +
-            "    System.out.println(lit4);\n" +
-            "    byte b = lit5;\n" +
-            "    short s = lit6;\n" +
-            "    int i = lit7;\n" +
-            "    long l = lit8;\n" +
-            "    byte[] array_byte = new byte[]{ lit9 };\n" +
+            "    byte b = lit3;\n" +
+            "    short s = lit4;\n" +
+            "    int i = lit5;\n" +
+            "    long l = lit6;\n" +
+            "    byte[] array_byte = new byte[]{ lit7 };\n" +
             "    Integer toto = null;\n" +
-            "    Seller seller = new Seller(lit10, Collections.singletonList(new Item(lit11, lit12)));\n" +
-            "    Player player = new Player(lit13, lit14);\n" +
+            "    Seller seller = new Seller(lit8, Collections.singletonList(new Item(\"Potion\", lit9)));\n" +
+            "    Player player = new Player(\"Timoleon\", lit10);\n" +
             "    player.toString();\n" +
             "    seller.toString();\n" +
-            "    player.buyItem(lit15, seller);\n" +
+            "    player.buyItem(\"Potion\", seller);\n" +
             "    player.toString();\n" +
             "    seller.toString();\n" +
             "}";

@@ -136,7 +136,13 @@ public class SMTSolver {
             operandRight.append(operands[i]);
         }
         final NumeralFormula.IntegerFormula eval = eval(operands[0]);
+        if (eval == null) {
+            return null;
+        }
         final NumeralFormula.IntegerFormula eval1 = eval(operandRight.toString());
+        if (eval1 == null) {
+            return null;
+        }
         switch (operator) {
             case "+":
                 return this.imgr.add(eval, eval1);
@@ -220,6 +226,8 @@ public class SMTSolver {
         constraint = removeParenthesisIfNeeded(constraint);
         if (constraint.startsWith("-")) {
             return this.imgr.subtract(this.imgr.makeNumber(0), eval(constraint.substring(1)));
+        } else if (constraint.startsWith("~")){
+            return this.imgr.negate(eval(constraint.substring(1)));
         }
         final String operator = findFirstOperator(constraint);
         if (operator.isEmpty()) {
@@ -238,7 +246,13 @@ public class SMTSolver {
                     throw new RuntimeException(e);
                 }
             } else {
-                return this.imgr.makeNumber(Integer.parseInt(constraint));
+                try {
+                    return this.imgr.makeNumber(Long.parseLong(constraint));
+                } catch (Exception e) {
+                    LOGGER.warn("Error while parsing {}", constraint);
+                    LOGGER.warn("should support it"); // TODO must be implemented!
+                    return null;
+                }
             }
         } else {
             return evaluateOperands(constraint, operator);

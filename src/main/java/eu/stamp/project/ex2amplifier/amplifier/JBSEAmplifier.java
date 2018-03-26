@@ -46,7 +46,7 @@ public class JBSEAmplifier extends Ex2Amplifier {
                 .filter(stringListMap ->
                         stringListMap.values()
                                 .stream()
-                                .anyMatch(strings ->
+                                .noneMatch(strings ->
                                         strings.stream()
                                                 .anyMatch(str -> str.contains("\\."))
                                 )
@@ -61,7 +61,7 @@ public class JBSEAmplifier extends Ex2Amplifier {
 
     private CtMethod<?> generateNewTestMethod(CtMethod<?> testMethod,
                                               Map<String, List<String>> conditionForParameter) {
-        final CtMethod clone = AmplificationHelper.cloneMethodTest(testMethod, "_Ex2_JBSE");
+        final CtMethod clone = AmplificationHelper.cloneTestMethodForAmp(testMethod, "_Ex2_JBSE");
         final List<?> solutions = SMTSolver.solve(conditionForParameter);
         final Iterator<?> iterator = solutions.iterator();
         final List<CtLiteral> originalLiterals =

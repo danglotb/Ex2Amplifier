@@ -41,7 +41,7 @@ public class CATGAmplifier extends Ex2Amplifier {
     private CtMethod<?> buildMethodFromValues(List<String> values, CtMethod originalTestMethod) {
         final Iterator<String> iteratorOnNewValues = values.iterator();
         final CtMethod<?> clone = new AssertionRemover().removeAssertion(
-                AmplificationHelper.cloneMethodTest(originalTestMethod, "_Ex2_CATG")
+                AmplificationHelper.cloneTestMethodForAmp(originalTestMethod, "_Ex2_CATG")
         );
         final List<CtLiteral<?>> originalLiterals = clone.getBody().getElements(CT_LITERAL_TYPE_FILTER);
         originalLiterals.forEach(ctLiteral ->

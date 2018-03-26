@@ -47,7 +47,7 @@ public class JBSERunner {
         typeToDescriptor.put("long", "J");
         typeToDescriptor.put("short", "S");
         typeToDescriptor.put("boolean", "Z");
-        typeToDescriptor.put("String", "Ljava/lang/String;");
+        //typeToDescriptor.put("String", "Ljava/lang/String;");
     }
 
     private final static Function<Class, String> GET_PATH_OF_JAR_FROM_CLASS = aClass ->
@@ -72,7 +72,7 @@ public class JBSERunner {
                 testMethod.getSimpleName()
         );
         p.setDecisionProcedureType(RunParameters.DecisionProcedureType.Z3);
-        p.setExternalDecisionProcedurePath("lib/z3/build/bin/z3");
+        p.setExternalDecisionProcedurePath("lib/z3");
         p.setOutputFileName("runIf_z3.txt");
         p.setStepShowMode(RunParameters.StepShowMode.LEAVES);
         p.setDepthScope(JBSERunner.depthScope);
