@@ -4,14 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fr.inria.stamp</groupId>
-    <artifactId>exhaustive-explorer-amplifier</artifactId>
-    <version>1.0.0</version>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <groupId>eu.stamp-project</groupId>
+    <artifactId>Ex2Amplifier</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Ex2Amplifier</name>
-    <description>TODO</description>
-    <url>https://github.com/STAMP-project/ex2amplifier</url>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Exhaustive Explorer Amplifier for DSpot. This project aims at exploring exhaustively the input space of test data using symbolic/concolic execution. It has been implemented as an Input Amplifier of DSpot.</description>
+    <url>http://github.com/STAMP-project/Ex2Amplifier.git</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,25 +28,42 @@
 
     <licenses>
         <license>
-            <name>GNU Lesser General Public License v3.0</name>
-            <url>https://github.com/STAMP-project/ex2amplifier/blob/master/Licence.md</url>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl.txt</url>
         </license>
     </licenses>
 
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/STAMP-project/Ex2Amplifier/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <name>Benjamin Danglot</name>
+            <email>benjamin.danglot@inria.fr</email>
+            <organization>STAMP-project</organization>
+            <organizationUrl>https://www.stamp-project.eu/view/main/</organizationUrl>
+        </developer>
+    </developers>
+
     <scm>
-        <url>https://github.com/STAMP-project/ex2amplifier</url>
+        <url>https://github.com/STAMP-project/Ex2Amplifier/</url>
+        <connection>scm:git:git://github.com:STAMP-project/Ex2Amplifier.git</connection>
+        <developerConnection>scm:git:git@github.com:STAMP-project/Ex2Amplifier.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
 
-    <repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
         <repository>
-            <id>stamp-maven-repository-mvn-repo</id>
-            <url>https://stamp-project.github.io/stamp-maven-repository/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-    </repositories>
+    </distributionManagement>
 
     <dependencies>
 
@@ -57,9 +80,9 @@
         </dependency>
 
         <dependency>
-            <groupId>fr.inria.stamp</groupId>
+            <groupId>eu.stamp-project</groupId>
             <artifactId>dspot</artifactId>
-            <version>1.0.6-SNAPSHOT</version>
+            <version>1.0.7-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -181,7 +204,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>fr.inria.stamp.Main</mainClass>
+                            <mainClass>eu.stamp.project.ex2amplifier.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -194,6 +217,37 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-ssh</artifactId>
+                        <version>2.12</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>
