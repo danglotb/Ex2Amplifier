@@ -1,10 +1,10 @@
 package eu.stamp.project.ex2amplifier.catg;
 
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
-import fr.inria.diversify.dspot.support.DSpotCompiler;
 import fr.inria.diversify.utils.AmplificationHelper;
 import fr.inria.diversify.utils.DSpotUtils;
 import eu.stamp.project.ex2amplifier.AbstractTest;
+import fr.inria.diversify.utils.compilation.DSpotCompiler;
 import org.junit.After;
 import org.junit.Test;
 import spoon.reflect.declaration.CtClass;

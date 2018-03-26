@@ -1,8 +1,8 @@
 package eu.stamp.project.ex2amplifier.jbse;
 
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
-import fr.inria.diversify.dspot.support.DSpotCompiler;
 import fr.inria.diversify.utils.DSpotUtils;
+import fr.inria.diversify.utils.compilation.DSpotCompiler;
 import fr.inria.diversify.utils.sosiefier.InputProgram;
 import eu.stamp.project.ex2amplifier.AbstractTest;
 import org.junit.Test;
