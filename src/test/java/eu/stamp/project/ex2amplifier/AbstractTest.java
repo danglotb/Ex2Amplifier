@@ -1,6 +1,5 @@
 package eu.stamp.project.ex2amplifier;
 
-import eu.stamp.project.ex2amplifier.Main;
 import fr.inria.diversify.automaticbuilder.AutomaticBuilder;
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.utils.AmplificationHelper;
