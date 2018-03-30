@@ -71,7 +71,7 @@ public class JBSERunner {
                 testMethod.getSimpleName()
         );
         p.setDecisionProcedureType(RunParameters.DecisionProcedureType.Z3);
-        p.setExternalDecisionProcedurePath("lib/z3_dir/build/bin/z3");
+        p.setExternalDecisionProcedurePath("lib/z3/build/bin/z3");
         p.setOutputFileName("runIf_z3.txt");
         p.setStepShowMode(RunParameters.StepShowMode.LEAVES);
         p.setDepthScope(JBSERunner.depthScope);
