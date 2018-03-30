@@ -8,7 +8,7 @@ jdk:
 cache:
   directories:
     - $HOME/.m2
-    - lib/
+    - lib/z3
 
 install:
   - export MAVEN_HOME=/usr/local/maven-3.5.2
