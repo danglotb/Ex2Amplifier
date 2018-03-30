@@ -29,7 +29,6 @@ public class AbstractTest {
 
     @Before
     public void setUp() throws Exception {
-        eu.stamp.project.ex2amplifier.Main.verbose = true;
         try {
             FileUtils.forceDelete(new File("target/dspot/tmp_test_sources"));
         } catch (Exception ignored) {
@@ -42,7 +41,7 @@ public class AbstractTest {
 
     @After
     public void tearDown() throws Exception {
-        Main.verbose = false;
+
     }
 
     protected Launcher launcher;

@@ -1,6 +1,5 @@
 package eu.stamp.project.ex2amplifier.jbse;
 
-import eu.stamp.project.ex2amplifier.Main;
 import jbse.apps.run.Run;
 import jbse.apps.run.RunParameters;
 import jbse.apps.settings.SettingsReader;
@@ -78,7 +77,7 @@ public class JBSERunner {
         p.setDepthScope(JBSERunner.depthScope);
         p.setCountScope(JBSERunner.countScope);
         p.setStateFormatMode(RunParameters.StateFormatMode.FULLTEXT);
-        p.setShowOnConsole(Main.verbose);
+        p.setShowOnConsole(true);
         final Run r = new Run(p);
         r.run();
         return filterDistinctLeaves(r.getStates())
