@@ -1,6 +1,5 @@
 package eu.stamp.project.ex2amplifier.smt;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.slf4j.LoggerFactory;
 import org.sosy_lab.common.ShutdownManager;
 import org.sosy_lab.common.configuration.Configuration;
@@ -20,6 +19,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

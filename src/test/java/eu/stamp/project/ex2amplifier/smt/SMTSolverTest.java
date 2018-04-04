@@ -1,6 +1,6 @@
 package eu.stamp.project.ex2amplifier.smt;
 
-import eu.stamp.project.ex2amplifier.smt.SMTSolver;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,7 +11,6 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Created by Benjamin DANGLOT
@@ -19,6 +18,19 @@ import static org.junit.Assert.fail;
  * on 10/01/18
  */
 public class SMTSolverTest {
+
+    @Test
+    @Ignore
+    public void testSolve2() throws Exception {
+        Map<String, List<String>> constraintsPerParamName = new HashMap<>();
+        constraintsPerParamName.put("param1", new ArrayList<>());
+        constraintsPerParamName.put("param2", new ArrayList<>());
+        constraintsPerParamName.get("param1").add("param1 % 3 == 0");
+        constraintsPerParamName.get("param2").add("param1 * param1 == param2");
+        final List<?> solutions = SMTSolver.solve(constraintsPerParamName);
+        assertEquals(2, solutions.size());
+        //assertEquals(6, values.get(0).getValue());// TODO must support types conversion
+    }
 
     @Test
     public void testSolve() throws Exception {

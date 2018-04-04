@@ -15,7 +15,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>Ex2Amplifier</name>
     <description>Exhaustive Explorer Amplifier for DSpot. This project aims at exploring exhaustively the input space of test data using symbolic/concolic execution. It has been implemented as an Input Amplifier of DSpot.</description>
     <url>http://github.com/STAMP-project/Ex2Amplifier.git</url>
 
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>eu.stamp-project</groupId>
             <artifactId>dspot</artifactId>
-            <version>1.0.7-SNAPSHOT</version>
+            <version>1.0.7</version>
         </dependency>
 
         <dependency>
@@ -187,13 +187,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/fr/inria/stamp/Main.*</exclude> <!-- we override this from dspot, do not need to re-test it-->
-                        <exclude>**/fr/inria/stamp/JSAP*</exclude> <!-- we override this from dspot, do not need to re-test it-->
-                        <exclude>**/fr/inria/stamp/Configuration.*</exclude> <!-- we override this from dspot, do not need to re-test it-->
-                    </excludes>
-                </configuration>
             </plugin>
 
             <plugin>
