@@ -1,5 +1,6 @@
 package eu.stamp.project.ex2amplifier.amplifier;
 
+import eu.stamp.project.ex2amplifier.catg.CATGExecutor;
 import fr.inria.diversify.automaticbuilder.AutomaticBuilderFactory;
 import fr.inria.diversify.dspot.amplifier.Amplifier;
 import fr.inria.diversify.utils.AmplificationHelper;
@@ -55,6 +56,7 @@ public abstract class Ex2Amplifier implements Amplifier {
 
     public void init(InputConfiguration configuration) {
         this.configuration = configuration;
+        CATGExecutor.java_home = this.configuration.getProperty("java_home", "");
     }
 
     @Override

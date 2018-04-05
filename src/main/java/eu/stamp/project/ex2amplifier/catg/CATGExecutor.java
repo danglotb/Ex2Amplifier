@@ -18,6 +18,8 @@ public class CATGExecutor {
 
     public static int maxIterations = 100;
 
+    public static String java_home = "";
+
     public static List<List<String>> execute(String classpath,
                                              String fullQualifiedNameOfTestClass) {
         CATGUtils.eraseOldFiles();
@@ -25,7 +27,7 @@ public class CATGExecutor {
         while (iteration <= maxIterations) {
             CATGUtils.copyIfNeeded(iteration);
             try {
-                final String command = CATGUtils.COMMAND_LINE +
+                final String command = java_home + CATGUtils.COMMAND_LINE +
                         classpath + CATG_JARS +
                         " -ea " + fullQualifiedNameOfTestClass;
                 LOGGER.info("Running CATG: {}", command);
