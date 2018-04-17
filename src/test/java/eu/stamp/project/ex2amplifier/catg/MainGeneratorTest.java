@@ -33,6 +33,7 @@ public class MainGeneratorTest extends AbstractTest {
             and initialize with a method call from CATG: catg.CATG.makeXXX(<originalValue>)
 
             The produced main method must be compilable and runnable
+            The test class is also modified to support JUnit4 features: @BeforeClass, @Before, @After, @AfterClass etc..
          */
 
         final CtClass<Object> testClass = this.launcher.getFactory().Class().get("fr.inria.stamp.MainTest");
@@ -46,7 +47,12 @@ public class MainGeneratorTest extends AbstractTest {
         this.launcher.getModelBuilder().compile(SpoonModelBuilder.InputType.CTTYPES);
 
         final String expectedMainMethod = "public static void main(String[] args) {" + AmplificationHelper.LINE_SEPARATOR + 
-                "    MainTest mainTest = new MainTest();" + AmplificationHelper.LINE_SEPARATOR + 
+                "    MainTest mainTest = new MainTest();" + AmplificationHelper.LINE_SEPARATOR +
+                "    try {" + AmplificationHelper.LINE_SEPARATOR +
+                "        MainTest.setUpBeforeClass();" + AmplificationHelper.LINE_SEPARATOR +
+                "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+                "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+                "    }" + AmplificationHelper.LINE_SEPARATOR +
                 "    try {" + AmplificationHelper.LINE_SEPARATOR + 
                 "        mainTest.setUp();" + AmplificationHelper.LINE_SEPARATOR + 
                 "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR + 
@@ -96,7 +102,12 @@ public class MainGeneratorTest extends AbstractTest {
                 "        mainTest.tearDown();" + AmplificationHelper.LINE_SEPARATOR + 
                 "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR + 
                 "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR + 
-                "    }" + AmplificationHelper.LINE_SEPARATOR + 
+                "    }" + AmplificationHelper.LINE_SEPARATOR +
+                "    try {" + AmplificationHelper.LINE_SEPARATOR +
+                "        MainTest.tearDownAfterClass();" + AmplificationHelper.LINE_SEPARATOR +
+                "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+                "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+                "    }" + AmplificationHelper.LINE_SEPARATOR +
                 "}";
         assertEquals(expectedMainMethod, mainMethodFromTestMethod.toString());
     }
