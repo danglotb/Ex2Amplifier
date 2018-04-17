@@ -116,28 +116,44 @@ public class MainGenerator {
                 );
 
         body.insertBegin(localVariableOfTestClass);
+
+        // 5 invoke setUpBeforeClass(@BeforeClass)
+        final CtTry wrappedBeforeClass = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, null, "org.junit.BeforeClass");
+        if (wrappedBeforeClass != null) {
+            body.insertBegin(wrappedBeforeClass);
+        }
+
+        // 6 invoke tearDownAfterClass(@AfterClass)
+        final CtTry wrappedAfterClass = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, null, "org.junit.AfterClass");
+        if (wrappedAfterClass != null) {
+            body.insertEnd(wrappedAfterClass);
+        }
     }
 
-    private static CtTry wrapInTryCatchMethodWithSpecificAnnotation(CtType testClass, Factory factory, CtLocalVariable localVariableOfTestClass, String fullQualifiedNameOfAnnoation) {
-        final Optional<CtMethod<?>> setUpMethod = ((Set<CtMethod<?>>) testClass
+    private static CtTry wrapInTryCatchMethodWithSpecificAnnotation(CtType testClass,
+                                                                    Factory factory,
+                                                                    CtLocalVariable localVariableOfTestClass,
+                                                                    String fullQualifiedNameOfAnnotation) {
+        final Optional<CtMethod<?>> methodWithGivenAnnotation = ((Set<CtMethod<?>>) testClass
                 .getMethods())
                 .stream().filter(method ->
                         method.getAnnotations()
                                 .stream()
                                 .anyMatch(ctAnnotation ->
-                                        fullQualifiedNameOfAnnoation.equals(ctAnnotation.getAnnotationType().getQualifiedName())
+                                        fullQualifiedNameOfAnnotation.equals(ctAnnotation.getAnnotationType().getQualifiedName())
                                 )
                 ).findFirst();
-        if (setUpMethod.isPresent()) {
-            return wrapInTryCatch(
-                    factory.createInvocation(
-                            factory.createVariableRead(localVariableOfTestClass.getReference(), false),
-                            setUpMethod.get().getReference()
-                    ), factory.Type().createReference("java.lang.Exception")
-            );
-        } else {
-            return null;
-        }
+        return methodWithGivenAnnotation.map(ctMethod -> wrapInTryCatch(
+                factory.createInvocation(
+                        localVariableOfTestClass == null ?
+                                factory.createTypeAccess(testClass.getReference()) :
+                                factory.createVariableRead(
+                                        localVariableOfTestClass.getReference(),
+                                        false
+                                ),
+                        ctMethod.getReference()
+                ), factory.Type().createReference("java.lang.Exception")
+        )).orElse(null);
     }
 
     private static CtTry wrapInTryCatch(CtStatement statementToBeWrapped, CtTypeReference exceptionType) {
