@@ -47,12 +47,12 @@ public class MainGeneratorTest extends AbstractTest {
         this.launcher.getModelBuilder().compile(SpoonModelBuilder.InputType.CTTYPES);
 
         final String expectedMainMethod = "public static void main(String[] args) {" + AmplificationHelper.LINE_SEPARATOR + 
-                "    MainTest mainTest = new MainTest();" + AmplificationHelper.LINE_SEPARATOR +
                 "    try {" + AmplificationHelper.LINE_SEPARATOR +
                 "        MainTest.setUpBeforeClass();" + AmplificationHelper.LINE_SEPARATOR +
                 "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
                 "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
                 "    }" + AmplificationHelper.LINE_SEPARATOR +
+                "    MainTest mainTest = new MainTest();" + AmplificationHelper.LINE_SEPARATOR +
                 "    try {" + AmplificationHelper.LINE_SEPARATOR + 
                 "        mainTest.setUp();" + AmplificationHelper.LINE_SEPARATOR + 
                 "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR + 
