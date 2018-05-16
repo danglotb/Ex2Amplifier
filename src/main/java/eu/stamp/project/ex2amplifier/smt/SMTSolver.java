@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -94,6 +95,7 @@ public class SMTSolver {
                         .map(constraint -> constraint.replaceAll(" ", ""))
                         .flatMap(constraint -> Arrays.stream(constraint.split("&&")))
                         .map(this::evaluate)
+                        .filter(Objects::nonNull)
                         .reduce(this.bmgr.makeTrue(),
                                 (acc, booleanFormula) -> this.bmgr.and(acc, booleanFormula)
                         )
@@ -103,25 +105,30 @@ public class SMTSolver {
     }
 
     private BooleanFormula evaluate(String constraint) {
-        if (constraint.contains("==")) {
-            final String[] operands = constraint.split("==");
-            return this.imgr.equal(eval(operands[0]), eval(operands[1]));
-        } else if (constraint.contains("!=")) {
-            final String[] operands = constraint.split("!=");
-            return this.bmgr.not(this.imgr.equal(eval(operands[0]), eval(operands[1])));
-        } else if (constraint.contains(">=")) {
-            final String[] operands = constraint.split(">=");
-            return this.imgr.greaterThan(eval(operands[0]), eval(operands[1]));
-        } else if (constraint.contains(">")) {
-            final String[] operands = constraint.split(">");
-            return this.imgr.greaterOrEquals(eval(operands[0]), eval(operands[1]));
-        } else if (constraint.contains("<=")) {
-            final String[] operands = constraint.split("<=");
-            return this.imgr.lessOrEquals(eval(operands[0]), eval(operands[1]));
-        } else if (constraint.contains("<")) {
-            final String[] operands = constraint.split("<");
-            return this.imgr.lessOrEquals(eval(operands[0]), eval(operands[1]));
-        } else {
+        try {
+            if (constraint.contains("==")) {
+                final String[] operands = constraint.split("==");
+                return this.imgr.equal(eval(operands[0]), eval(operands[1]));
+            } else if (constraint.contains("!=")) {
+                final String[] operands = constraint.split("!=");
+                return this.bmgr.not(this.imgr.equal(eval(operands[0]), eval(operands[1])));
+            } else if (constraint.contains(">=")) {
+                final String[] operands = constraint.split(">=");
+                return this.imgr.greaterThan(eval(operands[0]), eval(operands[1]));
+            } else if (constraint.contains(">")) {
+                final String[] operands = constraint.split(">");
+                return this.imgr.greaterOrEquals(eval(operands[0]), eval(operands[1]));
+            } else if (constraint.contains("<=")) {
+                final String[] operands = constraint.split("<=");
+                return this.imgr.lessOrEquals(eval(operands[0]), eval(operands[1]));
+            } else if (constraint.contains("<")) {
+                final String[] operands = constraint.split("<");
+                return this.imgr.lessOrEquals(eval(operands[0]), eval(operands[1]));
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -203,7 +210,7 @@ public class SMTSolver {
             return removeConversionCall(constraint, "NARROW");
         } else if (constraint.startsWith("WIDEN")) {
             return removeConversionCall(constraint, "WIDEN");
-        } else if (! (constraint.startsWith("(") && constraint.endsWith(")"))) {
+        } else if (!(constraint.startsWith("(") && constraint.endsWith(")"))) {
             return constraint;
         } else {
             int nbParenthesis = 1;
@@ -226,7 +233,7 @@ public class SMTSolver {
         constraint = removeParenthesisIfNeeded(constraint);
         if (constraint.startsWith("-")) {
             return this.imgr.subtract(this.imgr.makeNumber(0), eval(constraint.substring(1)));
-        } else if (constraint.startsWith("~")){
+        } else if (constraint.startsWith("~")) {
             return this.imgr.negate(eval(constraint.substring(1)));
         }
         final String operator = findFirstOperator(constraint);
@@ -234,7 +241,7 @@ public class SMTSolver {
             // there is no operator, i.e. it is an operand
             if (this.variables.containsKey(constraint)) {
                 return this.variables.get(constraint);
-            } else if (constraint.contains(">") || constraint.contains("<")){// the SMT solver does not support such operation
+            } else if (constraint.contains(">") || constraint.contains("<")) {// the SMT solver does not support such operation
                 try {
                     Object value = this.engine.eval(constraint);
                     if (value instanceof Double) {
