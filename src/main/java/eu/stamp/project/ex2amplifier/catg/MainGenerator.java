@@ -190,10 +190,15 @@ public class MainGenerator {
             value = "'" + value.toString().replace("\'", "\\\'") + "'";
         }
         final String type = Utils.getRealTypeOfLiteral(literal).getSimpleName();
-        return "catg.CATG.read" +
-                ("boolean".equals(literal.getType().getSimpleName()) ?
-                        "Bool" : toU1.apply(type))
-                + "((" + type + ")" + value + ")";
+        String readInvocation = "catg.CATG.read";
+        if ("boolean".equals(type.toLowerCase())) {
+            readInvocation += "Bool";
+        } else if ("integer".equals(type.toLowerCase())) {
+            readInvocation += "Int";
+        } else {
+            readInvocation += toU1.apply(type);
+        }
+        return readInvocation + "((" + type + ")" + value + ")";
     }
 
     private static final Function<String, String> toU1 = string ->

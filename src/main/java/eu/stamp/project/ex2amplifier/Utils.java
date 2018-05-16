@@ -20,7 +20,10 @@ public class Utils {
             if (typedParent != null) {// special treatment for int literal
                 if (typedParent instanceof CtAbstractInvocation) {
                     final CtExecutableReference<?> executable = ((CtAbstractInvocation) typedParent).getExecutable();
-                    final int indexOf = ((CtAbstractInvocation) typedParent).getArguments().indexOf(literal);
+                    int indexOf = ((CtAbstractInvocation) typedParent).getArguments().indexOf(literal);
+                    if (indexOf >= executable.getParameters().size()) {
+                        indexOf--; // TODO checks if this is correct in case of varargs
+                    }
                     final CtTypeReference<?> ctTypeReference = executable.getParameters().get(indexOf);
                     if (Number.class.isAssignableFrom(ctTypeReference.getActualClass())) {
                         return ctTypeReference;
