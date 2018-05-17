@@ -73,12 +73,12 @@ public class SMTSolverTest {
         assertTrue(SMTSolver.solve(constraintsPerParamName).isEmpty());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testSolveReturnNull() throws Exception {
         Map<String, List<String>> constraintsPerParamName = new HashMap<>();
         constraintsPerParamName.put("param1", new ArrayList<>());
         constraintsPerParamName.get("param1").add("param1");
-        assertNull(SMTSolver.solve(constraintsPerParamName));
+        assertTrue(SMTSolver.solve(constraintsPerParamName).isEmpty());
     }
 
     @Test

@@ -269,6 +269,9 @@ public class SMTSolver {
     public static List<?> solve(Map<String, List<String>> constraintsPerParamName) {
         SMTSolver solver = new SMTSolver();
         BooleanFormula constraint = solver.buildConstraint(constraintsPerParamName);
+        if (solver.bmgr.makeTrue().equals(constraint)) {
+            return Collections.emptyList();
+        }
         final Model model = solver.solve(constraint);
         if (model == null) {
             return Collections.emptyList();
