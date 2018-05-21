@@ -29,31 +29,44 @@ public class CATGUtils {
 
     static void copyIfNeeded(int iteration) {
         boolean isRealInput = true;
-        try (BufferedReader buffer = new BufferedReader(new FileReader("isRealInput"))) {
+        try (BufferedReader buffer = new BufferedReader(
+                new FileReader(CATGExecutor.getPrefixWorkingDirectory() + "isRealInput"))) {
             isRealInput = buffer.lines().findFirst().get().equals("true");
         } catch (Exception e) {
             isRealInput = true;
         }
         if (isRealInput) {
             try {
-                FileUtils.copyFile(new File("inputs"), new File("inputs" + iteration));
-                FileUtils.copyFile(new File("inputs"), new File("inputs.old"));
+                FileUtils.copyFile(
+                        new File(CATGExecutor.getPrefixWorkingDirectory() + "inputs"),
+                        new File(CATGExecutor.getPrefixWorkingDirectory() + "inputs" + iteration)
+                );
+                FileUtils.copyFile(new File(CATGExecutor.getPrefixWorkingDirectory() + "inputs"),
+                        new File(CATGExecutor.getPrefixWorkingDirectory() + "inputs.old")
+                );
             } catch (Exception ignored) {
                 //ignored
             }
         }
         try {
-            FileUtils.copyFile(new File("history"), new File("history.old"));
+            FileUtils.copyFile(
+                    new File(CATGExecutor.getPrefixWorkingDirectory() + "history"),
+                    new File(CATGExecutor.getPrefixWorkingDirectory() + "history.old"));
         } catch (Exception ignored) {
             //ignored
         }
     }
 
     static List<List<String>> readOutPut() {
-        return Arrays.stream(new File(".").list(FILTER_INPUTS_FILES))
+        return Arrays.stream(new File(
+                CATGExecutor.getPrefixWorkingDirectory().isEmpty() ?
+                        "." : CATGExecutor.getPrefixWorkingDirectory())
+                .list(FILTER_INPUTS_FILES))
                 .map(filename -> {
                     try (BufferedReader buffer = new BufferedReader(new FileReader(filename))) {
-                        final List<String> literals = buffer.lines().collect(Collectors.toList());
+                        final List<String> literals = buffer
+                                .lines()
+                                .collect(Collectors.toList());
                         return literals;
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -61,10 +74,13 @@ public class CATGUtils {
                 }).collect(Collectors.toList());
     }
 
-    static final String COMMAND_LINE = "java -Xmx4096M -Xms2048M -Djanala.loggerClass=janala.logger.DirectConcolicExecution"
-            + " -Djanala.conf=lib/catg.conf "
-//                + jvmOpts +
-            + " -javaagent:lib/catg-dev.jar -cp ";
+    static final String COMMAND_LINE = "java -Xmx4096M -Xms2048M -Djanala.loggerClass=janala.logger.DirectConcolicExecution";
+
+    static final String CONF_FILE_OPT = " -Djanala.conf=";
+    static final String CONF_FILE_NAME = "lib/catg.conf ";
+
+    static final String AGENT_OPT = " -javaagent:";
+    static final String AGENT_FILE_NAME = "lib/catg-dev.jar ";
 
     public static void eraseOldFiles() {
         Stream.concat(Arrays.stream(new String[]{
@@ -72,7 +88,7 @@ public class CATGUtils {
                         "inputs", "inputs.old", "inputs.bak",
                         "history", "history.old", "history.bak",
                         "isRealInput", "backtrackFlag", "instrumented"
-                }),
+                }).map(file -> CATGExecutor.getPrefixWorkingDirectory() + file),
                 Arrays.stream(new File(".").list(FILTER_INPUTS_FILES))
         ).forEach(CATGUtils::tryToErase);
     }

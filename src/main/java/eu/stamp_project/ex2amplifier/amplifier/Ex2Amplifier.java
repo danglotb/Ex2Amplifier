@@ -147,15 +147,15 @@ public abstract class Ex2Amplifier implements Amplifier {
                 .getAutomaticBuilder(this.configuration)
                 .buildClasspath(this.configuration.getInputProgram().getProgramDir())
                 + AmplificationHelper.PATH_SEPARATOR +
-                this.configuration.getInputProgram().getProgramDir() + "/"
-                + this.configuration.getInputProgram().getClassesDir()
-                + AmplificationHelper.PATH_SEPARATOR + "target/dspot/dependencies/"
+                new File(this.configuration.getInputProgram().getProgramDir() + "/"
+                + this.configuration.getInputProgram().getClassesDir()).getAbsolutePath()
+                + AmplificationHelper.PATH_SEPARATOR + new File("target/dspot/dependencies/").getAbsolutePath()
                 + AmplificationHelper.PATH_SEPARATOR +
-                this.configuration.getInputProgram().getProgramDir() + "/"
-                + this.configuration.getInputProgram().getTestClassesDir()
+                new File(this.configuration.getInputProgram().getProgramDir() + "/"
+                + this.configuration.getInputProgram().getTestClassesDir()).getAbsolutePath()
                 + AmplificationHelper.PATH_SEPARATOR + this.additionalClasspathElement();
-        final String pathToBinTests = this.configuration.getInputProgram().getProgramDir() + "/" +
-                this.configuration.getInputProgram().getTestClassesDir();
+        final String pathToBinTests = new File(this.configuration.getInputProgram().getProgramDir() + "/" +
+                this.configuration.getInputProgram().getTestClassesDir()).getAbsolutePath();
         try {
             FileUtils.forceDelete(new File(pathToBinTests + "/" +
                     clone.getQualifiedName().replace(".", "/") + ".class"));
