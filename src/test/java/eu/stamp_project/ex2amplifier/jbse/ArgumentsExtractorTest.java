@@ -39,7 +39,7 @@ public class ArgumentsExtractorTest {
         final CtMethod<?> test = testClass
                 .getMethodsByName("testWithBinaryOnLiteral")
                 .get(0);
-        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test);
+        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test, testClass);
         System.out.println(extractedMethod);
     }
 
@@ -67,7 +67,7 @@ public class ArgumentsExtractorTest {
         final CtMethod<?> test = testClass
                 .getMethodsByName("testAccumulate")
                 .get(0);
-        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test);
+        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test, testClass);
 
         // same as the MainGenerator, the resulting method from ArgumentsExtractor should be compilable
         testClass.addMethod(extractedMethod);
@@ -108,7 +108,7 @@ public class ArgumentsExtractorTest {
         final CtMethod<?> test = testClass
                 .getMethodsByName("test")
                 .get(0);
-        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test);
+        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(test, testClass);
 
         System.out.println(extractedMethod);
 

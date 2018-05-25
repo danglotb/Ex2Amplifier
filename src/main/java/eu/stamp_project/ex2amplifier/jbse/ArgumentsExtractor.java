@@ -8,6 +8,7 @@ import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.code.CtVariableAccess;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtParameter;
+import spoon.reflect.declaration.CtType;
 import spoon.reflect.factory.Factory;
 import spoon.reflect.reference.CtParameterReference;
 
@@ -24,7 +25,7 @@ import java.util.Map;
 public class ArgumentsExtractor {
 
 
-    public static CtMethod<?> performExtraction(CtMethod<?> ctMethod) {
+    public static CtMethod<?> performExtraction(CtMethod<?> ctMethod, CtType<?> testClass) {
         final CtMethod<?> ctMethodWithoutAssertion =
                 new AssertionRemover().removeAssertion(ctMethod);
 
@@ -60,6 +61,7 @@ public class ArgumentsExtractor {
                     }
                 });
         extractedMethod.setThrownTypes(ctMethod.getThrownTypes());
+        Utils.removeNonStaticElement(extractedMethod, testClass);
         return extractedMethod;
     }
 }
