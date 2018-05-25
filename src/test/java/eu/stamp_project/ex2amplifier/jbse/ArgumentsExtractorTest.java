@@ -78,11 +78,21 @@ public class ArgumentsExtractorTest {
         assertNotEquals(test.toString(), extractedMethod.toString());
     }
 
-    private static final String expectedMethod = "public void extract_testAccumulate(int lit0, int lit1) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
-            "    final Calculator calculator1 = new Calculator(lit0);" + AmplificationHelper.LINE_SEPARATOR +
-            "    calculator1.getCurrentValue();" + AmplificationHelper.LINE_SEPARATOR +
-            "    calculator1.accumulate(lit1);" + AmplificationHelper.LINE_SEPARATOR +
-            "    calculator1.getCurrentValue();" + AmplificationHelper.LINE_SEPARATOR +
+    private static final String expectedMethod = "public void extract_testAccumulate(int lit0, int lit1) throws Exception {\n" +
+            "    try {\n" +
+            "        this.setUp();\n" +
+            "    } catch (Exception __exceptionEx2Amplifier) {\n" +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);\n" +
+            "    }\n" +
+            "    final Calculator calculator1 = new Calculator(lit0);\n" +
+            "    calculator1.getCurrentValue();\n" +
+            "    calculator1.accumulate(lit1);\n" +
+            "    calculator1.getCurrentValue();\n" +
+            "    try {\n" +
+            "        this.tearDown();\n" +
+            "    } catch (Exception __exceptionEx2Amplifier) {\n" +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);\n" +
+            "    }\n" +
             "}";
 
 
@@ -121,26 +131,46 @@ public class ArgumentsExtractorTest {
         assertNotEquals(test.toString(), extractedMethod.toString());
     }
 
-    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, byte lit3, short lit4, int lit5, long lit6, byte lit7, int lit8, int lit9, int lit10) throws Exception {\n" +
-            "    System.out.println(this.aUsedNumber);\n" +
-            "    System.out.println(getANumber());\n" +
-            "    System.out.println(\"\\\"bar\\\"\");\n" +
-            "    System.out.println(\"NEW\\nLINE\");\n" +
-            "    System.out.println(lit0);\n" +
-            "    System.out.println(lit1);\n" +
-            "    System.out.println(lit2);\n" +
-            "    byte b = lit3;\n" +
-            "    short s = lit4;\n" +
-            "    int i = lit5;\n" +
-            "    long l = lit6;\n" +
-            "    byte[] array_byte = new byte[]{ lit7 };\n" +
-            "    Integer toto = null;\n" +
-            "    Seller seller = new Seller(lit8, Collections.singletonList(new Item(\"Potion\", lit9)));\n" +
-            "    Player player = new Player(\"Timoleon\", lit10);\n" +
-            "    player.toString();\n" +
-            "    seller.toString();\n" +
-            "    player.buyItem(\"Potion\", seller);\n" +
-            "    player.toString();\n" +
-            "    seller.toString();\n" +
+    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, byte lit3, short lit4, int lit5, long lit6, byte lit7, int lit8, int lit9, int lit10) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
+            "    try {" + AmplificationHelper.LINE_SEPARATOR +
+            "        MainTest.setUpBeforeClass();" + AmplificationHelper.LINE_SEPARATOR +
+            "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+            "    }" + AmplificationHelper.LINE_SEPARATOR +
+            "    try {" + AmplificationHelper.LINE_SEPARATOR +
+            "        this.setUp();" + AmplificationHelper.LINE_SEPARATOR +
+            "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+            "    }" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(this.aUsedNumber);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(this.getANumber());" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(\"NEW\\nLINE\");" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(lit0);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR +
+            "    byte b = lit3;" + AmplificationHelper.LINE_SEPARATOR +
+            "    short s = lit4;" + AmplificationHelper.LINE_SEPARATOR +
+            "    int i = lit5;" + AmplificationHelper.LINE_SEPARATOR +
+            "    long l = lit6;" + AmplificationHelper.LINE_SEPARATOR +
+            "    byte[] array_byte = new byte[]{ lit7 };" + AmplificationHelper.LINE_SEPARATOR +
+            "    Integer toto = null;" + AmplificationHelper.LINE_SEPARATOR +
+            "    Seller seller = new Seller(lit8, Collections.singletonList(new Item(\"Potion\", lit9)));" + AmplificationHelper.LINE_SEPARATOR +
+            "    Player player = new Player(\"Timoleon\", lit10);" + AmplificationHelper.LINE_SEPARATOR +
+            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "    player.buyItem(\"Potion\", seller);" + AmplificationHelper.LINE_SEPARATOR +
+            "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
+            "    try {" + AmplificationHelper.LINE_SEPARATOR +
+            "        this.tearDown();" + AmplificationHelper.LINE_SEPARATOR +
+            "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+            "    }" + AmplificationHelper.LINE_SEPARATOR +
+            "    try {" + AmplificationHelper.LINE_SEPARATOR +
+            "        MainTest.tearDownAfterClass();" + AmplificationHelper.LINE_SEPARATOR +
+            "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+            "    }" + AmplificationHelper.LINE_SEPARATOR +
             "}";
 }

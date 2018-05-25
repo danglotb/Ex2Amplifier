@@ -5,6 +5,7 @@ import spoon.reflect.code.CtBinaryOperator;
 import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtCatch;
 import spoon.reflect.code.CtCatchVariable;
+import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtStatement;
@@ -73,12 +74,13 @@ public class Utils {
                 factory.createConstructorCall(testClass.getReference())
         );
         // 2 invoke setUp(@Before) at the begin if present
-        final CtTry wrappedBefore = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, localVariableOfTestClass, "org.junit.Before");
+        final CtExpression targetForCalls = factory.createVariableRead(localVariableOfTestClass.getReference(), false);
+        final CtTry wrappedBefore = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, targetForCalls, "org.junit.Before");
         if (wrappedBefore != null) {
             body.insertBegin(wrappedBefore);
         }
         // 3 invoke tearDown(@After) at the end of the block
-        final CtTry wrappedAfter = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, localVariableOfTestClass, "org.junit.After");
+        final CtTry wrappedAfter = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, targetForCalls, "org.junit.After");
         if (wrappedAfter != null) {
             body.insertEnd(wrappedAfter);
         }
@@ -97,13 +99,13 @@ public class Utils {
         body.insertBegin(localVariableOfTestClass);
 
         // 5 invoke setUpBeforeClass(@BeforeClass)
-        final CtTry wrappedBeforeClass = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, null, "org.junit.BeforeClass");
+        final CtTry wrappedBeforeClass = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, factory.createTypeAccess(testClass.getReference()), "org.junit.BeforeClass");
         if (wrappedBeforeClass != null) {
             body.insertBegin(wrappedBeforeClass);
         }
 
         // 6 invoke tearDownAfterClass(@AfterClass)
-        final CtTry wrappedAfterClass = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, null, "org.junit.AfterClass");
+        final CtTry wrappedAfterClass = wrapInTryCatchMethodWithSpecificAnnotation(testClass, factory, factory.createTypeAccess(testClass.getReference()), "org.junit.AfterClass");
         if (wrappedAfterClass != null) {
             body.insertEnd(wrappedAfterClass);
         }
@@ -111,7 +113,7 @@ public class Utils {
 
     public static CtTry wrapInTryCatchMethodWithSpecificAnnotation(CtType testClass,
                                                                    Factory factory,
-                                                                   CtLocalVariable localVariableOfTestClass,
+                                                                   CtExpression<?> target,
                                                                    String fullQualifiedNameOfAnnotation) {
         final Optional<CtMethod<?>> methodWithGivenAnnotation = ((Set<CtMethod<?>>) testClass
                 .getMethods())
@@ -124,18 +126,13 @@ public class Utils {
                 ).findFirst();
         return methodWithGivenAnnotation.map(ctMethod -> wrapInTryCatch(
                 factory.createInvocation(
-                        localVariableOfTestClass == null ?
-                                factory.createTypeAccess(testClass.getReference()) :
-                                factory.createVariableRead(
-                                        localVariableOfTestClass.getReference(),
-                                        false
-                                ),
+                        target,
                         ctMethod.getReference()
                 ), factory.Type().createReference("java.lang.Exception")
         )).orElse(null);
     }
 
-    private static CtTry wrapInTryCatch(CtStatement statementToBeWrapped, CtTypeReference exceptionType) {
+    public static CtTry wrapInTryCatch(CtStatement statementToBeWrapped, CtTypeReference exceptionType) {
         final Factory factory = statementToBeWrapped.getFactory();
         final CtTry aTry = factory.createTry();
         aTry.setBody(statementToBeWrapped);
