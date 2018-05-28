@@ -1,5 +1,7 @@
 package fr.inria.calculator;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,6 +12,16 @@ import static org.junit.Assert.assertEquals;
  * on 27/10/17
  */
 public class CalculatorTest {
+
+    @Before
+    public void setUp() throws Exception {
+        // empty
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        // empty
+    }
 
     @Test
     public void testAccumulate() throws Exception {
@@ -63,6 +75,7 @@ public class CalculatorTest {
     @Test
     public void testWithBinaryOnLiteral() throws Exception {
         int zz = 4 + 5;
+        boolean z = (zz == 3 || zz < 1);
         assertEquals(9, zz);
     }
 }

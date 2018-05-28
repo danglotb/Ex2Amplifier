@@ -31,12 +31,12 @@ public class JBSEAmplifier extends Ex2Amplifier {
 
     @Override
     public List<CtMethod> internalApply(CtMethod ctMethod) {
-        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod);
+        final CtType<?> clone = this.currentTestClassToBeAmplified.clone();
+        final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod, clone);
         if (extractedMethod.getParameters().isEmpty()) {
             return Collections.emptyList();
         }
-        final CtType<?> clone = this.currentTestClassToBeAmplified.clone();
-        clone.setParent(this.currentTestClassToBeAmplified.getParent());
+        this.currentTestClassToBeAmplified.getPackage().addType(clone);
         clone.removeMethod(ctMethod);
         clone.addMethod(extractedMethod);
         final String classpath = printAndCompile(clone);

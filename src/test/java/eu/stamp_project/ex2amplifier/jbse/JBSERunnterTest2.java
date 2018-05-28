@@ -39,7 +39,7 @@ public class JBSERunnterTest2 extends AbstractTest {
                 .getMethodsByName("test3")
                 .get(0);
 
-        final CtMethod<?> ctMethod = ArgumentsExtractor.performExtraction(testMethod);
+        final CtMethod<?> ctMethod = ArgumentsExtractor.performExtraction(testMethod, mainClass);
         mainClass.addMethod(ctMethod);
 
         DSpotUtils.printCtTypeToGivenDirectory(mainClass, new File("target/dspot/tmp_test_sources"));
