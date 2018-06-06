@@ -46,7 +46,7 @@ public class ArgumentsExtractor {
         extractedMethod.getElements(Ex2Amplifier.CT_LITERAL_TYPE_FILTER).stream()
                 .filter(literal ->! (literal.getValue() instanceof String))
                 .forEach(ctLiteral -> {
-                    final CtParameter parameter = factory.createParameter(extractedMethod, Utils.getRealTypeOfLiteral(ctLiteral), "lit" + count[0]++);
+                    final CtParameter parameter = factory.createParameter(extractedMethod, Utils.getRealTypeOfLiteral(ctLiteral), "param" + ++count[0]);
                     final CtParameterReference<?> parameterReference = factory.createParameterReference();
                     parameterReference.setSimpleName(parameter.getSimpleName());
                     parameterReference.setType(parameter.getType());

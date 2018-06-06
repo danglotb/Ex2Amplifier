@@ -127,4 +127,29 @@ public class CalculatorTest {
         }
         assertEquals(9, zz);
     }
+
+    @Test
+    public void testCompute() {
+        final Calculator calculator = new Calculator(23);
+        final int compute = calculator.compute(32, 42);
+        assertEquals(1, compute);
+    }
+
+    public void extract_testCompute(int param1,
+                                    int param2,
+                                    int param3) {
+        final Calculator calculator = new Calculator(param1);
+        final int compute = calculator.compute(param2, param3);
+    }
+
+    // constraint: {
+    //      param1=[param1 != param2, param1 != param3],
+    //      param2=[param2 > param3, param2 + 7 - 15 > param3]
+    // }
+    // values that solve the problem: {param1=0, param2=1, param3=-7}
+    @Test(timeout = 10000)
+    public void testCompute_Ex2_JBSE3() throws Exception {
+        final Calculator calculator = new Calculator(0);
+        final int compute = calculator.compute(1, -7);
+    }
 }

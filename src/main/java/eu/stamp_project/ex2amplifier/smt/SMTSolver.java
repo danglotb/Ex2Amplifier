@@ -20,7 +20,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,7 +37,7 @@ public class SMTSolver {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SMTSolver.class);
 
     // TODO must be extended to other types
-    private Map<String, NumeralFormula.IntegerFormula> variables;
+    private LinkedHashMap<String, NumeralFormula.IntegerFormula> variables;
 
     private SolverContext context;
     private FormulaManager fmgr;
@@ -55,7 +55,7 @@ public class SMTSolver {
             this.fmgr = this.context.getFormulaManager();
             this.bmgr = this.fmgr.getBooleanFormulaManager();
             this.imgr = this.fmgr.getIntegerFormulaManager();
-            this.variables = new HashMap<>();
+            this.variables = new LinkedHashMap<>();
             this.engine = new ScriptEngineManager().getEngineByName("JavaScript");
         } catch (Exception e) {
             throw new RuntimeException(e);

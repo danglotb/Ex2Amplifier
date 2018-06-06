@@ -23,7 +23,7 @@ public class ArgumentsExtractorTest {
     public void testExtraction() throws Exception {
 
         /*
-            Test that we can extract all literals, e.g. involved in binary operation
+            Test that we can extract all paramerals, e.g. involved in binary operation
          */
 
         final Launcher launcher = new Launcher();
@@ -50,7 +50,7 @@ public class ArgumentsExtractorTest {
             The ArgumentsExtractor should produce a new CtMethod<?>,
             that is semantically equivalent to the test given as input,
             but without assertion, and all used (and supported by JBSE)
-            values (literals) will be pass as argument.
+            values (paramerals) will be pass as argument.
             This new CtMethod<?> is used as input for JBSE, and the symbolic execution.
          */
 
@@ -78,21 +78,21 @@ public class ArgumentsExtractorTest {
         assertNotEquals(test.toString(), extractedMethod.toString());
     }
 
-    private static final String expectedMethod = "public void extract_testAccumulate(int lit0, int lit1) throws Exception {\n" +
-            "    try {\n" +
-            "        this.setUp();\n" +
-            "    } catch (Exception __exceptionEx2Amplifier) {\n" +
-            "        throw new RuntimeException(__exceptionEx2Amplifier);\n" +
-            "    }\n" +
-            "    final Calculator calculator1 = new Calculator(lit0);\n" +
-            "    calculator1.getCurrentValue();\n" +
-            "    calculator1.accumulate(lit1);\n" +
-            "    calculator1.getCurrentValue();\n" +
-            "    try {\n" +
-            "        this.tearDown();\n" +
-            "    } catch (Exception __exceptionEx2Amplifier) {\n" +
-            "        throw new RuntimeException(__exceptionEx2Amplifier);\n" +
-            "    }\n" +
+    private static final String expectedMethod = "public void extract_testAccumulate(int param1, int param2) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
+            "    try {" + AmplificationHelper.LINE_SEPARATOR +
+            "        this.setUp();" + AmplificationHelper.LINE_SEPARATOR +
+            "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+            "    }" + AmplificationHelper.LINE_SEPARATOR +
+            "    final Calculator calculator1 = new Calculator(param1);" + AmplificationHelper.LINE_SEPARATOR +
+            "    calculator1.getCurrentValue();" + AmplificationHelper.LINE_SEPARATOR +
+            "    calculator1.accumulate(param2);" + AmplificationHelper.LINE_SEPARATOR +
+            "    calculator1.getCurrentValue();" + AmplificationHelper.LINE_SEPARATOR +
+            "    try {" + AmplificationHelper.LINE_SEPARATOR +
+            "        this.tearDown();" + AmplificationHelper.LINE_SEPARATOR +
+            "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
+            "        throw new RuntimeException(__exceptionEx2Amplifier);" + AmplificationHelper.LINE_SEPARATOR +
+            "    }" + AmplificationHelper.LINE_SEPARATOR +
             "}";
 
 
@@ -131,7 +131,7 @@ public class ArgumentsExtractorTest {
         assertNotEquals(test.toString(), extractedMethod.toString());
     }
 
-    private final String expectMethodTavern = "public void extract_test(boolean lit0, char lit1, char lit2, byte lit3, short lit4, int lit5, long lit6, byte lit7, int lit8, int lit9, int lit10) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
+    private final String expectMethodTavern = "public void extract_test(boolean param1, char param2, char param3, byte param4, short param5, int param6, long param7, byte param8, int param9, int param10, int param11) throws Exception {" + AmplificationHelper.LINE_SEPARATOR +
             "    try {" + AmplificationHelper.LINE_SEPARATOR +
             "        MainTest.setUpBeforeClass();" + AmplificationHelper.LINE_SEPARATOR +
             "    } catch (Exception __exceptionEx2Amplifier) {" + AmplificationHelper.LINE_SEPARATOR +
@@ -146,17 +146,17 @@ public class ArgumentsExtractorTest {
             "    System.out.println(this.getANumber());" + AmplificationHelper.LINE_SEPARATOR +
             "    System.out.println(\"\\\"bar\\\"\");" + AmplificationHelper.LINE_SEPARATOR +
             "    System.out.println(\"NEW\\nLINE\");" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(lit0);" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(lit1);" + AmplificationHelper.LINE_SEPARATOR +
-            "    System.out.println(lit2);" + AmplificationHelper.LINE_SEPARATOR +
-            "    byte b = lit3;" + AmplificationHelper.LINE_SEPARATOR +
-            "    short s = lit4;" + AmplificationHelper.LINE_SEPARATOR +
-            "    int i = lit5;" + AmplificationHelper.LINE_SEPARATOR +
-            "    long l = lit6;" + AmplificationHelper.LINE_SEPARATOR +
-            "    byte[] array_byte = new byte[]{ lit7 };" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(param1);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(param2);" + AmplificationHelper.LINE_SEPARATOR +
+            "    System.out.println(param3);" + AmplificationHelper.LINE_SEPARATOR +
+            "    byte b = param4;" + AmplificationHelper.LINE_SEPARATOR +
+            "    short s = param5;" + AmplificationHelper.LINE_SEPARATOR +
+            "    int i = param6;" + AmplificationHelper.LINE_SEPARATOR +
+            "    long l = param7;" + AmplificationHelper.LINE_SEPARATOR +
+            "    byte[] array_byte = new byte[]{ param8 };" + AmplificationHelper.LINE_SEPARATOR +
             "    Integer toto = null;" + AmplificationHelper.LINE_SEPARATOR +
-            "    Seller seller = new Seller(lit8, Collections.singletonList(new Item(\"Potion\", lit9)));" + AmplificationHelper.LINE_SEPARATOR +
-            "    Player player = new Player(\"Timoleon\", lit10);" + AmplificationHelper.LINE_SEPARATOR +
+            "    Seller seller = new Seller(param9, Collections.singletonList(new Item(\"Potion\", param10)));" + AmplificationHelper.LINE_SEPARATOR +
+            "    Player player = new Player(\"Timoleon\", param11);" + AmplificationHelper.LINE_SEPARATOR +
             "    player.toString();" + AmplificationHelper.LINE_SEPARATOR +
             "    seller.toString();" + AmplificationHelper.LINE_SEPARATOR +
             "    player.buyItem(\"Potion\", seller);" + AmplificationHelper.LINE_SEPARATOR +

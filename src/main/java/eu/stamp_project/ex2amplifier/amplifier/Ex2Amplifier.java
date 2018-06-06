@@ -3,6 +3,7 @@ package eu.stamp_project.ex2amplifier.amplifier;
 import eu.stamp_project.ex2amplifier.catg.CATGExecutor;
 import eu.stamp_project.automaticbuilder.AutomaticBuilderFactory;
 import eu.stamp_project.dspot.amplifier.Amplifier;
+import eu.stamp_project.utils.AmplificationChecker;
 import eu.stamp_project.utils.AmplificationHelper;
 import eu.stamp_project.utils.DSpotUtils;
 import eu.stamp_project.utils.compilation.DSpotCompiler;
@@ -11,7 +12,9 @@ import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLiteral;
+import spoon.reflect.declaration.CtAnnotation;
 import spoon.reflect.declaration.CtMethod;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.visitor.filter.TypeFilter;
@@ -50,7 +53,13 @@ public abstract class Ex2Amplifier implements Amplifier {
     public static final TypeFilter<CtLiteral<?>> CT_LITERAL_TYPE_FILTER = new TypeFilter<CtLiteral<?>>(CtLiteral.class) {
         @Override
         public boolean matches(CtLiteral<?> element) {
-            return super.matches(element) && !"<nulltype>".equals(element.getType().getSimpleName());
+            return super.matches(element) &&
+                    !"<nulltype>".equals(element.getType().getSimpleName()) &&
+                    element.getParent(CtAnnotation.class) == null &&
+                    (element.getParent(CtInvocation.class) == null ||
+                            element.getParent(CtInvocation.class) != null &&
+                                    !AmplificationChecker.isAssert(element.getParent(CtInvocation.class))
+                    );
         }
     };
 
@@ -100,7 +109,7 @@ public abstract class Ex2Amplifier implements Amplifier {
     private void printIntermediateAmplification(CtMethod<?> originalTestCase) {
         try (FileWriter writer =
                      new FileWriter(this.currentIntermediateOutputDirectoryPath + "/" +
-                              originalTestCase.getSimpleName() + "_values.csv", false)) {
+                             originalTestCase.getSimpleName() + "_values.csv", false)) {
             writer.write(getIntermediate());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -148,11 +157,11 @@ public abstract class Ex2Amplifier implements Amplifier {
                 .buildClasspath(this.configuration.getInputProgram().getProgramDir())
                 + AmplificationHelper.PATH_SEPARATOR +
                 new File(this.configuration.getInputProgram().getProgramDir() + "/"
-                + this.configuration.getInputProgram().getClassesDir()).getAbsolutePath()
+                        + this.configuration.getInputProgram().getClassesDir()).getAbsolutePath()
                 + AmplificationHelper.PATH_SEPARATOR + new File("target/dspot/dependencies/").getAbsolutePath()
                 + AmplificationHelper.PATH_SEPARATOR +
                 new File(this.configuration.getInputProgram().getProgramDir() + "/"
-                + this.configuration.getInputProgram().getTestClassesDir()).getAbsolutePath()
+                        + this.configuration.getInputProgram().getTestClassesDir()).getAbsolutePath()
                 + AmplificationHelper.PATH_SEPARATOR + this.additionalClasspathElement();
         final String pathToBinTests = new File(this.configuration.getInputProgram().getProgramDir() + "/" +
                 this.configuration.getInputProgram().getTestClassesDir()).getAbsolutePath();
