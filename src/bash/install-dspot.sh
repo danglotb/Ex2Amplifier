@@ -6,7 +6,7 @@ chmod +x cvc4-1.4-x86_64-linux-opt
 
 cat lib/catg.conf
 
-git clone http://github.com/STAMP-project/dspot.git
+git clone http://github.com/STAMP-project/dspot.git -b speed-up-input-amplification
 cd dspot
 mvn install -DskipTests
 

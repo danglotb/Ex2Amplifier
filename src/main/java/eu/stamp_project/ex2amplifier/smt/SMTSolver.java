@@ -14,7 +14,6 @@ import org.sosy_lab.java_smt.api.Model;
 import org.sosy_lab.java_smt.api.NumeralFormula;
 import org.sosy_lab.java_smt.api.ProverEnvironment;
 import org.sosy_lab.java_smt.api.SolverContext;
-import spoon.reflect.declaration.CtParameter;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
