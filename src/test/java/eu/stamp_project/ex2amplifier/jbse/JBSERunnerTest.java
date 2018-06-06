@@ -4,6 +4,7 @@ import eu.stamp_project.automaticbuilder.AutomaticBuilderFactory;
 import eu.stamp_project.utils.sosiefier.InputProgram;
 import eu.stamp_project.ex2amplifier.AbstractTest;
 import org.junit.Test;
+import spoon.reflect.declaration.CtClass;
 import spoon.reflect.declaration.CtMethod;
 
 import java.util.List;
@@ -66,5 +67,30 @@ public class JBSERunnerTest extends AbstractTest {
         final List<Map<String, List<String>>> conditionOnVariablesForEachState =
                 JBSERunner.runJBSE(classpath, testMethod);
         assertEquals("[{param1=[param1 > param2]}, {param1=[param1 <= param2]}]", conditionOnVariablesForEachState.toString());
+    }
+
+    @Test
+    public void test3() throws Exception {
+
+        /*
+            Same as Test, but on another test method (compareTo).
+            In this case, there is also a parameter in the second operand
+         */
+
+        final InputProgram program = configuration.getInputProgram();
+        final String classpath = AutomaticBuilderFactory.getAutomaticBuilder(
+                configuration
+        ).buildClasspath(program.getProgramDir()) + ":" +
+                program.getProgramDir() + program.getClassesDir() + ":" +
+                program.getProgramDir() + program.getTestClassesDir();
+        final CtClass<Object> testClass = this.launcher.getFactory().Class().get("fr.inria.calculator.CalculatorTest");
+        final CtMethod<?> testMethod = testClass
+                .getMethodsByName("extract_testWithBinaryOnLiteral")
+                .get(0);
+
+        final List<Map<String, List<String>>> conditionOnVariablesForEachState =
+                JBSERunner.runJBSE(classpath, testMethod);
+
+        System.out.println(conditionOnVariablesForEachState);
     }
 }

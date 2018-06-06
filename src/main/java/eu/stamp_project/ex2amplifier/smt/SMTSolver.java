@@ -14,6 +14,7 @@ import org.sosy_lab.java_smt.api.Model;
 import org.sosy_lab.java_smt.api.NumeralFormula;
 import org.sosy_lab.java_smt.api.ProverEnvironment;
 import org.sosy_lab.java_smt.api.SolverContext;
+import spoon.reflect.declaration.CtParameter;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by Benjamin DANGLOT
@@ -83,11 +85,19 @@ public class SMTSolver {
                 .collect(Collectors.toList());
     }
 
-    private BooleanFormula buildConstraint(Map<String, List<String>> constraintsPerParamName) {
-        constraintsPerParamName.keySet()
-                .forEach(paramName ->
-                        this.variables.put(paramName, this.imgr.makeVariable(paramName))
+    private BooleanFormula buildConstraint(Map<String, List<String>> constraintsPerParamName,
+                                           int numberOfParameters) {
+
+        IntStream.range(1, numberOfParameters + 1)
+                .forEachOrdered(value ->
+                        this.variables.put("param" + value, this.imgr.makeVariable("param" + value))
                 );
+
+//        constraintsPerParamName.keySet()
+//                .forEach(paramName ->
+//                        this.variables.put(paramName, this.imgr.makeVariable(paramName))
+//                );
+
 
         return constraintsPerParamName.keySet().stream()
                 .map(constraintsPerParamName::get)
@@ -266,9 +276,10 @@ public class SMTSolver {
         }
     }
 
-    public static List<?> solve(Map<String, List<String>> constraintsPerParamName) {
+    public static List<?> solve(Map<String, List<String>> constraintsPerParamName,
+                                int numberOfParameters) {
         SMTSolver solver = new SMTSolver();
-        BooleanFormula constraint = solver.buildConstraint(constraintsPerParamName);
+        BooleanFormula constraint = solver.buildConstraint(constraintsPerParamName, numberOfParameters);
         if (solver.bmgr.makeTrue().equals(constraint)) {
             return Collections.emptyList();
         }

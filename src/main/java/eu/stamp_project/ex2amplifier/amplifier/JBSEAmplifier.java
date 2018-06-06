@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.CtType;
-import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +33,8 @@ public class JBSEAmplifier extends Ex2Amplifier {
     public List<CtMethod> internalApply(CtMethod ctMethod) {
         final CtType<?> clone = this.currentTestClassToBeAmplified.clone();
         final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod, clone);
-        if (extractedMethod.getParameters().isEmpty()) {
+        final List<CtParameter<?>> parameters = extractedMethod.getParameters();
+        if (parameters.isEmpty()) {
             return Collections.emptyList();
         }
         this.currentTestClassToBeAmplified.getPackage().addType(clone);
@@ -54,18 +55,20 @@ public class JBSEAmplifier extends Ex2Amplifier {
         return conditionForEachParameterForEachState.stream()
                 .filter(condition -> ! condition.isEmpty())
                 .map(conditions ->
-                        this.generateNewTestMethod(ctMethod, conditions)
+                        this.generateNewTestMethod(ctMethod, conditions, parameters)
                 ).filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
+    // the parameters list will be given to initialize variables in SMT solver
     private CtMethod<?> generateNewTestMethod(CtMethod<?> testMethod,
-                                              Map<String, List<String>> conditionForParameter) {
+                                              Map<String, List<String>> conditionForParameter,
+                                              List<CtParameter<?>> parameters) {
         final CtMethod clone = AmplificationHelper.cloneTestMethodForAmp(testMethod, "_Ex2_JBSE");
-        final List<?> solutions = SMTSolver.solve(conditionForParameter);
+        final List<?> solutions = SMTSolver.solve(conditionForParameter, parameters.size());
         final Iterator<?> iterator = solutions.iterator();
         final List<CtLiteral> originalLiterals =
-                clone.getElements(new TypeFilter<>(CtLiteral.class));
+                clone.getElements(literal -> !(literal.getValue() instanceof String));
         conditionForParameter.keySet()
                 .forEach(s -> {
                     try {
