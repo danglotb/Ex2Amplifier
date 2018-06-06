@@ -4,6 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,8 @@ public class SMTSolverTest {
         constraintsPerParamName.put("param2", new ArrayList<>());
         constraintsPerParamName.get("param1").add("param1 % 3 == 0");
         constraintsPerParamName.get("param2").add("param1 * param1 == param2");
-        final List<?> solutions = SMTSolver.solve(constraintsPerParamName);
+
+        final List<?> solutions = SMTSolver.solve(constraintsPerParamName, 2);
         assertEquals(2, solutions.size());
         //assertEquals(6, values.get(0).getValue());// TODO must support types conversion
     }
@@ -59,7 +61,7 @@ public class SMTSolverTest {
         constraintsPerParamName.get("param2").add("param2 + 1 != 0");
         constraintsPerParamName.get("param2").add("param2 * 2 == param1");
         constraintsPerParamName.get("param2").add("param2 / 2 > 0 && param2 / 4 > 0");
-        final List<?> solutions = SMTSolver.solve(constraintsPerParamName);
+        final List<?> solutions = SMTSolver.solve(constraintsPerParamName, 2);
         assertEquals(2, solutions.size());
         //assertEquals(6, values.get(0).getValue());// TODO must support types conversion
     }
@@ -70,7 +72,7 @@ public class SMTSolverTest {
         constraintsPerParamName.put("param1", new ArrayList<>());
         constraintsPerParamName.get("param1").add("param1 == 2");
         constraintsPerParamName.get("param1").add("param1 == 3");
-        assertTrue(SMTSolver.solve(constraintsPerParamName).isEmpty());
+        assertTrue(SMTSolver.solve(constraintsPerParamName, 2).isEmpty());
     }
 
     @Test
@@ -78,7 +80,7 @@ public class SMTSolverTest {
         Map<String, List<String>> constraintsPerParamName = new HashMap<>();
         constraintsPerParamName.put("param1", new ArrayList<>());
         constraintsPerParamName.get("param1").add("param1");
-        assertTrue(SMTSolver.solve(constraintsPerParamName).isEmpty());
+        assertTrue(SMTSolver.solve(constraintsPerParamName, 2).isEmpty());
     }
 
     @Test
@@ -87,7 +89,7 @@ public class SMTSolverTest {
         constraintsPerParamName.put("param1", new ArrayList<>());
         constraintsPerParamName.get("param1").add("param1 - ((param1 * 52429 >>> 19 << 3) + (param1 * 52429 >>> 19 << 1)) == 0");
         constraintsPerParamName.get("param1").add("param1 * 52429 >>> 19 == 0");
-        final List<?> solutions = SMTSolver.solve(constraintsPerParamName);
+        final List<?> solutions = SMTSolver.solve(constraintsPerParamName, 1);
         assertEquals(1, solutions.size());
     }
 }

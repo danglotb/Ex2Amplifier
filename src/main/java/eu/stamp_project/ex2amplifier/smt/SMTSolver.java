@@ -20,11 +20,12 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by Benjamin DANGLOT
@@ -36,7 +37,7 @@ public class SMTSolver {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SMTSolver.class);
 
     // TODO must be extended to other types
-    private Map<String, NumeralFormula.IntegerFormula> variables;
+    private LinkedHashMap<String, NumeralFormula.IntegerFormula> variables;
 
     private SolverContext context;
     private FormulaManager fmgr;
@@ -54,7 +55,7 @@ public class SMTSolver {
             this.fmgr = this.context.getFormulaManager();
             this.bmgr = this.fmgr.getBooleanFormulaManager();
             this.imgr = this.fmgr.getIntegerFormulaManager();
-            this.variables = new HashMap<>();
+            this.variables = new LinkedHashMap<>();
             this.engine = new ScriptEngineManager().getEngineByName("JavaScript");
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -83,11 +84,19 @@ public class SMTSolver {
                 .collect(Collectors.toList());
     }
 
-    private BooleanFormula buildConstraint(Map<String, List<String>> constraintsPerParamName) {
-        constraintsPerParamName.keySet()
-                .forEach(paramName ->
-                        this.variables.put(paramName, this.imgr.makeVariable(paramName))
+    private BooleanFormula buildConstraint(Map<String, List<String>> constraintsPerParamName,
+                                           int numberOfParameters) {
+
+        IntStream.range(1, numberOfParameters + 1)
+                .forEachOrdered(value ->
+                        this.variables.put("param" + value, this.imgr.makeVariable("param" + value))
                 );
+
+//        constraintsPerParamName.keySet()
+//                .forEach(paramName ->
+//                        this.variables.put(paramName, this.imgr.makeVariable(paramName))
+//                );
+
 
         return constraintsPerParamName.keySet().stream()
                 .map(constraintsPerParamName::get)
@@ -266,9 +275,10 @@ public class SMTSolver {
         }
     }
 
-    public static List<?> solve(Map<String, List<String>> constraintsPerParamName) {
+    public static List<?> solve(Map<String, List<String>> constraintsPerParamName,
+                                int numberOfParameters) {
         SMTSolver solver = new SMTSolver();
-        BooleanFormula constraint = solver.buildConstraint(constraintsPerParamName);
+        BooleanFormula constraint = solver.buildConstraint(constraintsPerParamName, numberOfParameters);
         if (solver.bmgr.makeTrue().equals(constraint)) {
             return Collections.emptyList();
         }

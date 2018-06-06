@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtUnaryOperator;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.CtParameter;
 import spoon.reflect.declaration.CtType;
-import spoon.reflect.visitor.filter.TypeFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +33,8 @@ public class JBSEAmplifier extends Ex2Amplifier {
     public List<CtMethod> internalApply(CtMethod ctMethod) {
         final CtType<?> clone = this.currentTestClassToBeAmplified.clone();
         final CtMethod<?> extractedMethod = ArgumentsExtractor.performExtraction(ctMethod, clone);
-        if (extractedMethod.getParameters().isEmpty()) {
+        final List<CtParameter<?>> parameters = extractedMethod.getParameters();
+        if (parameters.isEmpty()) {
             return Collections.emptyList();
         }
         this.currentTestClassToBeAmplified.getPackage().addType(clone);
@@ -54,37 +55,40 @@ public class JBSEAmplifier extends Ex2Amplifier {
         return conditionForEachParameterForEachState.stream()
                 .filter(condition -> ! condition.isEmpty())
                 .map(conditions ->
-                        this.generateNewTestMethod(ctMethod, conditions)
+                        this.generateNewTestMethod(ctMethod, conditions, parameters.size())
                 ).filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
+
+
+    // the parameters list will be given to initialize variables in SMT solver
     private CtMethod<?> generateNewTestMethod(CtMethod<?> testMethod,
-                                              Map<String, List<String>> conditionForParameter) {
+                                              Map<String, List<String>> conditionForParameter,
+                                              int nbParameters) {
         final CtMethod clone = AmplificationHelper.cloneTestMethodForAmp(testMethod, "_Ex2_JBSE");
-        final List<?> solutions = SMTSolver.solve(conditionForParameter);
+        final List<?> solutions = SMTSolver.solve(conditionForParameter, nbParameters);
         final Iterator<?> iterator = solutions.iterator();
-        final List<CtLiteral> originalLiterals =
-                clone.getElements(new TypeFilter<>(CtLiteral.class));
-        conditionForParameter.keySet()
-                .forEach(s -> {
-                    try {
-                        final int indexOfLit = Integer.parseInt(s.substring("param".length()));
-                        final CtLiteral literalToBeReplaced = originalLiterals.get(indexOfLit);
-                        final CtLiteral<?> newLiteral = testMethod.getFactory().createLiteral(iterator.next());
-                        if (!this.intermediateAmplification.containsKey(literalToBeReplaced)) {
-                            this.intermediateAmplification.put(literalToBeReplaced, new ArrayList<>());
-                        }
-                        this.intermediateAmplification.get(literalToBeReplaced).add(newLiteral);
-                        if (literalToBeReplaced.getParent() instanceof CtUnaryOperator) {
-                            literalToBeReplaced.getParent().replace(newLiteral);
-                        } else {
-                            literalToBeReplaced.replace(newLiteral);
-                        }
-                    } catch (Exception e) {
-                        LOGGER.warn("Error when trying to generate a value for {}", s);
-                    }
-                });
+        final List<CtLiteral<?>> originalLiterals = clone.getElements(CT_LITERAL_TYPE_FILTER)
+                .stream().filter(literal ->
+                        !(literal.getValue() instanceof String)).collect(Collectors.toList()
+                );
+        originalLiterals.forEach(literalToBeReplaced -> {
+            try {
+                final CtLiteral<?> newLiteral = testMethod.getFactory().createLiteral(iterator.next());
+                if (!this.intermediateAmplification.containsKey(literalToBeReplaced)) {
+                    this.intermediateAmplification.put(literalToBeReplaced, new ArrayList<>());
+                }
+                this.intermediateAmplification.get(literalToBeReplaced).add(newLiteral);
+                if (literalToBeReplaced.getParent() instanceof CtUnaryOperator) {
+                    literalToBeReplaced.getParent().replace(newLiteral);
+                } else {
+                    literalToBeReplaced.replace(newLiteral);
+                }
+            } catch (Exception e) {
+                LOGGER.warn("Error when trying to generate a value for {}({})", literalToBeReplaced, originalLiterals.indexOf(literalToBeReplaced));
+            }
+        });
         return clone;
     }
 }

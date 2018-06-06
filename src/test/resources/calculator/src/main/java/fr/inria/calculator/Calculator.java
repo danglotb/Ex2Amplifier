@@ -50,6 +50,32 @@ public class Calculator {
         return this.currentValue;
     }
 
+    public int compute(int value, int value2) {
+        if (this.currentValue == value || this.currentValue == value2) {
+            return 0;
+        }
+        if (value > value2) {
+            this.currentValue = 7;
+        } else {
+            this.currentValue = 0;
+        }
+        if (this.currentValue * value == 701 && value2 + value > this.currentValue) {
+            return 23;
+        }
+        if (value + this.currentValue - 15 > value2) {
+            if (value < value2 + 3) {
+                this.currentValue++;
+            } else {
+                this.currentValue--;
+            }
+        } else if (this.currentValue < value2 || this.currentValue > value + 72) {
+            return this.currentValue++;
+        } else {
+            return this.currentValue--;
+        }
+        return this.currentValue;
+    }
+
     public int getCurrentValue() {
         return currentValue;
     }
